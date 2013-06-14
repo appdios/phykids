@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
+		5C5AC671176AEAF70019F2C8 /* ADNodeFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeFactory.m */; };
+		5C5AC672176AEAF70019F2C8 /* ADNodeFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeFactory.m */; };
 		5CD370CE176AE39700B689AC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370CD176AE39700B689AC /* Foundation.framework */; };
 		5CD370D0176AE39700B689AC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370CF176AE39700B689AC /* CoreGraphics.framework */; };
 		5CD370D2176AE39700B689AC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370D1176AE39700B689AC /* UIKit.framework */; };
@@ -38,6 +40,8 @@
 /* Begin PBXFileReference section */
 		5C5AC66A176AE7630019F2C8 /* ADScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADScene.h; sourceTree = "<group>"; };
 		5C5AC66B176AE7630019F2C8 /* ADScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADScene.m; sourceTree = "<group>"; };
+		5C5AC66F176AEAF70019F2C8 /* ADNodeFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNodeFactory.h; sourceTree = "<group>"; };
+		5C5AC670176AEAF70019F2C8 /* ADNodeFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADNodeFactory.m; sourceTree = "<group>"; };
 		5CD370CA176AE39700B689AC /* Phykids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phykids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD370CD176AE39700B689AC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5CD370CF176AE39700B689AC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -160,6 +164,8 @@
 				5CD37105176AE43100B689AC /* ADSceneViewController.m */,
 				5C5AC66A176AE7630019F2C8 /* ADScene.h */,
 				5C5AC66B176AE7630019F2C8 /* ADScene.m */,
+				5C5AC66F176AEAF70019F2C8 /* ADNodeFactory.h */,
+				5C5AC670176AEAF70019F2C8 /* ADNodeFactory.m */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -264,6 +270,7 @@
 				5CD370DA176AE39700B689AC /* main.m in Sources */,
 				5CD370DE176AE39700B689AC /* ADAppDelegate.m in Sources */,
 				5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */,
+				5C5AC671176AEAF70019F2C8 /* ADNodeFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +279,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CD37107176AE43100B689AC /* ADSceneViewController.m in Sources */,
+				5C5AC672176AEAF70019F2C8 /* ADNodeFactory.m in Sources */,
 				5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */,
 				5CD370F3176AE39700B689AC /* PhykidsTests.m in Sources */,
 			);

@@ -36,6 +36,8 @@
     [super viewDidLoad];
 	
     SKView *sView = (SKView*)self.view;
+    [sView setShowsFPS:YES];
+    [sView setShowsNodeCount:YES];
     
     ADScene *sceneView = [[ADScene alloc] initWithSize:self.view.bounds.size];
     [sceneView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
