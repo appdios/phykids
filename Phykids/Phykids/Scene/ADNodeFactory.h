@@ -26,5 +26,5 @@ typedef enum
 @interface ADNodeFactory : NSObject
 
 + (id)nodeOfType:(ADNodeType)type subType:(ADNodeSubType)subType atPoint:(CGPoint)point;
-+ (void)tranformNode:(id)node;
++ (void)tranformNode:(id)node withMatrix:(CGAffineTransform)matrix;
 @end

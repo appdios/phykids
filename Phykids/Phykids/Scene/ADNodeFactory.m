@@ -54,7 +54,7 @@
     [node setFillColor:[ADNodeFactory randomColor]];
     [node setPosition:point];
     
-    [ADNodeFactory setPhysicsBodyToNode:node];
+    [node setPhysicsBody:[SKPhysicsBody bodyWithCircleOfRadius:25]];
     
     return node;
 }
@@ -84,7 +84,7 @@
 + (CGPathRef) rectanglePathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity; //Change matrix based to translate/Rotate/Scale
+    CGAffineTransform matrix = CGAffineTransformIdentity; 
     CGPathAddRect(pathRef, &matrix, CGRectMake(0, 0, size.width, size.height));
     CGPathCloseSubpath(pathRef);
     
@@ -94,7 +94,7 @@
 + (CGPathRef) circularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity; //Change matrix based to translate/Rotate/Scale
+    CGAffineTransform matrix = CGAffineTransformIdentity; 
     CGPathAddEllipseInRect(pathRef, &matrix, CGRectMake(0, 0, size.width, size.height));
     CGPathCloseSubpath(pathRef);
     
@@ -104,7 +104,7 @@
 + (CGPathRef) triangularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity; //Change matrix based to translate/Rotate/Scale
+    CGAffineTransform matrix = CGAffineTransformIdentity; 
     CGPathMoveToPoint(pathRef, &matrix, -size.width/2, -size.height/2);
     CGPathAddLineToPoint(pathRef, &matrix, 0, size.height/2);
     CGPathAddLineToPoint(pathRef, &matrix, size.width/2, -size.height/2);
@@ -122,9 +122,8 @@
     return color;
 }
 
-+ (void)tranformNode:(SKShapeNode*)node
++ (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
 {
-    CGAffineTransform matrix = CGAffineTransformMakeRotation(M_PI/2); //Change matrix based to translate/Rotate/Scale
     node.path = CGPathCreateCopyByTransformingPath(node.path, &matrix);
     [ADNodeFactory setPhysicsBodyToNode:node];
 }

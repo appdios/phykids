@@ -29,7 +29,7 @@
     SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
     if (body) {
         SKNode *node = body.node;
-        [ADNodeFactory tranformNode:node];
+        [ADNodeFactory tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
         return;
     }
     [self addChild:[ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeTriangle atPoint:point]];
