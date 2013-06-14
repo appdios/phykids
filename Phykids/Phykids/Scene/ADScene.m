@@ -26,7 +26,13 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
     
-    [self addChild:[ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point]];
+    SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
+    if (body) {
+        SKNode *node = body.node;
+        [ADNodeFactory tranformNode:node];
+        return;
+    }
+    [self addChild:[ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeTriangle atPoint:point]];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event

@@ -40,7 +40,7 @@
     [node setFillColor:[ADNodeFactory randomColor]];
     [node setPosition:point];
     
-    [ADNodeFactory setPhysicsBodyToNode:node atPath:path];
+    [ADNodeFactory setPhysicsBodyToNode:node];
     
     return node;
 }
@@ -54,7 +54,7 @@
     [node setFillColor:[ADNodeFactory randomColor]];
     [node setPosition:point];
     
-    [ADNodeFactory setPhysicsBodyToNode:node atPath:path];
+    [ADNodeFactory setPhysicsBodyToNode:node];
     
     return node;
 }
@@ -68,14 +68,14 @@
     [node setFillColor:[ADNodeFactory randomColor]];
     [node setPosition:point];
     
-    [ADNodeFactory setPhysicsBodyToNode:node atPath:path];
-    
+    [ADNodeFactory setPhysicsBodyToNode:node];
+        
     return node;
 }
 
-+ (void)setPhysicsBodyToNode:(SKNode*)node atPath:(CGPathRef)path
++ (void)setPhysicsBodyToNode:(SKShapeNode*)node
 {
-    SKPhysicsBody *body = [SKPhysicsBody bodyWithPolygonFromPath:path];
+    SKPhysicsBody *body = [SKPhysicsBody bodyWithPolygonFromPath:node.path];
     [body setDynamic:YES]; // No for static objects
     [body setAllowsRotation:YES]; // No to disable rotation on drag
     [node setPhysicsBody:body];
@@ -84,7 +84,8 @@
 + (CGPathRef) rectanglePathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGPathAddRect(pathRef, nil, CGRectMake(0, 0, size.width, size.height));
+    CGAffineTransform matrix = CGAffineTransformIdentity; //Change matrix based to translate/Rotate/Scale
+    CGPathAddRect(pathRef, &matrix, CGRectMake(0, 0, size.width, size.height));
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
@@ -93,7 +94,8 @@
 + (CGPathRef) circularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGPathAddEllipseInRect(pathRef, nil, CGRectMake(0, 0, size.width, size.height));
+    CGAffineTransform matrix = CGAffineTransformIdentity; //Change matrix based to translate/Rotate/Scale
+    CGPathAddEllipseInRect(pathRef, &matrix, CGRectMake(0, 0, size.width, size.height));
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
@@ -102,9 +104,10 @@
 + (CGPathRef) triangularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGPathMoveToPoint(pathRef, nil, -size.width/2, -size.height/2);
-    CGPathAddLineToPoint(pathRef, nil, 0, size.height/2);
-    CGPathAddLineToPoint(pathRef, nil, size.width/2, -size.height/2);
+    CGAffineTransform matrix = CGAffineTransformIdentity; //Change matrix based to translate/Rotate/Scale
+    CGPathMoveToPoint(pathRef, &matrix, -size.width/2, -size.height/2);
+    CGPathAddLineToPoint(pathRef, &matrix, 0, size.height/2);
+    CGPathAddLineToPoint(pathRef, &matrix, size.width/2, -size.height/2);
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
@@ -117,6 +120,13 @@
     CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;  
     UIColor *color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
     return color;
+}
+
++ (void)tranformNode:(SKShapeNode*)node
+{
+    CGAffineTransform matrix = CGAffineTransformMakeRotation(M_PI/2); //Change matrix based to translate/Rotate/Scale
+    node.path = CGPathCreateCopyByTransformingPath(node.path, &matrix);
+    [ADNodeFactory setPhysicsBodyToNode:node];
 }
 
 @end
