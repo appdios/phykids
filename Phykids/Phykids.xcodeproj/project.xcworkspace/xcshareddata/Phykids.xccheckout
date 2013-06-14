@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>6D5A438C-D84D-4975-AEB7-7D20B1E0E245</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Phykids</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>4F81EF62-8FF2-46D1-9B29-8C064D73353E</key>
+		<string>https://github.com/appdios/phykids.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Phykids/Phykids.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>4F81EF62-8FF2-46D1-9B29-8C064D73353E</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/appdios/phykids.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>4F81EF62-8FF2-46D1-9B29-8C064D73353E</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>4F81EF62-8FF2-46D1-9B29-8C064D73353E</string>
+			<key>IDESourceControlWCCName</key>
+			<string>phykids</string>
+		</dict>
+	</array>
+</dict>
+</plist>
