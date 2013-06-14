@@ -40,7 +40,8 @@
     [node setFillColor:[ADNodeFactory randomColor]];
     [node setPosition:point];
     
-    [node setPhysicsBody:[SKPhysicsBody bodyWithPolygonFromPath:path]];
+    [ADNodeFactory setPhysicsBodyToNode:node atPath:path];
+    
     return node;
 }
 
@@ -52,7 +53,9 @@
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADNodeFactory randomColor]];
     [node setPosition:point];
-    [node setPhysicsBody:[SKPhysicsBody bodyWithCircleOfRadius:25]];
+    
+    [ADNodeFactory setPhysicsBodyToNode:node atPath:path];
+    
     return node;
 }
 
@@ -65,8 +68,17 @@
     [node setFillColor:[ADNodeFactory randomColor]];
     [node setPosition:point];
     
-    [node setPhysicsBody:[SKPhysicsBody bodyWithPolygonFromPath:path]];
+    [ADNodeFactory setPhysicsBodyToNode:node atPath:path];
+    
     return node;
+}
+
++ (void)setPhysicsBodyToNode:(SKNode*)node atPath:(CGPathRef)path
+{
+    SKPhysicsBody *body = [SKPhysicsBody bodyWithPolygonFromPath:path];
+    [body setDynamic:YES]; // No for static objects
+    [body setAllowsRotation:YES]; // No to disable rotation on drag
+    [node setPhysicsBody:body];
 }
 
 + (CGPathRef) rectanglePathOfSize:(CGSize)size

@@ -16,7 +16,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     self.sceneController = [[ADSceneViewController alloc] init];
-    [self.window addSubview:self.sceneController.view];
+    [self.window setRootViewController:self.sceneController];
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
