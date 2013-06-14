@@ -25,7 +25,7 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
-    [self addChild:[ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point]];
+    [self addChild:[ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeTriangle atPoint:point]];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event

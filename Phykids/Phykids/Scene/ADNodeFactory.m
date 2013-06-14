@@ -18,9 +18,9 @@
             case ADNodeSubTypeRectangle:
                 return [ADNodeFactory rectangleNode:point];
             case ADNodeSubTypeCircle:
-                return [ADNodeFactory rectangleNode:point];
+                return [ADNodeFactory circularNode:point];
             case ADNodeSubTypeTriangle:
-                return [ADNodeFactory rectangleNode:point];
+                return [ADNodeFactory triangularNode:point];
             case ADNodeSubTypePolygon:
                 return [ADNodeFactory rectangleNode:point];
                 
@@ -44,10 +44,55 @@
     return node;
 }
 
++ (SKNode*) circularNode:(CGPoint)point
+{
+    SKShapeNode *node = [SKShapeNode node];
+    CGPathRef path = [ADNodeFactory circularPathOfSize:CGSizeMake(50, 50)];
+    [node setPath:path];
+    [node setStrokeColor:[UIColor blackColor]];
+    [node setFillColor:[ADNodeFactory randomColor]];
+    [node setPosition:point];
+    [node setPhysicsBody:[SKPhysicsBody bodyWithCircleOfRadius:25]];
+    return node;
+}
+
++ (SKNode*) triangularNode:(CGPoint)point
+{
+    SKShapeNode *node = [SKShapeNode node];
+    CGPathRef path = [ADNodeFactory triangularPathOfSize:CGSizeMake(100, 100)];
+    [node setPath:path];
+    [node setStrokeColor:[UIColor blackColor]];
+    [node setFillColor:[ADNodeFactory randomColor]];
+    [node setPosition:point];
+    
+    [node setPhysicsBody:[SKPhysicsBody bodyWithPolygonFromPath:path]];
+    return node;
+}
+
 + (CGPathRef) rectanglePathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGPathAddRect(pathRef, nil, CGRectMake(0, 0, size.width, size.height));
+    CGPathCloseSubpath(pathRef);
+    
+    return pathRef;
+}
+
++ (CGPathRef) circularPathOfSize:(CGSize)size
+{
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    CGPathAddEllipseInRect(pathRef, nil, CGRectMake(0, 0, size.width, size.height));
+    CGPathCloseSubpath(pathRef);
+    
+    return pathRef;
+}
+
++ (CGPathRef) triangularPathOfSize:(CGSize)size
+{
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    CGPathMoveToPoint(pathRef, nil, -size.width/2, -size.height/2);
+    CGPathAddLineToPoint(pathRef, nil, 0, size.height/2);
+    CGPathAddLineToPoint(pathRef, nil, size.width/2, -size.height/2);
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
