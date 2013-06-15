@@ -34,7 +34,7 @@
 + (SKNode*) rectangleNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [ADNodeFactory rectanglePathOfSize:CGSizeMake(100, 50)];
+    CGPathRef path = [ADNodeFactory rectanglePathOfSize:CGSizeMake(50, 50)];
     [node setPath:path];
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADNodeFactory randomColor]];
@@ -62,7 +62,7 @@
 + (SKNode*) triangularNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [ADNodeFactory triangularPathOfSize:CGSizeMake(100, 100)];
+    CGPathRef path = [ADNodeFactory triangularPathOfSize:CGSizeMake(50, 50)];
     [node setPath:path];
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADNodeFactory randomColor]];
@@ -127,5 +127,6 @@
     node.path = CGPathCreateCopyByTransformingPath(node.path, &matrix);
     [ADNodeFactory setPhysicsBodyToNode:node];
 }
+
 
 @end

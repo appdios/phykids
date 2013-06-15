@@ -10,4 +10,5 @@
 
 @interface ADScene : SKScene
 
+- (void)playPauseScene;
 @end

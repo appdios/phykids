@@ -9,22 +9,15 @@
 
 #import "ADSceneViewController.h"
 #import "ADScene.h"
+
 @import SpriteKit;
 
 @interface ADSceneViewController ()
-
+@property (nonatomic, strong) UIButton *playButton;
+@property (nonatomic, strong) ADScene *sceneView;
 @end
 
 @implementation ADSceneViewController
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
 
 - (void)loadView
 {
@@ -39,9 +32,28 @@
     [sView setShowsFPS:YES];
     [sView setShowsNodeCount:YES];
     
-    ADScene *sceneView = [[ADScene alloc] initWithSize:self.view.bounds.size];
-    [sceneView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
-    [sView presentScene:sceneView];
+    self.sceneView = [[ADScene alloc] initWithSize:self.view.bounds.size];
+    [self.sceneView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
+    [sView presentScene:self.sceneView];
+    
+    self.playButton = [[UIButton alloc] init];
+    [self.playButton setImage:[UIImage imageNamed:@"btnPlay"] forState:UIControlStateNormal];
+    [self.playButton setImage:[UIImage imageNamed:@"btnStop"] forState:UIControlStateSelected];
+    [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.playButton];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    self.playButton.frame = CGRectMake(0, 0, 40, 40);
+    self.playButton.center = CGPointMake(30, self.view.bounds.size.height - 30);
+}
+
+- (void)playPauseScene
+{
+    [self.sceneView playPauseScene];
+    [self.playButton setSelected:![self.playButton isSelected]];
 }
 
 - (void)didReceiveMemoryWarning

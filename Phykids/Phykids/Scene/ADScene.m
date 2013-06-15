@@ -9,6 +9,10 @@
 #import "ADScene.h"
 #import "ADNodeFactory.h"
 
+@interface ADScene()
+@property (nonatomic) BOOL isPaused;
+@end
+
 @implementation ADScene
 
 - (id)initWithSize:(CGSize)size
@@ -16,6 +20,7 @@
     self = [super initWithSize:size];
     if (self) {
         self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
+        self.isPaused = YES;
     }
     return self;
 }
@@ -26,13 +31,15 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
     
-    SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
-    if (body) {
-        SKNode *node = body.node;
-        [ADNodeFactory tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
-        return;
-    }
-    [self addChild:[ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeTriangle atPoint:point]];
+//    SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
+//    if (body) {
+//        SKNode *node = body.node;
+//        [ADNodeFactory tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
+//        return;
+//    }
+    SKNode *node = [ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point];
+    [node setPaused:self.isPaused];
+    [self addChild:node];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
@@ -43,6 +50,15 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     
+}
+
+- (void)playPauseScene
+{
+    self.isPaused = !self.isPaused;
+    [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        SKShapeNode *node = (SKShapeNode*)obj;
+        [node setPaused:self.isPaused];
+    }];
 }
 
 @end
