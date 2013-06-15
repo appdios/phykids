@@ -7,7 +7,7 @@
 //
 
 #import "ADScene.h"
-#import "ADNodeFactory.h"
+#import "ADNodeManager.h"
 
 @interface ADScene()
 @property (nonatomic) BOOL isPaused;
@@ -37,7 +37,7 @@
 //        [ADNodeFactory tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
 //        return;
 //    }
-    SKNode *node = [ADNodeFactory nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point];
+    SKNode *node = [ADNodeManager nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point];
     [node setPaused:self.isPaused];
     [self addChild:node];
 }
