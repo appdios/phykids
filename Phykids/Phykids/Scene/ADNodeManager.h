@@ -28,4 +28,5 @@ typedef enum
 + (id)nodeOfType:(ADNodeType)type subType:(ADNodeSubType)subType atPoint:(CGPoint)point;
 + (void)tranformNode:(SKNode*)node withMatrix:(CGAffineTransform)matrix;
 + (SKNode*)currentNode;
++ (void)setCurrentNode:(SKNode*)node;
 @end

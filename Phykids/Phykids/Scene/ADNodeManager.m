@@ -58,10 +58,16 @@
     return nodeManager.currentNode;
 }
 
++ (void)setCurrentNode:(SKNode*)node
+{
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    nodeManager.currentNode = node;
+}
+
 - (SKNode*) rectangleNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self rectanglePathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self rectanglePathOfSize:CGSizeMake(100, 50)];
     [node setPath:path];
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[self randomColor]];
@@ -89,7 +95,7 @@
 - (SKNode*) triangularNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self triangularPathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self triangularPathOfSize:CGSizeMake(80, 80)];
     [node setPath:path];
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[self randomColor]];

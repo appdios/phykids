@@ -11,6 +11,8 @@
 
 @interface ADScene()
 @property (nonatomic) BOOL isPaused;
+@property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
+@property (nonatomic, strong) SKNode *mouseNode;
 @end
 
 @implementation ADScene
@@ -34,10 +36,16 @@
     SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
     if (body) {
         SKNode *node = body.node;
-        if (node) {
-            //[ADNodeManager currentNode] = node;
+        [ADNodeManager setCurrentNode:node];
+        if (self.isPaused) {
+            
         }
-        //[ADNodeManager tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
+        else
+        {
+            [self destroyMouseNode];
+            [self createMouseNodeAtPoint:point];
+        }
+        
     }
     else
     {
@@ -49,12 +57,14 @@
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInNode:self];
+    self.mouseNode.position = point;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    [self destroyMouseNode];
 }
 
 - (void)playPauseScene
@@ -66,4 +76,30 @@
     }];
 }
 
+- (void)createMouseNodeAtPoint:(CGPoint)point
+{
+    self.mouseNode = [SKSpriteNode spriteNodeWithImageNamed:@"touchImage"];
+    self.mouseNode.position = point;
+    [self addChild:self.mouseNode];
+    
+    SKPhysicsBody *mouseBody = [SKPhysicsBody bodyWithCircleOfRadius:20];
+    [mouseBody setDynamic:NO];
+    [self.mouseNode setPhysicsBody:mouseBody];
+    
+    self.mouseJoint = [SKPhysicsJointLimit jointWithBodyA:[ADNodeManager currentNode].physicsBody bodyB:self.mouseNode.physicsBody anchorA:[ADNodeManager currentNode].position anchorB:point];
+    self.mouseJoint.maxLength = 10;
+    [self.physicsWorld addJoint:self.mouseJoint];
+}
+
+- (void)destroyMouseNode
+{
+    if (self.mouseNode) {
+        [self.mouseNode removeFromParent];
+        self.mouseNode = nil;
+    }
+    if (self.mouseJoint) {
+        [self.physicsWorld removeJoint:self.mouseJoint];
+        self.mouseJoint = nil;
+    }
+}
 @end
