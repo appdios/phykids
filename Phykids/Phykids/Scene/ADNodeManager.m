@@ -7,7 +7,6 @@
 //
 
 #import "ADNodeManager.h"
-#import <SpriteKit/SpriteKit.h>
 
 @interface ADNodeManager()
 @property (nonatomic, strong) SKNode *currentNode;

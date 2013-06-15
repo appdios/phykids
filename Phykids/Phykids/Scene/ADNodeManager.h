@@ -6,6 +6,7 @@
 //  Copyright (c) 2013 Appdios Inc. All rights reserved.
 //
 
+#import <SpriteKit/SpriteKit.h>
 
 typedef enum
 {
@@ -25,6 +26,6 @@ typedef enum
 @interface ADNodeManager : NSObject
 
 + (id)nodeOfType:(ADNodeType)type subType:(ADNodeSubType)subType atPoint:(CGPoint)point;
-+ (void)tranformNode:(id)node withMatrix:(CGAffineTransform)matrix;
-+ (id)currentNode;
++ (void)tranformNode:(SKNode*)node withMatrix:(CGAffineTransform)matrix;
++ (SKNode*)currentNode;
 @end

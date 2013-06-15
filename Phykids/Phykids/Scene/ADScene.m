@@ -31,15 +31,20 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
     
-//    SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
-//    if (body) {
-//        SKNode *node = body.node;
-//        [ADNodeFactory tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
-//        return;
-//    }
-    SKNode *node = [ADNodeManager nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point];
-    [node setPaused:self.isPaused];
-    [self addChild:node];
+    SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
+    if (body) {
+        SKNode *node = body.node;
+        if (node) {
+            //[ADNodeManager currentNode] = node;
+        }
+        //[ADNodeManager tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
+    }
+    else
+    {
+        SKNode *node = [ADNodeManager nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point];
+        [node setPaused:self.isPaused];
+        [self addChild:node];
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
