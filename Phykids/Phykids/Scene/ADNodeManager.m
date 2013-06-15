@@ -1,28 +1,43 @@
 //
-//  ADNodeFactory.m
+//  ADNodeManager.m
 //  Phykids
 //
 //  Created by Aditi Kamal on 6/13/13.
 //  Copyright (c) 2013 Appdios Inc. All rights reserved.
 //
 
-#import "ADNodeFactory.h"
-@import SpriteKit;
+#import "ADNodeManager.h"
+#import <SpriteKit/SpriteKit.h>
 
-@implementation ADNodeFactory
+@interface ADNodeManager()
+@property (nonatomic, strong) SKNode *currentNode;
+@end
+
+@implementation ADNodeManager
+
++ (ADNodeManager*)sharedInstance
+{
+    static dispatch_once_t once;
+    static ADNodeManager *sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+    });
+    return sharedInstance;
+}
 
 + (id)nodeOfType:(ADNodeType)type subType:(ADNodeSubType)subType atPoint:(CGPoint)point
 {
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
     if (type == ADNodeTypeSprite) {
         switch (subType) {
             case ADNodeSubTypeRectangle:
-                return [ADNodeFactory rectangleNode:point];
+                return [nodeManager rectangleNode:point];
             case ADNodeSubTypeCircle:
-                return [ADNodeFactory circularNode:point];
+                return [nodeManager circularNode:point];
             case ADNodeSubTypeTriangle:
-                return [ADNodeFactory triangularNode:point];
+                return [nodeManager triangularNode:point];
             case ADNodeSubTypePolygon:
-                return [ADNodeFactory rectangleNode:point];
+                return [nodeManager rectangleNode:point];
                 
             default:
                 break;
@@ -31,27 +46,40 @@
     return nil;
 }
 
-+ (SKNode*) rectangleNode:(CGPoint)point
++ (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
+{
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    node.path = CGPathCreateCopyByTransformingPath(node.path, &matrix);
+    [nodeManager setPhysicsBodyToNode:node];
+}
+
++ (SKNode*)currentNode
+{
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    return nodeManager.currentNode;
+}
+
+- (SKNode*) rectangleNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [ADNodeFactory rectanglePathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self rectanglePathOfSize:CGSizeMake(50, 50)];
     [node setPath:path];
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[ADNodeFactory randomColor]];
+    [node setFillColor:[self randomColor]];
     [node setPosition:point];
     
-    [ADNodeFactory setPhysicsBodyToNode:node];
+    [self setPhysicsBodyToNode:node];
     
     return node;
 }
 
-+ (SKNode*) circularNode:(CGPoint)point
+- (SKNode*) circularNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [ADNodeFactory circularPathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self circularPathOfSize:CGSizeMake(50, 50)];
     [node setPath:path];
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[ADNodeFactory randomColor]];
+    [node setFillColor:[self randomColor]];
     [node setPosition:point];
     
     [node setPhysicsBody:[SKPhysicsBody bodyWithCircleOfRadius:25]];
@@ -59,21 +87,21 @@
     return node;
 }
 
-+ (SKNode*) triangularNode:(CGPoint)point
+- (SKNode*) triangularNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [ADNodeFactory triangularPathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self triangularPathOfSize:CGSizeMake(50, 50)];
     [node setPath:path];
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[ADNodeFactory randomColor]];
+    [node setFillColor:[self randomColor]];
     [node setPosition:point];
     
-    [ADNodeFactory setPhysicsBodyToNode:node];
+    [self setPhysicsBodyToNode:node];
         
     return node;
 }
 
-+ (void)setPhysicsBodyToNode:(SKShapeNode*)node
+- (void)setPhysicsBodyToNode:(SKShapeNode*)node
 {
     SKPhysicsBody *body = [SKPhysicsBody bodyWithPolygonFromPath:node.path];
     [body setDynamic:YES]; // No for static objects
@@ -81,7 +109,7 @@
     [node setPhysicsBody:body];
 }
 
-+ (CGPathRef) rectanglePathOfSize:(CGSize)size
+- (CGPathRef) rectanglePathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity; 
@@ -91,7 +119,7 @@
     return pathRef;
 }
 
-+ (CGPathRef) circularPathOfSize:(CGSize)size
+- (CGPathRef) circularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity; 
@@ -101,7 +129,7 @@
     return pathRef;
 }
 
-+ (CGPathRef) triangularPathOfSize:(CGSize)size
+- (CGPathRef) triangularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity; 
@@ -113,7 +141,7 @@
     return pathRef;
 }
 
-+ (UIColor*)randomColor
+- (UIColor*)randomColor
 {
     CGFloat hue = ( arc4random() % 256 / 256.0 ); 
     CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;  
@@ -122,11 +150,6 @@
     return color;
 }
 
-+ (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
-{
-    node.path = CGPathCreateCopyByTransformingPath(node.path, &matrix);
-    [ADNodeFactory setPhysicsBodyToNode:node];
-}
 
 
 @end
