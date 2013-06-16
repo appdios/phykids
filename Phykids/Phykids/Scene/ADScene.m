@@ -13,6 +13,7 @@
 @property (nonatomic) BOOL isPaused;
 @property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
 @property (nonatomic, strong) SKNode *mouseNode;
+@property (nonatomic, strong) SKNode *currentNode;
 @end
 
 @implementation ADScene
@@ -33,25 +34,18 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
     
+    self.currentNode = nil;
     SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
-    if (body) {
+    if (body && !self.isPaused) {
         SKNode *node = body.node;
-        [ADNodeManager setCurrentNode:node];
-        if (self.isPaused) {
-            
-        }
-        else
-        {
-            [self destroyMouseNode];
-            [self createMouseNodeAtPoint:point];
-        }
-        
+        [self destroyMouseNode];
+        [self createMouseNodeWithNode:node atPoint:point];
     }
     else
     {
-        SKNode *node = [ADNodeManager nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point];
-        [node setPaused:self.isPaused];
-        [self addChild:node];
+        self.currentNode = [ADNodeManager nodeOfType:[ADPropertyManager selectedNodeType] atPoint:point];
+        [self.currentNode setPaused:self.isPaused];
+        [self addChild:self.currentNode];
     }
 }
 
@@ -59,12 +53,17 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
-    self.mouseNode.position = point;
+    if (self.mouseNode) {
+        self.mouseNode.position = point;
+    }
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     [self destroyMouseNode];
+    if (self.currentNode) {
+        [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+    }
 }
 
 - (void)playPauseScene
@@ -76,17 +75,17 @@
     }];
 }
 
-- (void)createMouseNodeAtPoint:(CGPoint)point
+- (void)createMouseNodeWithNode:(SKNode*)node atPoint:(CGPoint)point
 {
-    self.mouseNode = [SKSpriteNode spriteNodeWithImageNamed:@"touchImage"];
+    self.mouseNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"touchImage"] size:CGSizeMake(20, 20)];
     self.mouseNode.position = point;
     [self addChild:self.mouseNode];
     
-    SKPhysicsBody *mouseBody = [SKPhysicsBody bodyWithCircleOfRadius:20];
+    SKPhysicsBody *mouseBody = [SKPhysicsBody bodyWithCircleOfRadius:5];
     [mouseBody setDynamic:NO];
     [self.mouseNode setPhysicsBody:mouseBody];
     
-    self.mouseJoint = [SKPhysicsJointLimit jointWithBodyA:[ADNodeManager currentNode].physicsBody bodyB:self.mouseNode.physicsBody anchorA:[ADNodeManager currentNode].position anchorB:point];
+    self.mouseJoint = [SKPhysicsJointLimit jointWithBodyA:node.physicsBody bodyB:self.mouseNode.physicsBody anchorA:point anchorB:point];
     self.mouseJoint.maxLength = 10;
     [self.physicsWorld addJoint:self.mouseJoint];
 }
