@@ -20,4 +20,6 @@ typedef enum
 
 + (ADNodeType)selectedNodeType;
 + (void)setSelectedNodeType:(ADNodeType)type;
++ (UIColor*)currentFillColor;
++ (void)setCurrentFillColor:(UIColor*)color;
 @end

@@ -29,15 +29,27 @@
     ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
     switch (type) {
         case ADNodeTypeRectangle:
-            return [nodeManager rectangleNode:point];
+            return [nodeManager rectangleNode:point ofSize:CGSizeMake(20, 20)];
         case ADNodeTypeCircle:
-            return [nodeManager circularNode:point];
+            return [nodeManager circularNode:point ofSize:CGSizeMake(20, 20)];
         case ADNodeTypePolygon:
             return [nodeManager triangularNode:point];
         default:
             break;
     }
     return nil;
+}
+
++ (id)rectangleNodeInRect:(CGRect)rect
+{
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    return [nodeManager rectangleNode:rect.origin ofSize:rect.size];
+}
+
++ (id)circularNodeInRect:(CGRect)rect
+{
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    return [nodeManager circularNode:rect.origin ofSize:rect.size];
 }
 
 + (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
@@ -61,27 +73,27 @@
     nodeManager.currentNode = node;
 }
 
-- (SKNode*) rectangleNode:(CGPoint)point
+- (SKNode*) rectangleNode:(CGPoint)point ofSize:(CGSize)size
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self newRectanglePathOfSize:CGSizeMake(100, 50)];
+    CGPathRef path = [self newRectanglePathOfSize:size];
     [node setPath:path];
     CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[self randomColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
     
     return node;
 }
 
-- (SKNode*) circularNode:(CGPoint)point
+- (SKNode*) circularNode:(CGPoint)point ofSize:(CGSize)size
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self newCircularPathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self newCircularPathOfSize:size];
     [node setPath:path];
     CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[self randomColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
     
     return node;
@@ -90,11 +102,11 @@
 - (SKNode*) triangularNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self newTriangularPathOfSize:CGSizeMake(80, 80)];
+    CGPathRef path = [self newTriangularPathOfSize:CGSizeMake(20, 20)];
     [node setPath:path];
     CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[self randomColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
         
     return node;
@@ -102,7 +114,7 @@
 
 + (void)setPhysicsBodyToNode:(SKShapeNode*)node{
     SKPhysicsBody *body = [ADPropertyManager selectedNodeType]==ADNodeTypeCircle?
-        [SKPhysicsBody bodyWithCircleOfRadius:25]:
+        [SKPhysicsBody bodyWithCircleOfRadius:node.frame.size.width/2]:
         [SKPhysicsBody bodyWithPolygonFromPath:node.path];
     [body setDynamic:YES]; // No for static objects
     [body setAllowsRotation:YES]; // No to disable rotation on drag
@@ -142,14 +154,6 @@
     return pathRef;
 }
 
-- (UIColor*)randomColor
-{
-    CGFloat hue = ( arc4random() % 256 / 256.0 ); 
-    CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;  
-    CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;  
-    UIColor *color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
-    return color;
-}
 
 
 

@@ -12,8 +12,11 @@
 @interface ADNodeManager : NSObject
 
 + (id)nodeOfType:(ADNodeType)type atPoint:(CGPoint)point;
++ (id)rectangleNodeInRect:(CGRect)rect;
++ (id)circularNodeInRect:(CGRect)rect;
 + (void)tranformNode:(SKNode*)node withMatrix:(CGAffineTransform)matrix;
 + (void)setPhysicsBodyToNode:(SKNode*)node;
 + (SKNode*)currentSelectedNode;
 + (void)setCurrentSelectedNode:(SKNode*)node;
+
 @end

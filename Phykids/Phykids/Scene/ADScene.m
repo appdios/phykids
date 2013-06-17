@@ -14,6 +14,7 @@
 @property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
 @property (nonatomic, strong) SKNode *mouseNode;
 @property (nonatomic, strong) SKNode *currentNode;
+@property (nonatomic) CGPoint startPoint;
 @end
 
 @implementation ADScene
@@ -43,9 +44,11 @@
     }
     else
     {
+        self.startPoint = point;
         self.currentNode = [ADNodeManager nodeOfType:[ADPropertyManager selectedNodeType] atPoint:point];
         [self.currentNode setPaused:self.isPaused];
         [self addChild:self.currentNode];
+        [ADPropertyManager setCurrentFillColor:((SKShapeNode*)self.currentNode).fillColor];
     }
 }
 
@@ -56,6 +59,29 @@
     if (self.mouseNode) {
         self.mouseNode.position = point;
     }
+    
+    if (self.currentNode) {
+        [self.currentNode removeFromParent];
+        self.currentNode = nil;
+        switch ([ADPropertyManager selectedNodeType]) {
+            case ADNodeTypeRectangle:
+            {
+                self.currentNode = [ADNodeManager rectangleNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, point.x - self.startPoint.x, point.y - self.startPoint.y)];
+            }
+                break;
+            case ADNodeTypeCircle:
+            {
+                CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
+                self.currentNode = [ADNodeManager circularNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0)];
+            }
+                break;
+            default:
+                break;
+        }
+        
+        [self addChild:self.currentNode];
+    }
+
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
@@ -63,6 +89,7 @@
     [self destroyMouseNode];
     if (self.currentNode) {
         [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+        [ADPropertyManager setCurrentFillColor:nil];
     }
 }
 
