@@ -9,6 +9,9 @@
 
 #import "ADSceneViewController.h"
 #import "ADScene.h"
+#import "ADSelectionView.h"
+#import "ADNodeManager.h"
+//#import "ADSelectionViewController.h"
 
 @import SpriteKit;
 
@@ -41,6 +44,8 @@
     [self.playButton setImage:[UIImage imageNamed:@"btnStop"] forState:UIControlStateSelected];
     [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.playButton];
+    
+    [self addSelectionView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -48,6 +53,17 @@
     [super viewWillAppear:animated];
     self.playButton.frame = CGRectMake(0, 0, 40, 40);
     self.playButton.center = CGPointMake(30, self.view.bounds.size.height - 30);
+}
+
+- (void)addSelectionView{
+//    SKNode *currentNode = [ADNodeManager currentNode];
+    CGRect boundingBox = CGRectMake(10, 10, 80, 80);//[currentNode calculateAccumulatedFrame];
+    ADSelectionView *selectionView = [[ADSelectionView alloc] initWithFrame:boundingBox];
+    [self.view addSubview:selectionView];
+}
+
+- (void)hideSelectionView{
+    
 }
 
 - (void)playPauseScene

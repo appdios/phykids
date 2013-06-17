@@ -14,6 +14,7 @@
 		2781D5A4176C26A000C80532 /* btnPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D5A0176C26A000C80532 /* btnPlay.png */; };
 		5C2D1127176C33DA00E31475 /* ADSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1126176C33DA00E31475 /* ADSelectionView.m */; };
 		5C2D1128176C33F000E31475 /* ADSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1126176C33DA00E31475 /* ADSelectionView.m */; };
+		5C2D112C176D619700E31475 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2D112B176D619700E31475 /* QuartzCore.framework */; };
 		5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC671176AEAF70019F2C8 /* ADNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */; };
@@ -50,6 +51,7 @@
 		2781D5A0176C26A000C80532 /* btnPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnPlay.png; sourceTree = "<group>"; };
 		5C2D1125176C33DA00E31475 /* ADSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSelectionView.h; sourceTree = "<group>"; };
 		5C2D1126176C33DA00E31475 /* ADSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADSelectionView.m; sourceTree = "<group>"; };
+		5C2D112B176D619700E31475 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		5C5AC66A176AE7630019F2C8 /* ADScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADScene.h; sourceTree = "<group>"; };
 		5C5AC66B176AE7630019F2C8 /* ADScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADScene.m; sourceTree = "<group>"; };
 		5C5AC66F176AEAF70019F2C8 /* ADNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNodeManager.h; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C2D112C176D619700E31475 /* QuartzCore.framework in Frameworks */,
 				270FC31C176C38E0006FBD11 /* SpriteKit.framework in Frameworks */,
 				5CD370D0176AE39700B689AC /* CoreGraphics.framework in Frameworks */,
 				5CD370D2176AE39700B689AC /* UIKit.framework in Frameworks */,
@@ -140,6 +143,7 @@
 		5CD370CC176AE39700B689AC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5C2D112B176D619700E31475 /* QuartzCore.framework */,
 				270FC31B176C38E0006FBD11 /* SpriteKit.framework */,
 				5CD370CD176AE39700B689AC /* Foundation.framework */,
 				5CD370CF176AE39700B689AC /* CoreGraphics.framework */,
