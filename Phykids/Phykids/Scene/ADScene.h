@@ -8,7 +8,12 @@
 
 #import <SpriteKit/SpriteKit.h>
 
+@protocol ADSceneDelegate <NSObject>
+- (void)showSelectionViewForNode:(SKShapeNode*)node;
+@end
+
 @interface ADScene : SKScene
 
+@property (nonatomic, weak) id<ADSceneDelegate> delegate;
 - (void)playPauseScene;
 @end

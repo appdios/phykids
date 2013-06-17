@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ADScene.h"
 
-@interface ADSceneViewController : UIViewController
+@interface ADSceneViewController : UIViewController<ADSceneDelegate>
 
 @end

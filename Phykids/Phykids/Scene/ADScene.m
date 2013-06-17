@@ -11,6 +11,10 @@
 
 @interface ADScene()
 @property (nonatomic) BOOL isPaused;
+@property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
+@property (nonatomic, strong) SKNode *mouseNode;
+@property (nonatomic, strong) SKNode *currentNode;
+@property (nonatomic) CGPoint startPoint;
 @end
 
 @implementation ADScene
@@ -31,30 +35,66 @@
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
     
+    self.currentNode = nil;
     SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
-    if (body) {
+    if (body && !self.isPaused) {
         SKNode *node = body.node;
-        if (node) {
-            //[ADNodeManager currentNode] = node;
-        }
-        //[ADNodeManager tranformNode:node withMatrix:CGAffineTransformMakeRotation(M_PI/4)];
+        [self destroyMouseNode];
+        [self createMouseNodeWithNode:node atPoint:point];
+    }
+    else if (body && self.isPaused) {
+        SKShapeNode *node = (SKShapeNode*)body.node;
+        [self.delegate showSelectionViewForNode:node];
     }
     else
     {
-        SKNode *node = [ADNodeManager nodeOfType:ADNodeTypeSprite subType:ADNodeSubTypeRectangle atPoint:point];
-        [node setPaused:self.isPaused];
-        [self addChild:node];
+        self.startPoint = point;
+        self.currentNode = [ADNodeManager nodeOfType:[ADPropertyManager selectedNodeType] atPoint:point];
+        [self.currentNode setPaused:self.isPaused];
+        [self addChild:self.currentNode];
+        [ADPropertyManager setCurrentFillColor:((SKShapeNode*)self.currentNode).fillColor];
     }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInNode:self];
+    if (self.mouseNode) {
+        self.mouseNode.position = point;
+    }
     
+    if (self.currentNode) {
+        [self.currentNode removeFromParent];
+        self.currentNode = nil;
+        switch ([ADPropertyManager selectedNodeType]) {
+            case ADNodeTypeRectangle:
+            {
+                self.currentNode = [ADNodeManager rectangleNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, point.x - self.startPoint.x, point.y - self.startPoint.y)];
+            }
+                break;
+            case ADNodeTypeCircle:
+            {
+                CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
+                self.currentNode = [ADNodeManager circularNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0)];
+            }
+                break;
+            default:
+                break;
+        }
+        
+        [self addChild:self.currentNode];
+    }
+
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    [self destroyMouseNode];
+    if (self.currentNode) {
+        [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+        [ADPropertyManager setCurrentFillColor:nil];
+    }
 }
 
 - (void)playPauseScene
@@ -66,4 +106,30 @@
     }];
 }
 
+- (void)createMouseNodeWithNode:(SKNode*)node atPoint:(CGPoint)point
+{
+    self.mouseNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"touchImage"] size:CGSizeMake(20, 20)];
+    self.mouseNode.position = point;
+    [self addChild:self.mouseNode];
+    
+    SKPhysicsBody *mouseBody = [SKPhysicsBody bodyWithCircleOfRadius:5];
+    [mouseBody setDynamic:NO];
+    [self.mouseNode setPhysicsBody:mouseBody];
+    
+    self.mouseJoint = [SKPhysicsJointLimit jointWithBodyA:node.physicsBody bodyB:self.mouseNode.physicsBody anchorA:point anchorB:point];
+    self.mouseJoint.maxLength = 10;
+    [self.physicsWorld addJoint:self.mouseJoint];
+}
+
+- (void)destroyMouseNode
+{
+    if (self.mouseNode) {
+        [self.mouseNode removeFromParent];
+        self.mouseNode = nil;
+    }
+    if (self.mouseJoint) {
+        [self.physicsWorld removeJoint:self.mouseJoint];
+        self.mouseJoint = nil;
+    }
+}
 @end

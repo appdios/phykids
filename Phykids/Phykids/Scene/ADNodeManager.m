@@ -24,64 +24,77 @@
     return sharedInstance;
 }
 
-+ (id)nodeOfType:(ADNodeType)type subType:(ADNodeSubType)subType atPoint:(CGPoint)point
++ (id)nodeOfType:(ADNodeType)type atPoint:(CGPoint)point
 {
     ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
-    if (type == ADNodeTypeSprite) {
-        switch (subType) {
-            case ADNodeSubTypeRectangle:
-                return [nodeManager rectangleNode:point];
-            case ADNodeSubTypeCircle:
-                return [nodeManager circularNode:point];
-            case ADNodeSubTypeTriangle:
-                return [nodeManager triangularNode:point];
-            case ADNodeSubTypePolygon:
-                return [nodeManager rectangleNode:point];
-                
-            default:
-                break;
-        }
+    switch (type) {
+        case ADNodeTypeRectangle:
+            return [nodeManager rectangleNode:point ofSize:CGSizeMake(20, 20)];
+        case ADNodeTypeCircle:
+            return [nodeManager circularNode:point ofSize:CGSizeMake(20, 20)];
+        case ADNodeTypePolygon:
+            return [nodeManager triangularNode:point];
+        default:
+            break;
     }
     return nil;
 }
 
-+ (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
++ (id)rectangleNodeInRect:(CGRect)rect
 {
     ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
-    node.path = CGPathCreateCopyByTransformingPath(node.path, &matrix);
-    [nodeManager setPhysicsBodyToNode:node];
+    return [nodeManager rectangleNode:rect.origin ofSize:rect.size];
 }
 
-+ (SKNode*)currentNode
++ (id)circularNodeInRect:(CGRect)rect
+{
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    return [nodeManager circularNode:rect.origin ofSize:rect.size];
+}
+
++ (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
+{
+//    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    CGPathRef path = CGPathCreateCopyByTransformingPath(node.path, &matrix);
+    node.path = path;
+    CGPathRelease(path);
+//    [nodeManager setPhysicsBodyToNode:node];
+}
+
++ (SKNode*)currentSelectedNode
 {
     ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
     return nodeManager.currentNode;
 }
 
-- (SKNode*) rectangleNode:(CGPoint)point
++ (void)setCurrentSelectedNode:(SKNode*)node
+{
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    nodeManager.currentNode = node;
+}
+
+- (SKNode*) rectangleNode:(CGPoint)point ofSize:(CGSize)size
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self rectanglePathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self newRectanglePathOfSize:size];
     [node setPath:path];
+    CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[self randomColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
-    
-    [self setPhysicsBodyToNode:node];
     
     return node;
 }
 
-- (SKNode*) circularNode:(CGPoint)point
+- (SKNode*) circularNode:(CGPoint)point ofSize:(CGSize)size
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self circularPathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self newCircularPathOfSize:size];
     [node setPath:path];
+    CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[self randomColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
-    
-    [node setPhysicsBody:[SKPhysicsBody bodyWithCircleOfRadius:25]];
     
     return node;
 }
@@ -89,26 +102,27 @@
 - (SKNode*) triangularNode:(CGPoint)point
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self triangularPathOfSize:CGSizeMake(50, 50)];
+    CGPathRef path = [self newTriangularPathOfSize:CGSizeMake(20, 20)];
     [node setPath:path];
+    CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[self randomColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
-    
-    [self setPhysicsBodyToNode:node];
         
     return node;
 }
 
-- (void)setPhysicsBodyToNode:(SKShapeNode*)node
-{
-    SKPhysicsBody *body = [SKPhysicsBody bodyWithPolygonFromPath:node.path];
++ (void)setPhysicsBodyToNode:(SKShapeNode*)node{
+    SKPhysicsBody *body = [ADPropertyManager selectedNodeType]==ADNodeTypeCircle?
+        [SKPhysicsBody bodyWithCircleOfRadius:node.frame.size.width/2]:
+        [SKPhysicsBody bodyWithPolygonFromPath:node.path];
     [body setDynamic:YES]; // No for static objects
     [body setAllowsRotation:YES]; // No to disable rotation on drag
+    [body setUsesPreciseCollisionDetection:YES]; // SLow, turn false if require performance
     [node setPhysicsBody:body];
 }
 
-- (CGPathRef) rectanglePathOfSize:(CGSize)size
+- (CGPathRef) newRectanglePathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity; 
@@ -118,17 +132,17 @@
     return pathRef;
 }
 
-- (CGPathRef) circularPathOfSize:(CGSize)size
+- (CGPathRef) newCircularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity; 
-    CGPathAddEllipseInRect(pathRef, &matrix, CGRectMake(0, 0, size.width, size.height));
+    CGAffineTransform matrix = CGAffineTransformIdentity;
+    CGPathAddArc(pathRef, &matrix, 0,0, size.width/2, 0, M_PI * 2, YES);
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
 }
 
-- (CGPathRef) triangularPathOfSize:(CGSize)size
+- (CGPathRef) newTriangularPathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity; 
@@ -140,14 +154,6 @@
     return pathRef;
 }
 
-- (UIColor*)randomColor
-{
-    CGFloat hue = ( arc4random() % 256 / 256.0 ); 
-    CGFloat saturation = ( arc4random() % 128 / 256.0 ) + 0.5;  
-    CGFloat brightness = ( arc4random() % 128 / 256.0 ) + 0.5;  
-    UIColor *color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
-    return color;
-}
 
 
 

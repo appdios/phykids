@@ -8,24 +8,15 @@
 
 #import <SpriteKit/SpriteKit.h>
 
-typedef enum
-{
-    ADNodeTypeSprite,
-    ADNodeTypeJoint,
-    ADNodeTypeAction
-}ADNodeType;
-
-typedef enum
-{
-    ADNodeSubTypeRectangle,
-    ADNodeSubTypeCircle,
-    ADNodeSubTypeTriangle,
-    ADNodeSubTypePolygon
-}ADNodeSubType;
 
 @interface ADNodeManager : NSObject
 
-+ (id)nodeOfType:(ADNodeType)type subType:(ADNodeSubType)subType atPoint:(CGPoint)point;
++ (id)nodeOfType:(ADNodeType)type atPoint:(CGPoint)point;
++ (id)rectangleNodeInRect:(CGRect)rect;
++ (id)circularNodeInRect:(CGRect)rect;
 + (void)tranformNode:(SKNode*)node withMatrix:(CGAffineTransform)matrix;
-+ (SKNode*)currentNode;
++ (void)setPhysicsBodyToNode:(SKNode*)node;
++ (SKNode*)currentSelectedNode;
++ (void)setCurrentSelectedNode:(SKNode*)node;
+
 @end
