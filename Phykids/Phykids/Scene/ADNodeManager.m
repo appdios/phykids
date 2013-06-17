@@ -139,7 +139,8 @@
         [SKPhysicsBody bodyWithPolygonFromPath:node.path];
     [body setDynamic:YES]; // No for static objects
     [body setAllowsRotation:YES]; // No to disable rotation on drag
-    [body setUsesPreciseCollisionDetection:YES]; // SLow, turn false if require performance
+    [body setUsesPreciseCollisionDetection:NO]; // SLow, turn false if require performance
+    [body setRestitution:0.5]; // bounciness  - elasticity
     [node setPhysicsBody:body];
 }
 

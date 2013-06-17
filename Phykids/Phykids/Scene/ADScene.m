@@ -28,6 +28,7 @@
         self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
         self.isPaused = YES;
         self.touchPoints = [NSMutableArray array];
+        self.physicsWorld.speed = 1.0;
     }
     return self;
 }
