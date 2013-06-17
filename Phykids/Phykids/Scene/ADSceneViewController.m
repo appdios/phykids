@@ -33,6 +33,7 @@
     [sView setShowsNodeCount:YES];
     
     self.sceneView = [[ADScene alloc] initWithSize:self.view.bounds.size];
+    self.sceneView.delegate = self;
     [self.sceneView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
     [sView presentScene:self.sceneView];
     
@@ -54,6 +55,11 @@
 {
     [self.sceneView playPauseScene];
     [self.playButton setSelected:![self.playButton isSelected]];
+}
+
+- (void)showSelectionViewForNode:(SKShapeNode *)node
+{
+    
 }
 
 - (void)didReceiveMemoryWarning

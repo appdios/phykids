@@ -42,6 +42,10 @@
         [self destroyMouseNode];
         [self createMouseNodeWithNode:node atPoint:point];
     }
+    else if (body && self.isPaused) {
+        SKShapeNode *node = (SKShapeNode*)body.node;
+        [self.delegate showSelectionViewForNode:node];
+    }
     else
     {
         self.startPoint = point;
