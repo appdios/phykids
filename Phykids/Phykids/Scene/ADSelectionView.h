@@ -7,8 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <SpriteKit/SpriteKit.h>
 
 @interface ADSelectionView : UIView
 
-- (void)setPath:(CGPathRef)path;
+- (void)setNode:(SKNode*)node;
 @end

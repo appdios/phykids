@@ -22,10 +22,6 @@
 
 @implementation ADSceneViewController
 
-- (void)loadView
-{
-    self.view = [[SKView alloc] initWithFrame:[[UIScreen mainScreen] applicationFrame]];
-}
 
 - (void)viewDidLoad
 {
@@ -51,7 +47,7 @@
 {
     [super viewWillAppear:animated];
     self.playButton.frame = CGRectMake(0, 0, 40, 40);
-    self.playButton.center = CGPointMake(30, self.view.bounds.size.height - 30);
+    self.playButton.center = CGPointMake(30, 768 - 30);
 }
 
 - (void)hideSelectionView{
@@ -81,7 +77,7 @@
     
     //CGRectMake(boundingBox.origin.x - 10 + boundingBox.size.width/2, self.view.bounds.size.height - boundingBox.origin.y - boundingBox.size.height/2 - 10, boundingBox.size.width + 40, boundingBox.size.height + 40)];
     [self.view addSubview:self.selectionView];
-    [self.selectionView setPath:node.path];
+    [self.selectionView setNode:node];
 }
 
 - (void)didReceiveMemoryWarning

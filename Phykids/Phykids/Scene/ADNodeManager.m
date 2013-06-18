@@ -129,6 +129,8 @@
     CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADPropertyManager currentFillColor]];
+    NSValue *pointValue = [points objectAtIndex:0];
+    [node setPosition:pointValue.CGPointValue];
     
     return node;
 }
@@ -180,14 +182,18 @@
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity;
+    
+    NSValue *point1Value = [points objectAtIndex:0];
+    CGPoint point1 = point1Value.CGPointValue;
+    
     [points enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSValue *pointValue = (NSValue*)obj;
         CGPoint point = [pointValue CGPointValue];
         if (idx==0) {
-            CGPathMoveToPoint(pathRef, &matrix, point.x, point.y);
+            CGPathMoveToPoint(pathRef, &matrix, point.x - point1.x, point.y - point1.y);
         }
         else{
-            CGPathAddLineToPoint(pathRef, &matrix, point.x, point.y);
+            CGPathAddLineToPoint(pathRef, &matrix, point.x - point1.x, point.y - point1.y);
         }
     }];
     CGPathCloseSubpath(pathRef);

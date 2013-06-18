@@ -27,6 +27,8 @@
 		5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC671176AEAF70019F2C8 /* ADNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */; };
 		5C5AC672176AEAF70019F2C8 /* ADNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */; };
+		5C7F9EC51770277F006E7368 /* ADSceneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */; };
+		5C7F9EC61770277F006E7368 /* ADSceneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */; };
 		5CD370CE176AE39700B689AC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370CD176AE39700B689AC /* Foundation.framework */; };
 		5CD370D0176AE39700B689AC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370CF176AE39700B689AC /* CoreGraphics.framework */; };
 		5CD370D2176AE39700B689AC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370D1176AE39700B689AC /* UIKit.framework */; };
@@ -70,6 +72,7 @@
 		5C5AC66B176AE7630019F2C8 /* ADScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADScene.m; sourceTree = "<group>"; };
 		5C5AC66F176AEAF70019F2C8 /* ADNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNodeManager.h; sourceTree = "<group>"; };
 		5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADNodeManager.m; sourceTree = "<group>"; };
+		5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ADSceneViewController.xib; sourceTree = "<group>"; };
 		5CD370CA176AE39700B689AC /* Phykids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phykids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD370CD176AE39700B689AC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5CD370CF176AE39700B689AC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -225,6 +228,7 @@
 			children = (
 				5CD37104176AE43100B689AC /* ADSceneViewController.h */,
 				5CD37105176AE43100B689AC /* ADSceneViewController.m */,
+				5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */,
 				5C5AC66A176AE7630019F2C8 /* ADScene.h */,
 				5C5AC66B176AE7630019F2C8 /* ADScene.m */,
 				5C2D1125176C33DA00E31475 /* ADSelectionView.h */,
@@ -316,6 +320,7 @@
 				2781D5A3176C26A000C80532 /* btnPlay.png in Resources */,
 				5CD370D8176AE39700B689AC /* InfoPlist.strings in Resources */,
 				270FC31F176C4467006FBD11 /* touchImage.png in Resources */,
+				5C7F9EC51770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A1176C26A000C80532 /* btnStop.png in Resources */,
 				270FC321176C4467006FBD11 /* touchImage@2x.png in Resources */,
 				5CD370E0176AE39700B689AC /* Images.xcassets in Resources */,
@@ -326,6 +331,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C7F9EC61770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A2176C26A000C80532 /* btnStop.png in Resources */,
 				5CD370F1176AE39700B689AC /* InfoPlist.strings in Resources */,
 				2781D5A4176C26A000C80532 /* btnPlay.png in Resources */,
@@ -475,7 +481,7 @@
 				GCC_PREFIX_HEADER = "Phykids/Phykids-Prefix.pch";
 				INFOPLIST_FILE = "Phykids/Phykids-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -489,7 +495,7 @@
 				GCC_PREFIX_HEADER = "Phykids/Phykids-Prefix.pch";
 				INFOPLIST_FILE = "Phykids/Phykids-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

@@ -8,11 +8,13 @@
 
 #import "ADSelectionView.h"
 #import "ADMathHelper.h"
+#import "ADNodeManager.h"
 
 static const int kOffset = 20;
 
 @interface ADSelectionView ()
 @property(nonatomic, strong) UIView *scaleView;
+@property(nonatomic, strong) SKNode *currentNode;
 @end
 
 @implementation ADSelectionView
@@ -21,7 +23,7 @@ static const int kOffset = 20;
 {
     self = [super initWithFrame:frame];
     if (self) {
-      //  [self setBackgroundColor:[UIColor lightGrayColor]];
+//        [self setBackgroundColor:[UIColor lightGrayColor]];
         
 
 
@@ -34,7 +36,7 @@ static const int kOffset = 20;
         slayer.borderColor = [UIColor blackColor].CGColor;
         slayer.borderWidth = 2.0;
         slayer.masksToBounds = YES;
-        [self addSubview:self.scaleView];
+     //   [self addSubview:self.scaleView];
 
         
     }
@@ -52,22 +54,41 @@ static const int kOffset = 20;
     CGPoint previousPoint = [touch previousLocationInView:self];
 
 //    if(CGRectContainsPoint(self.scaleView.frame, point)){
-        self.transform = CGAffineTransformRotate(self.transform, angleBetweenPoints(point, previousPoint));
+        //self.transform = CGAffineTransformRotate(self.transform, angleBetweenPoints(point, previousPoint));
 //    }
 //    else{
-////        self.transform = CGAffineTransformTranslate(self.transform, point.x - previousPoint.x, point.y - previousPoint.y);
+        self.transform = CGAffineTransformTranslate(self.transform, point.x - previousPoint.x, point.y - previousPoint.y);
+    [ADNodeManager tranformNode:self.currentNode withMatrix:CGAffineTransformMakeTranslation(point.x - previousPoint.x, - point.y + previousPoint.y)];
+
 //    }
 }
 
-
-- (void)setPath:(CGPathRef)path
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    CGRect  pathBox = CGPathGetPathBoundingBox(path);
+//    [self.currentNode.userData setObject:[NSValue valueWithCGAffineTransform:self.transform] forKey:@"matrix"];
+//
+    [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+}
+
+
+- (void)setNode:(SKShapeNode*)node
+{
+//    NSValue *matrixValue = [node.userData objectForKey:@"matrix"];
+//    if (matrixValue) {
+//        self.transform = matrixValue.CGAffineTransformValue;
+//    }
+
+    self.currentNode = node;
+    CGRect  pathBox = CGPathGetPathBoundingBox(node.path);
     double xx = CGRectGetMidX(pathBox) - CGRectGetMidX(self.bounds);
     double yy = CGRectGetMidY(pathBox) - CGRectGetMidY(self.bounds);
     // Create the shape layer
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    [shapeLayer setTransform:CATransform3DMakeTranslation(abs(xx), abs(yy), 0)];
+    CATransform3D tmatrix = CATransform3DIdentity;
+    tmatrix = CATransform3DScale(tmatrix, 1.0, -1.0, 1.0);
+    tmatrix = CATransform3DTranslate(tmatrix, abs(xx), abs(yy), 0);
+    tmatrix = CATransform3DTranslate(tmatrix, 0.0, -pathBox.size.height, 0);
+    [shapeLayer setTransform:tmatrix];
     [shapeLayer setFillColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
     [shapeLayer setStrokeColor:[[UIColor whiteColor] CGColor]];
     [shapeLayer setLineWidth:2.0f];
@@ -77,7 +98,7 @@ static const int kOffset = 20;
       [NSNumber numberWithInt:5],
       nil]];
     
-    [shapeLayer setPath:path];
+    [shapeLayer setPath:node.path];
     
     // Set the layer's contents
     //    [shapeLayer setContents:(id)[[UIImage imageNamed:@"balloon.jpg"] CGImage]];

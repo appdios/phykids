@@ -131,6 +131,7 @@
     if (self.currentNode) {
         [ADNodeManager setPhysicsBodyToNode:self.currentNode];
         [ADPropertyManager setCurrentFillColor:nil];
+        self.currentNode.userData = [NSMutableDictionary dictionary];
     }
 }
 
