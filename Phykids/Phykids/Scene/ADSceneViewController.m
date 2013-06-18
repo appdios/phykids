@@ -44,6 +44,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    self.sceneView.size = CGSizeMake(320, 568);
     self.playButton.frame = CGRectMake(0, 0, 40, 40);
     self.playButton.center = CGPointMake(30, 768 - 30);
 }
@@ -57,6 +58,7 @@
 
 - (void)playPauseScene
 {
+    [self hideSelectionView];
     [self.sceneView playPauseScene];
     [self.playButton setSelected:![self.playButton isSelected]];
 }

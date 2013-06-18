@@ -23,7 +23,4 @@ typedef enum
 + (UIColor*)currentFillColor;
 + (void)setCurrentFillColor:(UIColor*)color;
 
-+ (NSArray*)reducePoints:(NSArray*) Points tol:(double) Tolerance;
-+(BOOL) isConvexPolygon:(NSArray*)points;
-+(BOOL)isPad;
 @end

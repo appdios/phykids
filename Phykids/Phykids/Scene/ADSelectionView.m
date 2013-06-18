@@ -7,7 +7,6 @@
 //
 
 #import "ADSelectionView.h"
-#import "ADMathHelper.h"
 #import "ADNodeManager.h"
 
 static const int kOffset = 20;
@@ -68,11 +67,20 @@ static const int kOffset = 20;
 
 - (void)setNode:(SKShapeNode*)node
 {
+    if (![node isKindOfClass:[SKShapeNode class]]) {
+        return;
+    }
 //    NSValue *matrixValue = [node.userData objectForKey:@"matrix"];
 //    if (matrixValue) {
 //        self.transform = matrixValue.CGAffineTransformValue;
 //    }
-
+    NSLog(@"%.2f",node.zRotation*57.2957795);
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    transform = CGAffineTransformRotate(transform, node.zRotation);
+   // transform = CGAffineTransformTranslate(transform,self.frame.size.width/2,self.frame.size.height/2);
+    
+    self.transform = transform;
+    
     self.currentNode = node;
     CGRect  pathBox = CGPathGetPathBoundingBox(node.path);
     double xx = CGRectGetMidX(pathBox) - CGRectGetMidX(self.bounds);

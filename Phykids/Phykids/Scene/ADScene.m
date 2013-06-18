@@ -95,7 +95,7 @@
             {
                 [self.touchPoints addObject:[NSValue valueWithCGPoint:point]];
                 if ([self.touchPoints count]>=3) {
-                    NSArray *reducedPoints = [ADPropertyManager reducePoints:self.touchPoints tol:10];
+                    NSArray *reducedPoints = reducePoints(self.touchPoints,10);
 //                    [self.touchPoints removeAllObjects];
 //                    [self.touchPoints addObjectsFromArray:reducedPoints];
 //                    BOOL isConvex = [ADPropertyManager isConvexPolygon:reducedPoints];
@@ -131,8 +131,8 @@
 {
     [self destroyMouseNode];
     if (self.currentNode) {
-        NSArray *reducedPoints = [ADPropertyManager reducePoints:self.touchPoints tol:10];
-        BOOL isConvex = [ADPropertyManager isConvexPolygon:reducedPoints];
+        NSArray *reducedPoints = reducePoints(self.touchPoints,10);
+        BOOL isConvex = isConvexPolygon(reducedPoints);
         if (isConvex) {
             [ADNodeManager setPhysicsBodyToNode:self.currentNode];
         }
