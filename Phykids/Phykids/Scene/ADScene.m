@@ -15,6 +15,8 @@
 @property (nonatomic, strong) SKNode *mouseNode;
 @property (nonatomic, strong) SKNode *currentNode;
 @property (nonatomic) CGPoint startPoint;
+@property (nonatomic, strong) NSMutableArray *touchPoints;
+
 @end
 
 @implementation ADScene
@@ -25,6 +27,8 @@
     if (self) {
         self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
         self.isPaused = YES;
+        self.touchPoints = [NSMutableArray array];
+        self.physicsWorld.speed = 1.0;
     }
     return self;
 }
@@ -53,6 +57,9 @@
         [self.currentNode setPaused:self.isPaused];
         [self addChild:self.currentNode];
         [ADPropertyManager setCurrentFillColor:((SKShapeNode*)self.currentNode).fillColor];
+        
+        [self.touchPoints removeAllObjects];
+        [self.touchPoints addObject:[NSValue valueWithCGPoint:self.startPoint]];
     }
 }
 
@@ -65,25 +72,55 @@
     }
     
     if (self.currentNode) {
-        [self.currentNode removeFromParent];
-        self.currentNode = nil;
+        
         switch ([ADPropertyManager selectedNodeType]) {
             case ADNodeTypeRectangle:
             {
+                [self.currentNode removeFromParent];
+                self.currentNode = nil;
+                
                 self.currentNode = [ADNodeManager rectangleNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, point.x - self.startPoint.x, point.y - self.startPoint.y)];
             }
                 break;
             case ADNodeTypeCircle:
             {
+                [self.currentNode removeFromParent];
+                self.currentNode = nil;
+                
                 CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
                 self.currentNode = [ADNodeManager circularNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0)];
+            }
+                break;
+            case ADNodeTypePolygon:
+            {
+                [self.touchPoints addObject:[NSValue valueWithCGPoint:point]];
+                if ([self.touchPoints count]>=3) {
+                    NSArray *reducedPoints = [ADPropertyManager reducePoints:self.touchPoints tol:10];
+//                    BOOL isConvex = [ADPropertyManager isConvexPolygon:reducedPoints];
+//                    if (isConvex) {
+                    [self.currentNode removeFromParent];
+                    self.currentNode = nil;
+                        self.currentNode = [ADNodeManager polygonNodeWithPoints:reducedPoints];
+//                    }
+//                    else
+//                    {
+//                        [self.touchPoints removeLastObject];
+//                    }
+                }
+//                else
+//                {
+//                    self.currentNode = [ADNodeManager nodeOfType:ADNodeTypePolygon atPoint:point];
+//                }
             }
                 break;
             default:
                 break;
         }
-        
-        [self addChild:self.currentNode];
+        if (self.currentNode) {
+            if (![self.currentNode.parent isEqual:self]) {
+                [self addChild:self.currentNode];
+            }
+        }
     }
 
 }

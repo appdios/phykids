@@ -52,6 +52,15 @@
     return [nodeManager circularNode:rect.origin ofSize:rect.size];
 }
 
++ (id)polygonNodeWithPoints:(NSArray*)points
+{
+    if ([points count]<3) {
+        return nil;
+    }
+    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
+    return [nodeManager polygonNode:points];
+}
+
 + (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
 {
 //    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
@@ -112,13 +121,26 @@
     return node;
 }
 
+- (SKNode*) polygonNode:(NSArray*)points
+{
+    SKShapeNode *node = [SKShapeNode node];
+    CGPathRef path = [self newPolygonPathForPoints:points];
+    [node setPath:path];
+    CGPathRelease(path);
+    [node setStrokeColor:[UIColor blackColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
+    
+    return node;
+}
+
 + (void)setPhysicsBodyToNode:(SKShapeNode*)node{
     SKPhysicsBody *body = [ADPropertyManager selectedNodeType]==ADNodeTypeCircle?
         [SKPhysicsBody bodyWithCircleOfRadius:node.frame.size.width/2]:
         [SKPhysicsBody bodyWithPolygonFromPath:node.path];
     [body setDynamic:YES]; // No for static objects
     [body setAllowsRotation:YES]; // No to disable rotation on drag
-    [body setUsesPreciseCollisionDetection:YES]; // SLow, turn false if require performance
+    [body setUsesPreciseCollisionDetection:NO]; // SLow, turn false if require performance
+    [body setRestitution:0.5]; // bounciness  - elasticity
     [node setPhysicsBody:body];
 }
 
@@ -154,7 +176,24 @@
     return pathRef;
 }
 
-
+- (CGPathRef) newPolygonPathForPoints:(NSArray*)points
+{
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    CGAffineTransform matrix = CGAffineTransformIdentity;
+    [points enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSValue *pointValue = (NSValue*)obj;
+        CGPoint point = [pointValue CGPointValue];
+        if (idx==0) {
+            CGPathMoveToPoint(pathRef, &matrix, point.x, point.y);
+        }
+        else{
+            CGPathAddLineToPoint(pathRef, &matrix, point.x, point.y);
+        }
+    }];
+    CGPathCloseSubpath(pathRef);
+    
+    return pathRef;
+}
 
 
 @end
