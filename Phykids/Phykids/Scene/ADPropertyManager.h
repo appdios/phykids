@@ -25,4 +25,5 @@ typedef enum
 
 + (NSArray*)reducePoints:(NSArray*) Points tol:(double) Tolerance;
 +(BOOL) isConvexPolygon:(NSArray*)points;
++(BOOL)isPad;
 @end

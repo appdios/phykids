@@ -11,4 +11,6 @@
 
 @interface ADSceneViewController : UIViewController<ADSceneDelegate>
 
+@property (nonatomic, strong) IBOutlet UIButton *playButton;
+
 @end

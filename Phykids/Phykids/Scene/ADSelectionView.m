@@ -53,14 +53,9 @@ static const int kOffset = 20;
     CGPoint point = [touch locationInView:self];
     CGPoint previousPoint = [touch previousLocationInView:self];
 
-//    if(CGRectContainsPoint(self.scaleView.frame, point)){
-        //self.transform = CGAffineTransformRotate(self.transform, angleBetweenPoints(point, previousPoint));
-//    }
-//    else{
-        self.transform = CGAffineTransformTranslate(self.transform, point.x - previousPoint.x, point.y - previousPoint.y);
-    [ADNodeManager tranformNode:self.currentNode withMatrix:CGAffineTransformMakeTranslation(point.x - previousPoint.x, - point.y + previousPoint.y)];
 
-//    }
+    self.center = CGPointMake(self.center.x + (point.x - previousPoint.x), self.center.y + (point.y - previousPoint.y));
+    self.currentNode.position = CGPointMake(self.currentNode.position.x + (point.x - previousPoint.x), self.currentNode.position.y - (point.y - previousPoint.y));
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event

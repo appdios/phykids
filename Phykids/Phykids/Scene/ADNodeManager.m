@@ -91,7 +91,7 @@
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
-    
+    node.userData = [NSMutableDictionary dictionary];
     return node;
 }
 
@@ -104,7 +104,7 @@
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
-    
+    node.userData = [NSMutableDictionary dictionary];
     return node;
 }
 
@@ -117,7 +117,7 @@
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:point];
-        
+    node.userData = [NSMutableDictionary dictionary]; 
     return node;
 }
 
@@ -131,7 +131,7 @@
     [node setFillColor:[ADPropertyManager currentFillColor]];
     NSValue *pointValue = [points objectAtIndex:0];
     [node setPosition:pointValue.CGPointValue];
-    
+    node.userData = [NSMutableDictionary dictionary];
     return node;
 }
 

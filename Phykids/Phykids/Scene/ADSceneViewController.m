@@ -15,7 +15,6 @@
 @import SpriteKit;
 
 @interface ADSceneViewController ()
-@property (nonatomic, strong) UIButton *playButton;
 @property (nonatomic, strong) ADScene *sceneView;
 @property (nonatomic, strong) ADSelectionView *selectionView;
 @end
@@ -36,7 +35,6 @@
     [self.sceneView setBackgroundColor:[UIColor colorWithWhite:1.0 alpha:1.0]];
     [sView presentScene:self.sceneView];
     
-    self.playButton = [[UIButton alloc] init];
     [self.playButton setImage:[UIImage imageNamed:@"btnPlay"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"btnStop"] forState:UIControlStateSelected];
     [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];

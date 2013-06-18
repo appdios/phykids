@@ -14,6 +14,10 @@
 		270FC322176C4467006FBD11 /* touchImage@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 270FC31E176C4467006FBD11 /* touchImage@2x.png */; };
 		270FC325176D0862006FBD11 /* ADPropertyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 270FC324176D0862006FBD11 /* ADPropertyManager.m */; };
 		270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 270FC324176D0862006FBD11 /* ADPropertyManager.m */; };
+		2771A2121770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2771A2111770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib */; };
+		2771A2131770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2771A2111770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib */; };
+		2771A2161771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2771A2151771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m */; };
+		2771A2171771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 2771A2151771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m */; };
 		2781D5A1176C26A000C80532 /* btnStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D59F176C26A000C80532 /* btnStop.png */; };
 		2781D5A2176C26A000C80532 /* btnStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D59F176C26A000C80532 /* btnStop.png */; };
 		2781D5A3176C26A000C80532 /* btnPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D5A0176C26A000C80532 /* btnPlay.png */; };
@@ -61,6 +65,9 @@
 		270FC31E176C4467006FBD11 /* touchImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "touchImage@2x.png"; sourceTree = "<group>"; };
 		270FC323176D0862006FBD11 /* ADPropertyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADPropertyManager.h; sourceTree = "<group>"; };
 		270FC324176D0862006FBD11 /* ADPropertyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADPropertyManager.m; sourceTree = "<group>"; };
+		2771A2111770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ADSceneViewController-iPhone.xib"; sourceTree = "<group>"; };
+		2771A2141771066400B3B7A7 /* OneFingerRotationGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OneFingerRotationGestureRecognizer.h; sourceTree = "<group>"; };
+		2771A2151771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OneFingerRotationGestureRecognizer.m; sourceTree = "<group>"; };
 		2781D59F176C26A000C80532 /* btnStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnStop.png; sourceTree = "<group>"; };
 		2781D5A0176C26A000C80532 /* btnPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnPlay.png; sourceTree = "<group>"; };
 		5C2D1125176C33DA00E31475 /* ADSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSelectionView.h; sourceTree = "<group>"; };
@@ -229,6 +236,7 @@
 				5CD37104176AE43100B689AC /* ADSceneViewController.h */,
 				5CD37105176AE43100B689AC /* ADSceneViewController.m */,
 				5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */,
+				2771A2111770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib */,
 				5C5AC66A176AE7630019F2C8 /* ADScene.h */,
 				5C5AC66B176AE7630019F2C8 /* ADScene.m */,
 				5C2D1125176C33DA00E31475 /* ADSelectionView.h */,
@@ -237,6 +245,8 @@
 				5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */,
 				270FC323176D0862006FBD11 /* ADPropertyManager.h */,
 				270FC324176D0862006FBD11 /* ADPropertyManager.m */,
+				2771A2141771066400B3B7A7 /* OneFingerRotationGestureRecognizer.h */,
+				2771A2151771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -323,6 +333,7 @@
 				5C7F9EC51770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A1176C26A000C80532 /* btnStop.png in Resources */,
 				270FC321176C4467006FBD11 /* touchImage@2x.png in Resources */,
+				2771A2121770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */,
 				5CD370E0176AE39700B689AC /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -331,6 +342,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2771A2131770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */,
 				5C7F9EC61770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A2176C26A000C80532 /* btnStop.png in Resources */,
 				5CD370F1176AE39700B689AC /* InfoPlist.strings in Resources */,
@@ -353,6 +365,7 @@
 				5CD370DE176AE39700B689AC /* ADAppDelegate.m in Sources */,
 				270FC325176D0862006FBD11 /* ADPropertyManager.m in Sources */,
 				5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */,
+				2771A2161771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m in Sources */,
 				5C2D1127176C33DA00E31475 /* ADSelectionView.m in Sources */,
 				5C5AC671176AEAF70019F2C8 /* ADNodeManager.m in Sources */,
 			);
@@ -365,6 +378,7 @@
 				5CD37107176AE43100B689AC /* ADSceneViewController.m in Sources */,
 				5C2D1128176C33F000E31475 /* ADSelectionView.m in Sources */,
 				5C5AC672176AEAF70019F2C8 /* ADNodeManager.m in Sources */,
+				2771A2171771066400B3B7A7 /* OneFingerRotationGestureRecognizer.m in Sources */,
 				5C2D1134176FCCB000E31475 /* ADMathHelper.m in Sources */,
 				5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */,
 				5CD370F3176AE39700B689AC /* PhykidsTests.m in Sources */,
@@ -481,7 +495,7 @@
 				GCC_PREFIX_HEADER = "Phykids/Phykids-Prefix.pch";
 				INFOPLIST_FILE = "Phykids/Phykids-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -495,7 +509,7 @@
 				GCC_PREFIX_HEADER = "Phykids/Phykids-Prefix.pch";
 				INFOPLIST_FILE = "Phykids/Phykids-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TARGETED_DEVICE_FAMILY = 2;
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

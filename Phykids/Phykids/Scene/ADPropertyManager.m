@@ -21,7 +21,7 @@
     static ADPropertyManager *sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
-        sharedInstance.nodeType = ADNodeTypeRectangle;
+        sharedInstance.nodeType = ADNodeTypePolygon;
     });
     return sharedInstance;
 }
@@ -175,6 +175,14 @@
 		return TRUE;
 	else
 		return TRUE;    
+}
+
++(BOOL)isPad
+{
+#ifdef UI_USER_INTERFACE_IDIOM
+    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+#endif
+    return NO;
 }
 
 - (UIColor*)randomColor
