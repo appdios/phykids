@@ -10,4 +10,5 @@
 
 @interface ADSelectionView : UIView
 
+- (void)setPath:(CGPathRef)path;
 @end

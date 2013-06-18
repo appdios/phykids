@@ -7,6 +7,8 @@
 //
 
 #import "ADSelectionView.h"
+#import "ADMathHelper.h"
+
 static const int kOffset = 20;
 
 @interface ADSelectionView ()
@@ -19,14 +21,19 @@ static const int kOffset = 20;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBackgroundColor:[UIColor colorWithWhite:0.2 alpha:1.0]];
+      //  [self setBackgroundColor:[UIColor lightGrayColor]];
         
 
 
-        [self addOverlay];
+      //  [self addOverlay];
 
         self.scaleView = [[UIView alloc] initWithFrame:CGRectMake(self.bounds.origin.x + self.bounds.size.width - kOffset, self.bounds.origin.y + self.bounds.size.height - kOffset, 20, 20)];
-        self.scaleView.backgroundColor = [UIColor redColor];
+//        self.scaleView.backgroundColor = [UIColor redColor];
+        CALayer *slayer = self.scaleView.layer;
+        slayer.cornerRadius = 10;
+        slayer.borderColor = [UIColor blackColor].CGColor;
+        slayer.borderWidth = 2.0;
+        slayer.masksToBounds = YES;
         [self addSubview:self.scaleView];
 
         
@@ -42,38 +49,27 @@ static const int kOffset = 20;
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
-    if(CGRectContainsPoint(self.scaleView.frame, point)){
-        self.transform = CGAffineTransformRotate(self.transform, M_PI);
-    }
-    else{
-        CGPoint previousPoint = [touch previousLocationInView:self];
-        self.transform = CGAffineTransformTranslate(self.transform, point.x - previousPoint.x, point.y - previousPoint.y);
-    }
+    CGPoint previousPoint = [touch previousLocationInView:self];
+
+//    if(CGRectContainsPoint(self.scaleView.frame, point)){
+        self.transform = CGAffineTransformRotate(self.transform, angleBetweenPoints(point, previousPoint));
+//    }
+//    else{
+////        self.transform = CGAffineTransformTranslate(self.transform, point.x - previousPoint.x, point.y - previousPoint.y);
+//    }
 }
 
-- (void)move:(UIPanGestureRecognizer*)gesture
-{
-    CGPoint translation = [gesture translationInView:gesture.view];
-    
-    CGAffineTransform matrix =  CGAffineTransformMakeTranslation(translation.x, translation.y);
-    gesture.view.transform = matrix;
-    
-   
-}
 
-- (void)layoutSubviews
+- (void)setPath:(CGPathRef)path
 {
-}
-
-- (void)addOverlay
-{
+    CGRect  pathBox = CGPathGetPathBoundingBox(path);
+    double xx = CGRectGetMidX(pathBox) - CGRectGetMidX(self.bounds);
+    double yy = CGRectGetMidY(pathBox) - CGRectGetMidY(self.bounds);
     // Create the shape layer
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    CGRect shapeRect = CGRectMake(kOffset/2, kOffset/2, self.bounds.size.width-2*kOffset, self.bounds.size.height-2*kOffset);
-    [shapeLayer setFrame:shapeRect];
-    //    [shapeLayer setPosition:self.view.bounds.origin];
-    [shapeLayer setFillColor:[[UIColor clearColor] CGColor]];
-    [shapeLayer setStrokeColor:[[UIColor redColor] CGColor]];
+    [shapeLayer setTransform:CATransform3DMakeTranslation(abs(xx), abs(yy), 0)];
+    [shapeLayer setFillColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
+    [shapeLayer setStrokeColor:[[UIColor whiteColor] CGColor]];
     [shapeLayer setLineWidth:2.0f];
     [shapeLayer setLineJoin:kCALineJoinRound];
     [shapeLayer setLineDashPattern:
@@ -81,11 +77,7 @@ static const int kOffset = 20;
       [NSNumber numberWithInt:5],
       nil]];
     
-    // Setup the path
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathAddRect(path, NULL, shapeRect);
     [shapeLayer setPath:path];
-    CGPathRelease(path);
     
     // Set the layer's contents
     //    [shapeLayer setContents:(id)[[UIImage imageNamed:@"balloon.jpg"] CGImage]];
@@ -102,12 +94,5 @@ static const int kOffset = 20;
     
     [shapeLayer addAnimation:dashAnimation forKey:@"linePhase"];
 }
-
-
-//- (void)drawRect:(CGRect)rect
-//{
-//   }
-
-
 
 @end 

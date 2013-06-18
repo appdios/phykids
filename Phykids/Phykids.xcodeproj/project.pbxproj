@@ -21,6 +21,8 @@
 		5C2D1127176C33DA00E31475 /* ADSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1126176C33DA00E31475 /* ADSelectionView.m */; };
 		5C2D1128176C33F000E31475 /* ADSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1126176C33DA00E31475 /* ADSelectionView.m */; };
 		5C2D112C176D619700E31475 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2D112B176D619700E31475 /* QuartzCore.framework */; };
+		5C2D1133176FCCB000E31475 /* ADMathHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1132176FCCB000E31475 /* ADMathHelper.m */; };
+		5C2D1134176FCCB000E31475 /* ADMathHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1132176FCCB000E31475 /* ADMathHelper.m */; };
 		5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC671176AEAF70019F2C8 /* ADNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */; };
@@ -62,6 +64,8 @@
 		5C2D1125176C33DA00E31475 /* ADSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSelectionView.h; sourceTree = "<group>"; };
 		5C2D1126176C33DA00E31475 /* ADSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADSelectionView.m; sourceTree = "<group>"; };
 		5C2D112B176D619700E31475 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5C2D1131176FCCB000E31475 /* ADMathHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ADMathHelper.h; path = Helper/ADMathHelper.h; sourceTree = "<group>"; };
+		5C2D1132176FCCB000E31475 /* ADMathHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ADMathHelper.m; path = Helper/ADMathHelper.m; sourceTree = "<group>"; };
 		5C5AC66A176AE7630019F2C8 /* ADScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADScene.h; sourceTree = "<group>"; };
 		5C5AC66B176AE7630019F2C8 /* ADScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADScene.m; sourceTree = "<group>"; };
 		5C5AC66F176AEAF70019F2C8 /* ADNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNodeManager.h; sourceTree = "<group>"; };
@@ -132,6 +136,15 @@
 			path = Images;
 			sourceTree = "<group>";
 		};
+		5C2D112E176FCC6A00E31475 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				5C2D1131176FCCB000E31475 /* ADMathHelper.h */,
+				5C2D1132176FCCB000E31475 /* ADMathHelper.m */,
+			);
+			name = Helper;
+			sourceTree = "<group>";
+		};
 		5CD370C1176AE39700B689AC = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +181,7 @@
 		5CD370D3176AE39700B689AC /* Phykids */ = {
 			isa = PBXGroup;
 			children = (
+				5C2D112E176FCC6A00E31475 /* Helper */,
 				5CD370DC176AE39700B689AC /* ADAppDelegate.h */,
 				5CD370DD176AE39700B689AC /* ADAppDelegate.m */,
 				5CD370FC176AE3C800B689AC /* Scene */,
@@ -327,6 +341,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5C2D1133176FCCB000E31475 /* ADMathHelper.m in Sources */,
 				5CD37106176AE43100B689AC /* ADSceneViewController.m in Sources */,
 				5CD370DA176AE39700B689AC /* main.m in Sources */,
 				5CD370DE176AE39700B689AC /* ADAppDelegate.m in Sources */,
@@ -344,6 +359,7 @@
 				5CD37107176AE43100B689AC /* ADSceneViewController.m in Sources */,
 				5C2D1128176C33F000E31475 /* ADSelectionView.m in Sources */,
 				5C5AC672176AEAF70019F2C8 /* ADNodeManager.m in Sources */,
+				5C2D1134176FCCB000E31475 /* ADMathHelper.m in Sources */,
 				5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */,
 				5CD370F3176AE39700B689AC /* PhykidsTests.m in Sources */,
 				270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */,
