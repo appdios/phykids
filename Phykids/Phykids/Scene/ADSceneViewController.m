@@ -38,15 +38,14 @@
     [self.playButton setImage:[UIImage imageNamed:@"btnPlay"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"btnStop"] forState:UIControlStateSelected];
     [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.playButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.sceneView.size = CGSizeMake(320, 568);
-    self.playButton.frame = CGRectMake(0, 0, 40, 40);
-    self.playButton.center = CGPointMake(30, 768 - 30);
+    self.sceneView.size = self.view.bounds.size;
+    self.playButton.center = CGPointMake(30, self.view.bounds.size.height - 30);
+    [self.view bringSubviewToFront:self.playButton];
 }
 
 - (void)hideSelectionView{
