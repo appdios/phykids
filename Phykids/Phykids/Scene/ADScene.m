@@ -8,6 +8,7 @@
 
 #import "ADScene.h"
 #import "ADNodeManager.h"
+#import "ADJointNode.h"
 
 @interface ADScene()
 @property (nonatomic) BOOL isPaused;
@@ -128,6 +129,19 @@
         BOOL isConvex = isConvexPolygon(reducedPoints);
         if (isConvex) {
             [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+
+            
+            SKNode *tempNode = [SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(20, 20)];
+            tempNode.position = CGPointMake(100, 100);
+            [self addChild:tempNode];
+            tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
+            
+           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeRope betweenNodeA:self.currentNode nodeB:tempNode];
+            [self.physicsWorld addJoint:jointNode.joint];
+
+            [self addChild:jointNode];
+            
+            
         }
         else{
             [self.currentNode removeFromParent];
@@ -170,5 +184,15 @@
         [self.physicsWorld removeJoint:self.mouseJoint];
         self.mouseJoint = nil;
     }
+}
+
+- (void)didSimulatePhysics
+{
+    [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[ADJointNode class]]) {
+            [(ADJointNode*)obj update];
+        }
+        
+    }];
 }
 @end

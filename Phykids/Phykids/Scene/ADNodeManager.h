@@ -11,6 +11,8 @@
 
 @interface ADNodeManager : NSObject
 
+
++ (ADNodeManager*)sharedInstance;
 + (id)nodeOfType:(ADNodeType)type atPoint:(CGPoint)point;
 + (id)rectangleNodeInRect:(CGRect)rect;
 + (id)circularNodeInRect:(CGRect)rect;
