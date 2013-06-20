@@ -96,23 +96,10 @@
                 [self.touchPoints addObject:[NSValue valueWithCGPoint:point]];
                 if ([self.touchPoints count]>=3) {
                     NSArray *reducedPoints = reducePoints(self.touchPoints,10);
-//                    [self.touchPoints removeAllObjects];
-//                    [self.touchPoints addObjectsFromArray:reducedPoints];
-//                    BOOL isConvex = [ADPropertyManager isConvexPolygon:reducedPoints];
-//                    if (isConvex) {
                     [self.currentNode removeFromParent];
                     self.currentNode = nil;
-                        self.currentNode = [ADNodeManager polygonNodeWithPoints:reducedPoints];
-//                    }
-//                    else
-//                    {
-//                        [self.touchPoints removeLastObject];
-//                    }
+                    self.currentNode = [ADNodeManager polygonNodeWithPoints:reducedPoints];
                 }
-//                else
-//                {
-//                    self.currentNode = [ADNodeManager nodeOfType:ADNodeTypePolygon atPoint:point];
-//                }
             }
                 break;
             default:
@@ -129,7 +116,13 @@
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [self destroyMouseNode];
+    if (self.mouseNode) {
+        UITouch *touch = [touches anyObject];
+        CGPoint point = [touch locationInNode:self];
+        CGPoint previousPoint = [touch previousLocationInNode:self];
+        [self.mouseJoint.bodyA setVelocity:CGPointMake((point.x - previousPoint.x)*20, (point.y - previousPoint.y)*20)];
+        [self destroyMouseNode];
+    }
     if (self.currentNode) {
         NSArray *reducedPoints = reducePoints(self.touchPoints,10);
         BOOL isConvex = isConvexPolygon(reducedPoints);
@@ -163,7 +156,7 @@
     [self.mouseNode setPhysicsBody:mouseBody];
     
     self.mouseJoint = [SKPhysicsJointLimit jointWithBodyA:node.physicsBody bodyB:self.mouseNode.physicsBody anchorA:point anchorB:point];
-    self.mouseJoint.maxLength = 10;
+    self.mouseJoint.maxLength = 20;
     [self.physicsWorld addJoint:self.mouseJoint];
 }
 

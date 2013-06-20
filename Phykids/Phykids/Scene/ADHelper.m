@@ -145,3 +145,57 @@ UIColor* randomColor()
     UIColor *color = [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:1];
     return color;
 }
+
+CGPoint polygonCentroid(NSArray* vertices)
+{
+    CGPoint centroid = {0, 0};
+    double signedArea = 0.0;
+    double x0 = 0.0; // Current vertex X
+    double y0 = 0.0; // Current vertex Y
+    double x1 = 0.0; // Next vertex X
+    double y1 = 0.0; // Next vertex Y
+    double a = 0.0;  // Partial signed area
+    
+    // For all vertices except last
+    
+    int i=0;
+    for (i=0; i<[vertices count]-1; ++i)
+    {
+        NSValue *valuePoint0 = (NSValue*)vertices[i];
+        CGPoint point0 = valuePoint0.CGPointValue;
+        
+        NSValue *valuePoint1 = (NSValue*)vertices[i+1];
+        CGPoint point1 = valuePoint1.CGPointValue;
+        
+        x0 = point0.x;
+        y0 = point0.y;
+        x1 = point1.x;
+        y1 = point1.y;
+        a = x0*y1 - x1*y0;
+        signedArea += a;
+        centroid.x += (x0 + x1)*a;
+        centroid.y += (y0 + y1)*a;
+    }
+    
+    // Do last vertex
+    NSValue *valuePointLast = (NSValue*)vertices[i];
+    CGPoint pointLast = valuePointLast.CGPointValue;
+    
+    NSValue *valuePointFirst = (NSValue*)vertices[0];
+    CGPoint pointFirst = valuePointFirst.CGPointValue;
+    
+    x0 = pointLast.x;
+    y0 = pointLast.y;
+    x1 = pointFirst.x;
+    y1 = pointFirst.y;
+    a = x0*y1 - x1*y0;
+    signedArea += a;
+    centroid.x += (x0 + x1)*a;
+    centroid.y += (y0 + y1)*a;
+    
+    signedArea *= 0.5;
+    centroid.x /= (6.0*signedArea);
+    centroid.y /= (6.0*signedArea);
+    
+    return centroid;
+}

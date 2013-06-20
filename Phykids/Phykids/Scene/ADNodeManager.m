@@ -90,7 +90,8 @@
     CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADPropertyManager currentFillColor]];
-    [node setPosition:point];
+    CGRect rect = CGRectMake(point.x, point.y, size.width, size.height);
+    [node setPosition:CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect))];
     node.userData = [NSMutableDictionary dictionary];
     return node;
 }
@@ -124,13 +125,17 @@
 - (SKNode*) polygonNode:(NSArray*)points
 {
     SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self newPolygonPathForPoints:points];
+    CGPoint centerPoint = polygonCentroid(points);
+    if (isnan(centerPoint.x) || isnan(centerPoint.y)) {
+        return node;
+    }
+    CGPathRef path = [self newPolygonPathForPoints:points atCenter:centerPoint];
     [node setPath:path];
     CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
     [node setFillColor:[ADPropertyManager currentFillColor]];
-    NSValue *pointValue = [points objectAtIndex:0];
-    [node setPosition:pointValue.CGPointValue];
+
+    [node setPosition:centerPoint];
     node.userData = [NSMutableDictionary dictionary];
     return node;
 }
@@ -150,7 +155,7 @@
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity; 
-    CGPathAddRect(pathRef, &matrix, CGRectMake(0, 0, size.width, size.height));
+    CGPathAddRect(pathRef, &matrix, CGRectMake(-size.width/2, -size.height/2, size.width, size.height));
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
@@ -178,28 +183,24 @@
     return pathRef;
 }
 
-- (CGPathRef) newPolygonPathForPoints:(NSArray*)points
+- (CGPathRef) newPolygonPathForPoints:(NSArray*)points atCenter:(CGPoint)centerPoint
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity;
-    
-    NSValue *point1Value = [points objectAtIndex:0];
-    CGPoint point1 = point1Value.CGPointValue;
     
     [points enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         NSValue *pointValue = (NSValue*)obj;
         CGPoint point = [pointValue CGPointValue];
         if (idx==0) {
-            CGPathMoveToPoint(pathRef, &matrix, point.x - point1.x, point.y - point1.y);
+            CGPathMoveToPoint(pathRef, &matrix, point.x - centerPoint.x, point.y - centerPoint.y);
         }
         else{
-            CGPathAddLineToPoint(pathRef, &matrix, point.x - point1.x, point.y - point1.y);
+            CGPathAddLineToPoint(pathRef, &matrix, point.x - centerPoint.x, point.y - centerPoint.y);
         }
     }];
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
 }
-
 
 @end

@@ -21,7 +21,7 @@
     static ADPropertyManager *sharedInstance;
     dispatch_once(&once, ^{
         sharedInstance = [[self alloc] init];
-        sharedInstance.nodeType = ADNodeTypeRectangle;
+        sharedInstance.nodeType = ADNodeTypePolygon;
     });
     return sharedInstance;
 }

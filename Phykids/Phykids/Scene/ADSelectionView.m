@@ -22,21 +22,15 @@ static const int kOffset = 20;
 {
     self = [super initWithFrame:frame];
     if (self) {
-//        [self setBackgroundColor:[UIColor lightGrayColor]];
-        
 
-
-      //  [self addOverlay];
-
+        self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.4];
         self.scaleView = [[UIView alloc] initWithFrame:CGRectMake(self.bounds.origin.x + self.bounds.size.width - kOffset, self.bounds.origin.y + self.bounds.size.height - kOffset, 20, 20)];
-//        self.scaleView.backgroundColor = [UIColor redColor];
         CALayer *slayer = self.scaleView.layer;
         slayer.cornerRadius = 10;
         slayer.borderColor = [UIColor blackColor].CGColor;
         slayer.borderWidth = 2.0;
         slayer.masksToBounds = YES;
-     //   [self addSubview:self.scaleView];
-
+    //    [self addSubview:self.scaleView];
         
     }
     return self;
@@ -59,8 +53,6 @@ static const int kOffset = 20;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-//    [self.currentNode.userData setObject:[NSValue valueWithCGAffineTransform:self.transform] forKey:@"matrix"];
-//
     [ADNodeManager setPhysicsBodyToNode:self.currentNode];
 }
 
@@ -70,28 +62,21 @@ static const int kOffset = 20;
     if (![node isKindOfClass:[SKShapeNode class]]) {
         return;
     }
-//    NSValue *matrixValue = [node.userData objectForKey:@"matrix"];
-//    if (matrixValue) {
-//        self.transform = matrixValue.CGAffineTransformValue;
-//    }
-    NSLog(@"%.2f",node.zRotation*57.2957795);
-    CGAffineTransform transform = CGAffineTransformIdentity;
-    transform = CGAffineTransformRotate(transform, node.zRotation);
-   // transform = CGAffineTransformTranslate(transform,self.frame.size.width/2,self.frame.size.height/2);
     
-    self.transform = transform;
-    
+    CGPoint pathPoint = CGPathGetCurrentPoint(node.path);
     self.currentNode = node;
-    CGRect  pathBox = CGPathGetPathBoundingBox(node.path);
-    double xx = CGRectGetMidX(pathBox) - CGRectGetMidX(self.bounds);
-    double yy = CGRectGetMidY(pathBox) - CGRectGetMidY(self.bounds);
-    // Create the shape layer
+    CGRect  pathBox = CGPathGetBoundingBox(node.path);
+    
+//    CGPoint centerDiffPoint =  CGPointMake(self.center.x - CGRectGetMidX(pathBox), self.center.y - CGRectGetMidY(pathBox));
+//    // Create the shape layer
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-    CATransform3D tmatrix = CATransform3DIdentity;
-    tmatrix = CATransform3DScale(tmatrix, 1.0, -1.0, 1.0);
-    tmatrix = CATransform3DTranslate(tmatrix, abs(xx), abs(yy), 0);
-    tmatrix = CATransform3DTranslate(tmatrix, 0.0, -pathBox.size.height, 0);
-    [shapeLayer setTransform:tmatrix];
+//    CATransform3D tmatrix = CATransform3DIdentity;
+//    NSLog(@"%.0f",node.zRotation*57.2957795);
+//    tmatrix = CATransform3DRotate(tmatrix, node.zRotation, 0, 0, 1);
+//    tmatrix = CATransform3DScale(tmatrix, 1.0, -1.0, 1.0);
+//    tmatrix = CATransform3DTranslate(tmatrix, CGRectGetWidth(pathBox)/2,CGRectGetHeight(pathBox)/2 - CGRectGetHeight(pathBox), 0);
+////
+//    [shapeLayer setTransform:tmatrix];
     [shapeLayer setFillColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
     [shapeLayer setStrokeColor:[[UIColor whiteColor] CGColor]];
     [shapeLayer setLineWidth:2.0f];
@@ -101,10 +86,7 @@ static const int kOffset = 20;
       [NSNumber numberWithInt:5],
       nil]];
     
-    [shapeLayer setPath:node.path];
-    
-    // Set the layer's contents
-    //    [shapeLayer setContents:(id)[[UIImage imageNamed:@"balloon.jpg"] CGImage]];
+    [shapeLayer setPath:CGPathCreateWithRect(self.bounds, nil)];
     
     [self.layer addSublayer:shapeLayer];
     CABasicAnimation *dashAnimation;

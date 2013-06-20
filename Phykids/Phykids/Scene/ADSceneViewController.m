@@ -72,9 +72,6 @@
     
     self.selectionView = [[ADSelectionView alloc] initWithFrame:CGRectMake(boundingBox.origin.x, fabs(boundingBox.origin.y - self.view.bounds.size.height+boundingBox.size.height), boundingBox.size.width, boundingBox.size.height)];
     
-    
-    
-    //CGRectMake(boundingBox.origin.x - 10 + boundingBox.size.width/2, self.view.bounds.size.height - boundingBox.origin.y - boundingBox.size.height/2 - 10, boundingBox.size.width + 40, boundingBox.size.height + 40)];
     [self.view addSubview:self.selectionView];
     [self.selectionView setNode:node];
 }

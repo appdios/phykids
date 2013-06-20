@@ -13,5 +13,6 @@ NSArray* reducePoints(NSArray *Points,double Tolerance);
 BOOL isConvexPolygon(NSArray *points);
 BOOL isPad();
 UIColor* randomColor();
+CGPoint polygonCentroid(NSArray* vertices);
 
 #endif
