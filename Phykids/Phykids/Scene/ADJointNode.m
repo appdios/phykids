@@ -82,33 +82,43 @@
         case ADPhysicsJointTypePivot:
         {
             CGPoint positionA = CGPointMake(self.nodeA.position.x + self.anchorPointOffsetA.x, self.nodeA.position.y + self.anchorPointOffsetA.y);
-            CGFloat radius = distanceBetween(self.nodeA.position, positionA);
-            CGPoint rotatedPoint = CGPointMake(radius * cosf(self.nodeA.zRotation), radius * sinf(self.nodeA.zRotation));
-            self.position = CGPointMake(self.nodeA.position.x + rotatedPoint.x, self.nodeA.position.y + rotatedPoint.y);
+            CGPoint rotatedPoint = rotatePoint(positionA, self.nodeA.zRotation, self.nodeA.position);
+            self.position = rotatedPoint;
         }
             break;
         case ADPhysicsJointTypeRope:
         {
             CGMutablePathRef pathRef = CGPathCreateMutable();
             CGPoint positionA = CGPointMake(self.nodeA.position.x + self.anchorPointOffsetA.x, self.nodeA.position.y + self.anchorPointOffsetA.y);
-            CGFloat radius = distanceBetween(self.nodeA.position, positionA);
-            CGPoint rotatedPoint = CGPointMake(radius * cos(self.nodeA.zRotation), radius * sin(self.nodeA.zRotation));
-            self.position = CGPointMake(self.nodeA.position.x + rotatedPoint.x, self.nodeA.position.y + rotatedPoint.y);
+            CGPoint rotatedPointA = rotatePoint(positionA, self.nodeA.zRotation, self.nodeA.position);
+            self.position = rotatedPointA;
+            
+            CGPoint positionB = CGPointMake(self.nodeB.position.x + self.anchorPointOffsetB.x, self.nodeB.position.y + self.anchorPointOffsetB.y);
+            CGPoint rotatedPointB = rotatePoint(positionB, self.nodeB.zRotation, self.nodeB.position);
             
             CGPathMoveToPoint(pathRef, nil, 0, 0);
             CGPathAddArc(pathRef, nil, 0,0, 2, 0, M_PI * 2, YES);
             CGPathMoveToPoint(pathRef, nil, 0, 0);
-            CGPathAddLineToPoint(pathRef, nil, self.nodeB.position.x - self.position.x, self.nodeB.position.y - self.position.y);
-            CGPathAddArc(pathRef, nil, self.nodeB.position.x - self.position.x,self.nodeB.position.y - self.position.y, 2, 0, M_PI * 2, YES);
+            CGPathAddLineToPoint(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y);
+            CGPathAddArc(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y, 2, 0, M_PI * 2, YES);
             self.path = pathRef;
         }
             break;
         case ADPhysicsJointTypeSpring:
         {
             CGMutablePathRef pathRef = CGPathCreateMutable();
-            self.position = self.nodeA.position;
+            CGPoint positionA = CGPointMake(self.nodeA.position.x + self.anchorPointOffsetA.x, self.nodeA.position.y + self.anchorPointOffsetA.y);
+            CGPoint rotatedPointA = rotatePoint(positionA, self.nodeA.zRotation, self.nodeA.position);
+            self.position = rotatedPointA;
+            
+            CGPoint positionB = CGPointMake(self.nodeB.position.x + self.anchorPointOffsetB.x, self.nodeB.position.y + self.anchorPointOffsetB.y);
+            CGPoint rotatedPointB = rotatePoint(positionB, self.nodeB.zRotation, self.nodeB.position);
+            
             CGPathMoveToPoint(pathRef, nil, 0, 0);
-            CGPathAddLineToPoint(pathRef, nil, self.nodeB.position.x - self.position.x, self.nodeB.position.y - self.position.y);
+            CGPathAddArc(pathRef, nil, 0,0, 2, 0, M_PI * 2, YES);
+            CGPathMoveToPoint(pathRef, nil, 0, 0);
+            CGPathAddLineToPoint(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y);
+            CGPathAddArc(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y, 2, 0, M_PI * 2, YES);
             self.path = pathRef;
         }
             break;

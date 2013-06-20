@@ -15,5 +15,5 @@ BOOL isPad();
 UIColor* randomColor();
 CGPoint polygonCentroid(NSArray* vertices);
 CGFloat distanceBetween(CGPoint point1,CGPoint point2);
-
+CGPoint rotatePoint(CGPoint p, float angle, CGPoint centerPoint);
 #endif
