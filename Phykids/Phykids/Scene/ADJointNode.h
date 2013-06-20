@@ -11,7 +11,8 @@
 typedef enum
 {
     ADPhysicsJointTypePivot,
-    ADPhysicsJointTypeRope
+    ADPhysicsJointTypeRope,
+    ADPhysicsJointTypeSpring
 }ADPhysicsJointType;
 
 @interface ADJointNode : SKShapeNode
@@ -19,5 +20,6 @@ typedef enum
 @property (nonatomic, strong) SKPhysicsJoint *joint;
 
 + (ADJointNode*)jointOfType:(ADPhysicsJointType)type betweenNodeA:(SKNode*)nodeA nodeB:(SKNode*)nodeB;
++ (ADJointNode*)jointOfType:(ADPhysicsJointType)type betweenNodeA:(SKNode*)nodeA nodeB:(SKNode*)nodeB anchorA:(CGPoint)pointA anchorB:(CGPoint)pointB;
 - (void)update;
 @end

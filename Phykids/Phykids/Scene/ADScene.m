@@ -27,7 +27,7 @@
     self = [super initWithSize:size];
     if (self) {
         self.physicsBody = [SKPhysicsBody bodyWithEdgeLoopFromRect:self.frame];
-        self.isPaused = YES;
+        self.isPaused = NO;
         self.touchPoints = [NSMutableArray array];
         self.physicsWorld.speed = 1.0;
     }
@@ -132,15 +132,15 @@
 
             
             SKNode *tempNode = [SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(20, 20)];
-            tempNode.position = CGPointMake(100, 100);
+            tempNode.position = CGPointMake(self.frame.size.width/2, 400);
             [self addChild:tempNode];
             tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
+            [tempNode.physicsBody setDynamic:NO];
             
-           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeRope betweenNodeA:self.currentNode nodeB:tempNode];
+           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeRope betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x+self.currentNode.frame.size.width/2, self.currentNode.position.y) anchorB:tempNode.position];
             [self.physicsWorld addJoint:jointNode.joint];
 
             [self addChild:jointNode];
-            
             
         }
         else{
