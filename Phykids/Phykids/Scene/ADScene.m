@@ -137,7 +137,7 @@
             tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
             [tempNode.physicsBody setDynamic:NO];
             
-           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeRope betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x-self.currentNode.frame.size.width/2, self.currentNode.position.y+self.currentNode.frame.size.height/2) anchorB:tempNode.position];
+           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeSpring betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x-self.currentNode.frame.size.width/2, self.currentNode.position.y+self.currentNode.frame.size.height/2) anchorB:tempNode.position];
             [self.physicsWorld addJoint:jointNode.joint];
 
             [self addChild:jointNode];
