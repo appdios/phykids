@@ -15,6 +15,9 @@
 @property (nonatomic, strong) SKNode *nodeB;
 @property (nonatomic) CGPoint anchorPointOffsetA;
 @property (nonatomic) CGPoint anchorPointOffsetB;
+@property (nonatomic) CGPoint startPositionA;
+@property (nonatomic) CGPoint startPositionB;
+@property (nonatomic, strong) NSMutableArray *childNodes;
 
 @end
 @implementation ADJointNode
@@ -27,9 +30,12 @@
 + (ADJointNode*)jointOfType:(ADPhysicsJointType)type betweenNodeA:(SKNode*)nodeA nodeB:(SKNode*)nodeB anchorA:(CGPoint)pointA anchorB:(CGPoint)pointB
 {
     ADJointNode *joint = [[ADJointNode alloc] init];
+    joint.childNodes = [NSMutableArray array];
     joint.jointType = type;
     joint.nodeA = nodeA;
     joint.nodeB = nodeB;
+    joint.startPositionA = pointA;
+    joint.startPositionB = pointB;
     joint.anchorPointOffsetA = CGPointMake(pointA.x - nodeA.position.x,pointA.y - nodeA.position.y);
     joint.anchorPointOffsetB = CGPointMake(pointB.x - nodeB.position.x,pointB.y - nodeB.position.y);
     
@@ -38,7 +44,9 @@
         {
             SKPhysicsJointPin *pinJoint = [SKPhysicsJointPin jointWithBodyA:nodeA.physicsBody bodyB:nodeB.physicsBody anchor:pointA];
             joint.joint = pinJoint;
-            joint.path = CGPathCreateWithEllipseInRect(CGRectMake(-5, -5, 10, 10), nil);
+            CGPathRef pathRef = CGPathCreateWithEllipseInRect(CGRectMake(-5, -5, 10, 10), nil);
+            joint.path = pathRef;
+            CGPathRelease(pathRef);
             joint.fillColor = [SKColor blackColor];
             joint.position = pointA;
         }
@@ -53,6 +61,7 @@
             CGPathMoveToPoint(pathRef, nil, 0, 0);
             CGPathAddLineToPoint(pathRef, nil, pointB.x - joint.position.x, pointB.y - joint.position.y);
             joint.path = pathRef;
+            CGPathRelease(pathRef);
             joint.strokeColor = [SKColor blackColor];
         }
             break;
@@ -67,7 +76,8 @@
             CGPathMoveToPoint(pathRef, nil, 0, 0);
             CGPathAddLineToPoint(pathRef, nil, pointB.x - joint.position.x, pointB.y - joint.position.y);
             joint.path = pathRef;
-            joint.strokeColor = [SKColor blackColor];
+            CGPathRelease(pathRef);
+            joint.strokeColor = [UIColor blackColor];
         }
             break;
         default:
@@ -91,7 +101,7 @@
             break;
         case ADPhysicsJointTypeSpring:
         {
-            [self updateRope];
+            [self updateSpring];
         }
             break;
         default:
@@ -108,7 +118,6 @@
 
 - (void) updateRope
 {
-   // CGMutablePathRef pathRef = CGPathCreateMutable();
     CGPoint positionA = CGPointMake(self.nodeA.position.x + self.anchorPointOffsetA.x, self.nodeA.position.y + self.anchorPointOffsetA.y);
     CGPoint rotatedPointA = rotatePoint(positionA, self.nodeA.zRotation, self.nodeA.position);
     self.position = rotatedPointA;
@@ -116,41 +125,40 @@
     CGPoint positionB = CGPointMake(self.nodeB.position.x + self.anchorPointOffsetB.x, self.nodeB.position.y + self.anchorPointOffsetB.y);
     CGPoint rotatedPointB = rotatePoint(positionB, self.nodeB.zRotation, self.nodeB.position);
     
-    CGPathRef pathRef = [self createVertices:self.position pointB:rotatedPointB];
-//    CGPathMoveToPoint(pathRef, nil, 0, 0);
-//    CGPathAddArc(pathRef, nil, 0,0, 2, 0, M_PI * 2, YES);
-//    CGPathMoveToPoint(pathRef, nil, 0, 0);
-//    CGPathAddLineToPoint(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y);
-//    CGPathAddArc(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y, 2, 0, M_PI * 2, YES);
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    CGPathMoveToPoint(pathRef, nil, 0, 0);
+    CGPathAddArc(pathRef, nil, 0,0, 2, 0, M_PI * 2, YES);
+    CGPathMoveToPoint(pathRef, nil, 0, 0);
+    CGPathAddLineToPoint(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y);
+    CGPathAddArc(pathRef, nil, rotatedPointB.x - self.position.x, rotatedPointB.y - self.position.y, 2, 0, M_PI * 2, YES);
     self.path = pathRef;
+    CGPathRelease(pathRef);
 }
 
-CGPoint updatePoint(CGPoint point,CGPoint originPoint, double angleInRadian)
+- (void) updateSpring
 {
-	// get coordinates relative to center
-    double dx = point.x - originPoint.x;
-    double dy = point.y - originPoint.y;
-    // calculate angle and distance
-    double a = atan2(dy, dx);
-    double dist = sqrt(dx * dx + dy * dy);
-    // calculate new angle
-    double a2 = a + angleInRadian;
-    // calculate new coordinates
-    double dx2 = cos(a2) * dist;
-    double dy2 = sin(a2) * dist;
-    // return coordinates relative to top left corner
-    point.x = dx2 + originPoint.x;
-    point.y = dy2 + originPoint.y;
-    return point;
+    CGPoint positionA = CGPointMake(self.nodeA.position.x + self.anchorPointOffsetA.x, self.nodeA.position.y + self.anchorPointOffsetA.y);
+    CGPoint rotatedPointA = rotatePoint(positionA, self.nodeA.zRotation, self.nodeA.position);
+    self.position = rotatedPointA;
+    
+    CGPoint positionB = CGPointMake(self.nodeB.position.x + self.anchorPointOffsetB.x, self.nodeB.position.y + self.anchorPointOffsetB.y);
+    CGPoint rotatedPointB = rotatePoint(positionB, self.nodeB.zRotation, self.nodeB.position);
+    
+    CGPathRef pathRef = [self newSpringPath:self.position pointB:rotatedPointB];
+    self.path = pathRef;
+    CGPathRelease(pathRef);
 }
 
--(CGPathRef)createVertices:(CGPoint)pointA pointB:(CGPoint)pointB{
-	
+
+-(CGPathRef)newSpringPath:(CGPoint)pointA pointB:(CGPoint)pointB{
+	[self removeAllChildren];
+    [self.childNodes removeAllObjects];
+    
     CGFloat distance = distanceBetween(pointA, pointB);
-    CGFloat height = distance*0.08;
+    CGFloat height = distanceBetween(self.startPositionA, self.startPositionB)*0.1;
 	CGFloat numberOfV = 12;
 	
-    CGPoint point1 = CGPointMake(pointA.x,pointA.y);
+    CGPoint point1 = CGPointMake(pointA.x, pointA.y);
 	CGPoint  point2 = CGPointMake(pointA.x+1*(distance/numberOfV), pointA.y);
 	CGPoint  point3 = CGPointMake(pointA.x+2*(distance/numberOfV), pointA.y-height);
 	CGPoint  point4 = CGPointMake(pointA.x+3*(distance/numberOfV), pointA.y+ height);
@@ -167,35 +175,63 @@ CGPoint updatePoint(CGPoint point,CGPoint originPoint, double angleInRadian)
 	double angleInRadian = atan2(pointB.y-pointA.y,pointB.x-pointA.x);
     
 	
-    point2 = updatePoint(point2,pointA,angleInRadian);
-	point3 = updatePoint(point3,pointA,angleInRadian);
-	point4 = updatePoint(point4,pointA,angleInRadian);
-	point5 = updatePoint(point5,pointA,angleInRadian);
-	point6 = updatePoint(point6,pointA,angleInRadian);
-	point7 = updatePoint(point7,pointA,angleInRadian);
-	point8 = updatePoint(point8,pointA,angleInRadian);
-	point9 = updatePoint(point9,pointA,angleInRadian);
-	point10 = updatePoint(point10,pointA,angleInRadian);
-	point11 = updatePoint(point11,pointA,angleInRadian);
-	point12 = updatePoint(point12,pointA,angleInRadian);
-	point13 = updatePoint(point13,pointA,angleInRadian);
+    point2 = rotatePoint(point2, angleInRadian, pointA);
+	point3 = rotatePoint(point3, angleInRadian, pointA);
+	point4 = rotatePoint(point4, angleInRadian, pointA);
+	point5 = rotatePoint(point5, angleInRadian, pointA);
+	point6 = rotatePoint(point6, angleInRadian, pointA);
+	point7 = rotatePoint(point7, angleInRadian, pointA);
+	point8 = rotatePoint(point8, angleInRadian, pointA);
+	point9 = rotatePoint(point9, angleInRadian, pointA);
+	point10 = rotatePoint(point10, angleInRadian, pointA);
+	point11 = rotatePoint(point11, angleInRadian, pointA);
+	point12 = rotatePoint(point12, angleInRadian, pointA);
+	point13 = rotatePoint(point13, angleInRadian, pointA);
     
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGPathMoveToPoint(pathRef, nil, point1.x, point1.y);
-    CGPathAddLineToPoint(pathRef, nil, point2.x, point2.y);
-    CGPathAddLineToPoint(pathRef, nil, point3.x, point3.y);
-    CGPathAddLineToPoint(pathRef, nil, point4.x, point4.y);
-    CGPathAddLineToPoint(pathRef, nil, point5.x, point5.y);
-    CGPathAddLineToPoint(pathRef, nil, point6.x, point6.y);
-    CGPathAddLineToPoint(pathRef, nil, point7.x, point7.y);
-    CGPathAddLineToPoint(pathRef, nil, point8.x, point8.y);
-    CGPathAddLineToPoint(pathRef, nil, point9.x, point9.y);
-    CGPathAddLineToPoint(pathRef, nil, point10.x, point10.y);
-    CGPathAddLineToPoint(pathRef, nil, point11.x, point11.y);
-    CGPathAddLineToPoint(pathRef, nil, point12.x, point12.y);
-    CGPathAddLineToPoint(pathRef, nil, point13.x, point13.y);
+    
+    CGPathMoveToPoint(pathRef, nil, point1.x - pointA.x, point1.y - pointA.y);
+    CGPathAddArc(pathRef, nil, 0,0, 2, 0, M_PI * 2, YES);
+    
+    CGPathMoveToPoint(pathRef, nil, point1.x - pointA.x, point1.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point2.x - pointA.x, point2.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point3.x - pointA.x, point3.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point4.x - pointA.x, point4.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point5.x - pointA.x, point5.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point6.x - pointA.x, point6.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point7.x - pointA.x, point7.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point8.x - pointA.x, point8.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point9.x - pointA.x, point9.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point10.x - pointA.x, point10.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point11.x - pointA.x, point11.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point12.x - pointA.x, point12.y - pointA.y);
+    CGPathAddLineToPoint(pathRef, nil, point13.x - pointA.x, point13.y - pointA.y);
+    
+    CGPathAddArc(pathRef, nil, point13.x - pointA.x, point13.y - pointA.y, 2, 0, M_PI * 2, YES);
+//    
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point1.x - pointA.x, point1.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point2.x - pointA.x, point2.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point3.x - pointA.x, point3.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point4.x - pointA.x, point4.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point5.x - pointA.x, point5.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point6.x - pointA.x, point6.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point7.x - pointA.x, point7.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point8.x - pointA.x, point8.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point9.x - pointA.x, point9.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point10.x - pointA.x, point10.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point11.x - pointA.x, point11.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point12.x - pointA.x, point12.y - pointA.y)]];
+//    [self addChild:[self createNodeAtPoint:CGPointMake(point13.x - pointA.x, point13.y - pointA.y)]];
+
     
     return pathRef;
+}
+
+- (SKNode*)createNodeAtPoint:(CGPoint)p
+{
+    SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:[UIImage imageNamed:@"rope"]] size:CGSizeMake(6, 6)];
+    node.position = p;
+    return node;
 }
 
 

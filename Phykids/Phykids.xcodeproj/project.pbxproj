@@ -18,6 +18,8 @@
 		270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 270FC324176D0862006FBD11 /* ADPropertyManager.m */; };
 		2771A2121770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2771A2111770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib */; };
 		2771A2131770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2771A2111770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib */; };
+		277FE7A81774F207002B9F5C /* rope.png in Resources */ = {isa = PBXBuildFile; fileRef = 277FE7A71774F207002B9F5C /* rope.png */; };
+		277FE7A91774F207002B9F5C /* rope.png in Resources */ = {isa = PBXBuildFile; fileRef = 277FE7A71774F207002B9F5C /* rope.png */; };
 		2781D5A1176C26A000C80532 /* btnStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D59F176C26A000C80532 /* btnStop.png */; };
 		2781D5A2176C26A000C80532 /* btnStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D59F176C26A000C80532 /* btnStop.png */; };
 		2781D5A3176C26A000C80532 /* btnPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D5A0176C26A000C80532 /* btnPlay.png */; };
@@ -68,6 +70,7 @@
 		270FC323176D0862006FBD11 /* ADPropertyManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADPropertyManager.h; sourceTree = "<group>"; };
 		270FC324176D0862006FBD11 /* ADPropertyManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADPropertyManager.m; sourceTree = "<group>"; };
 		2771A2111770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "ADSceneViewController-iPhone.xib"; sourceTree = "<group>"; };
+		277FE7A71774F207002B9F5C /* rope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rope.png; sourceTree = "<group>"; };
 		2781D59F176C26A000C80532 /* btnStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnStop.png; sourceTree = "<group>"; };
 		2781D5A0176C26A000C80532 /* btnPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnPlay.png; sourceTree = "<group>"; };
 		27EF5F431771190800DCA345 /* ADHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADHelper.h; sourceTree = "<group>"; };
@@ -140,6 +143,7 @@
 			children = (
 				2781D59F176C26A000C80532 /* btnStop.png */,
 				2781D5A0176C26A000C80532 /* btnPlay.png */,
+				277FE7A71774F207002B9F5C /* rope.png */,
 				270FC31D176C4467006FBD11 /* touchImage.png */,
 				270FC31E176C4467006FBD11 /* touchImage@2x.png */,
 			);
@@ -321,6 +325,7 @@
 			files = (
 				2781D5A3176C26A000C80532 /* btnPlay.png in Resources */,
 				5CD370D8176AE39700B689AC /* InfoPlist.strings in Resources */,
+				277FE7A81774F207002B9F5C /* rope.png in Resources */,
 				270FC31F176C4467006FBD11 /* touchImage.png in Resources */,
 				5C7F9EC51770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A1176C26A000C80532 /* btnStop.png in Resources */,
@@ -335,6 +340,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2771A2131770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */,
+				277FE7A91774F207002B9F5C /* rope.png in Resources */,
 				5C7F9EC61770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A2176C26A000C80532 /* btnStop.png in Resources */,
 				5CD370F1176AE39700B689AC /* InfoPlist.strings in Resources */,
