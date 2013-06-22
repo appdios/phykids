@@ -132,12 +132,13 @@
 
             
             SKNode *tempNode = [SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(20, 20)];
-            tempNode.position = CGPointMake(self.frame.size.width/2, 400);
+            tempNode.hidden = YES;
+            tempNode.position = CGPointMake(self.frame.size.width/2, 450);
             [self addChild:tempNode];
             tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
             [tempNode.physicsBody setDynamic:NO];
             
-           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeSpring betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x-self.currentNode.frame.size.width/2, self.currentNode.position.y+self.currentNode.frame.size.height/2) anchorB:tempNode.position];
+           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypePivot betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x, self.currentNode.position.y+self.currentNode.frame.size.height/2) anchorB:tempNode.position];
             [self.physicsWorld addJoint:jointNode.joint];
 
             [self addChild:jointNode];

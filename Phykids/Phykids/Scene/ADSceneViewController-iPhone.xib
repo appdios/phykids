@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" fixedFrame="YES" placeholderIntrinsicWidth="60" placeholderIntrinsicHeight="61" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L7c-9b-Xhq">
+                <button opaque="NO" alpha="0.79999999999999982" contentMode="scaleToFill" placeholderIntrinsicWidth="60" placeholderIntrinsicHeight="61" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L7c-9b-Xhq">
                     <rect key="frame" x="0.0" y="507" width="60" height="61"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
@@ -29,6 +29,10 @@
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="L7c-9b-Xhq" firstAttribute="bottom" secondItem="1" secondAttribute="bottom" id="hr4-ro-c96"/>
+                <constraint firstItem="L7c-9b-Xhq" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="mmZ-fF-S5C"/>
+            </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>

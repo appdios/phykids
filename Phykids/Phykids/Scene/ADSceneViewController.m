@@ -43,9 +43,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    self.sceneView.size = self.view.bounds.size;
-    self.playButton.center = CGPointMake(30, self.view.bounds.size.height - 30);
-    [self.view bringSubviewToFront:self.playButton];
 }
 
 - (void)hideSelectionView{
