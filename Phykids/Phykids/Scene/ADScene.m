@@ -138,7 +138,7 @@
             tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
             [tempNode.physicsBody setDynamic:NO];
             
-           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypePivot betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x, self.currentNode.position.y+self.currentNode.frame.size.height/2) anchorB:tempNode.position];
+           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeRope betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x, self.currentNode.position.y+self.currentNode.frame.size.height/2) anchorB:tempNode.position inSecene:self];
             [self.physicsWorld addJoint:jointNode.joint];
 
             [self addChild:jointNode];
@@ -187,11 +187,21 @@
     }
 }
 
+- (void)update:(NSTimeInterval)currentTime
+{
+    [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[ADJointNode class]]) {
+            [(ADJointNode*)obj update:currentTime];
+        }
+        
+    }];
+}
+
 - (void)didSimulatePhysics
 {
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([obj isKindOfClass:[ADJointNode class]]) {
-            [(ADJointNode*)obj update];
+            [(ADJointNode*)obj didSimulatePhysics];
         }
         
     }];

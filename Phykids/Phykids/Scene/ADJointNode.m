@@ -7,6 +7,7 @@
 //
 
 #import "ADJointNode.h"
+#import "ADRope.h"
 
 @interface ADJointNode()
 
@@ -17,16 +18,17 @@
 @property (nonatomic) CGPoint anchorPointOffsetB;
 @property (nonatomic) CGPoint startPositionA;
 @property (nonatomic) CGPoint startPositionB;
+@property (nonatomic, strong) ADRope *vRope;
 
 @end
 @implementation ADJointNode
 
-+ (ADJointNode*)jointOfType:(ADPhysicsJointType)type betweenNodeA:(SKNode*)nodeA nodeB:(SKNode*)nodeB
++ (ADJointNode*)jointOfType:(ADPhysicsJointType)type betweenNodeA:(SKNode*)nodeA nodeB:(SKNode*)nodeB inSecene:(SKScene*)scene
 {
-    return [self jointOfType:type betweenNodeA:nodeA nodeB:nodeB anchorA:nodeA.position anchorB:nodeB.position];
+    return [self jointOfType:type betweenNodeA:nodeA nodeB:nodeB anchorA:nodeA.position anchorB:nodeB.position inSecene:scene];
 }
 
-+ (ADJointNode*)jointOfType:(ADPhysicsJointType)type betweenNodeA:(SKNode*)nodeA nodeB:(SKNode*)nodeB anchorA:(CGPoint)pointA anchorB:(CGPoint)pointB
++ (ADJointNode*)jointOfType:(ADPhysicsJointType)type betweenNodeA:(SKNode*)nodeA nodeB:(SKNode*)nodeB anchorA:(CGPoint)pointA anchorB:(CGPoint)pointB inSecene:(SKScene*)scene
 {
     ADJointNode *joint = [[ADJointNode alloc] init];
     joint.jointType = type;
@@ -57,9 +59,7 @@
             joint.joint = limitJoint;
             joint.position = pointA;
             
-            CGPathRef pathRef = [joint newRopePath:joint.position pointB:pointB];
-            joint.path = pathRef;
-            CGPathRelease(pathRef);
+            joint.vRope = [[ADRope alloc] initWithPoints:pointA pointB:pointB spriteSheet:scene];
             
             joint.strokeColor = [SKColor blackColor];
         }
@@ -84,8 +84,9 @@
     return joint;
 }
 
-- (void)update
+- (void)update:(NSTimeInterval)currentTime
 {
+    
     switch (self.jointType) {
         case ADPhysicsJointTypePivot:
         {
@@ -107,6 +108,20 @@
     }
 }
 
+- (void)didSimulatePhysics
+{
+    switch (self.jointType) {
+        case ADPhysicsJointTypeRope:
+        {
+            [self.vRope updateSprites];
+        }
+            break;
+        
+        default:
+            break;
+    }
+}
+
 - (void)updatePivot
 {
     CGPoint positionA = CGPointMake(self.nodeA.position.x + self.anchorPointOffsetA.x, self.nodeA.position.y + self.anchorPointOffsetA.y);
@@ -122,10 +137,8 @@
     
     CGPoint positionB = CGPointMake(self.nodeB.position.x + self.anchorPointOffsetB.x, self.nodeB.position.y + self.anchorPointOffsetB.y);
     CGPoint rotatedPointB = rotatePoint(positionB, self.nodeB.zRotation, self.nodeB.position);
-    
-    CGPathRef pathRef = [self newRopePath:self.position pointB:rotatedPointB];
-    self.path = pathRef;
-    CGPathRelease(pathRef);
+
+    [self.vRope updateWithPoints:rotatedPointA pointB:rotatedPointB dt:0.04];
 }
 
 - (void) updateSpring
@@ -143,7 +156,6 @@
 }
 
 - (CGPathRef)newRopePath:(CGPoint)pointA pointB:(CGPoint)pointB{
-    [self removeAllChildren];
 
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGPathMoveToPoint(pathRef, nil, 0, 0);
@@ -152,8 +164,21 @@
     CGPathAddLineToPoint(pathRef, nil, pointB.x - pointA.x, pointB.y - pointA.y);
     CGPathAddArc(pathRef, nil, pointB.x - pointA.x, pointB.y - pointA.y, 2, 0, M_PI * 2, YES);
     
-    [self addChild:[self createNodeAtPoint:CGPointZero]];
-    [self addChild:[self createNodeAtPoint:CGPointMake(pointB.x - pointA.x, pointB.y - pointA.y)]];
+    if ([self.children count]) {
+        [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if (idx==0) {
+                ((SKNode*)obj).position = CGPointZero;
+            }
+            else if (idx==1) {
+                ((SKNode*)obj).position = CGPointMake(pointB.x - pointA.x, pointB.y - pointA.y);
+            }
+        }];
+    }
+    else
+    {
+        [self addChild:[self createNodeAtPoint:CGPointZero]];
+        [self addChild:[self createNodeAtPoint:CGPointMake(pointB.x - pointA.x, pointB.y - pointA.y)]];
+    }    
 
     return pathRef;
 }

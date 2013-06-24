@@ -228,3 +228,54 @@ CGPoint rotatePoint(CGPoint p, float angle, CGPoint centerPoint)
     
     return p;
 }
+
+CGFloat adDot(const CGPoint v1, const CGPoint v2)
+{
+	return v1.x*v2.x + v1.y*v2.y;
+}
+
+CGFloat adLengthSQ(const CGPoint v)
+{
+	return adDot(v, v);
+}
+
+CGFloat adLength(const CGPoint v)
+{
+	return sqrtf(adLengthSQ(v));
+}
+
+CGPoint subtractPoints(const CGPoint v1, const CGPoint v2)
+{
+	return CGPointMake(v1.x - v2.x, v1.y - v2.y);
+}
+
+CGPoint multiplyPoint(const CGPoint v, const CGFloat s)
+{
+	return CGPointMake(v.x*s, v.y*s);
+}
+
+CGPoint normalizePoint(const CGPoint v)
+{
+	return multiplyPoint(v, 1.0f/adLength(v));
+}
+
+CGPoint angleToPoint(const CGFloat a)
+{
+	return CGPointMake(cosf(a), sinf(a));
+}
+
+CGFloat pointToAngle(const CGPoint v)
+{
+	return atan2f(v.y, v.x);
+}
+
+CGPoint addPoints(const CGPoint v1, const CGPoint v2)
+{
+	return CGPointMake(v1.x + v2.x, v1.y + v2.y);
+}
+
+CGPoint midpointOfPoints(const CGPoint v1, const CGPoint v2)
+{
+	return multiplyPoint(addPoints(v1, v2), 0.5f);
+}
+
