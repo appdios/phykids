@@ -9,6 +9,7 @@
 #import "ADScene.h"
 #import "ADNodeManager.h"
 #import "ADJointNode.h"
+#import "ADNode.h"
 
 @interface ADScene()
 @property (nonatomic) BOOL isPaused;
@@ -54,7 +55,19 @@
     else
     {
         self.startPoint = point;
-        self.currentNode = [ADNodeManager nodeOfType:[ADPropertyManager selectedNodeType] atPoint:point];
+        switch ([ADPropertyManager selectedNodeType]) {
+            case ADNodeTypeRectangle:
+                self.currentNode = [ADNode rectangleNodeInRect:CGRectMake(point.x, point.y, 20, 20)];
+                break;
+            case ADNodeTypeCircle:
+                self.currentNode = [ADNode circularNodeInRect:CGRectMake(point.x, point.y, 20, 20)];
+                break;
+            case ADNodeTypePolygon:
+                self.currentNode = [ADNode polygonNodeWithPoints:@[[NSValue valueWithCGPoint:point],[NSValue valueWithCGPoint:point],[NSValue valueWithCGPoint:point]]];
+                break;
+            default:
+                break;
+        }
         [self.currentNode setPaused:self.isPaused];
         [self addChild:self.currentNode];
         [ADPropertyManager setCurrentFillColor:((SKShapeNode*)self.currentNode).fillColor];
@@ -80,7 +93,7 @@
                 [self.currentNode removeFromParent];
                 self.currentNode = nil;
                 
-                self.currentNode = [ADNodeManager rectangleNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, point.x - self.startPoint.x, point.y - self.startPoint.y)];
+                self.currentNode = [ADNode rectangleNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, point.x - self.startPoint.x, point.y - self.startPoint.y)];
             }
                 break;
             case ADNodeTypeCircle:
@@ -89,7 +102,7 @@
                 self.currentNode = nil;
                 
                 CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
-                self.currentNode = [ADNodeManager circularNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0)];
+                self.currentNode = [ADNode circularNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0)];
             }
                 break;
             case ADNodeTypePolygon:
@@ -99,7 +112,7 @@
                     NSArray *reducedPoints = reducePoints(self.touchPoints,10);
                     [self.currentNode removeFromParent];
                     self.currentNode = nil;
-                    self.currentNode = [ADNodeManager polygonNodeWithPoints:reducedPoints];
+                    self.currentNode = [ADNode polygonNodeWithPoints:reducedPoints];
                 }
             }
                 break;

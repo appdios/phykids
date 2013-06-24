@@ -13,10 +13,6 @@
 
 
 + (ADNodeManager*)sharedInstance;
-+ (id)nodeOfType:(ADNodeType)type atPoint:(CGPoint)point;
-+ (id)rectangleNodeInRect:(CGRect)rect;
-+ (id)circularNodeInRect:(CGRect)rect;
-+ (id)polygonNodeWithPoints:(NSArray*)points;
 + (void)tranformNode:(SKNode*)node withMatrix:(CGAffineTransform)matrix;
 + (void)setPhysicsBodyToNode:(SKNode*)node;
 + (SKNode*)currentSelectedNode;

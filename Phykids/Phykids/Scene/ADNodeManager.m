@@ -24,43 +24,6 @@
     return sharedInstance;
 }
 
-+ (id)nodeOfType:(ADNodeType)type atPoint:(CGPoint)point
-{
-    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
-    switch (type) {
-        case ADNodeTypeRectangle:
-            return [nodeManager rectangleNode:point ofSize:CGSizeMake(20, 20)];
-        case ADNodeTypeCircle:
-            return [nodeManager circularNode:point ofSize:CGSizeMake(20, 20)];
-        case ADNodeTypePolygon:
-            return [nodeManager triangularNode:point];
-        default:
-            break;
-    }
-    return nil;
-}
-
-+ (id)rectangleNodeInRect:(CGRect)rect
-{
-    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
-    return [nodeManager rectangleNode:rect.origin ofSize:rect.size];
-}
-
-+ (id)circularNodeInRect:(CGRect)rect
-{
-    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
-    return [nodeManager circularNode:rect.origin ofSize:rect.size];
-}
-
-+ (id)polygonNodeWithPoints:(NSArray*)points
-{
-    if ([points count]<3) {
-        return nil;
-    }
-    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
-    return [nodeManager polygonNode:points];
-}
-
 + (void)tranformNode:(SKShapeNode*)node withMatrix:(CGAffineTransform)matrix
 {
 //    ADNodeManager *nodeManager = [ADNodeManager sharedInstance];
@@ -82,64 +45,6 @@
     nodeManager.currentNode = node;
 }
 
-- (SKNode*) rectangleNode:(CGPoint)point ofSize:(CGSize)size
-{
-    SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self newRectanglePathOfSize:size];
-    [node setPath:path];
-    CGPathRelease(path);
-    [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[ADPropertyManager currentFillColor]];
-    CGRect rect = CGRectMake(point.x, point.y, size.width, size.height);
-    [node setPosition:CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect))];
-    node.userData = [NSMutableDictionary dictionary];
-    return node;
-}
-
-- (SKNode*) circularNode:(CGPoint)point ofSize:(CGSize)size
-{
-    SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self newCircularPathOfSize:size];
-    [node setPath:path];
-    CGPathRelease(path);
-    [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[ADPropertyManager currentFillColor]];
-    [node setPosition:point];
-    node.userData = [NSMutableDictionary dictionary];
-    return node;
-}
-
-- (SKNode*) triangularNode:(CGPoint)point
-{
-    SKShapeNode *node = [SKShapeNode node];
-    CGPathRef path = [self newTriangularPathOfSize:CGSizeMake(20, 20)];
-    [node setPath:path];
-    CGPathRelease(path);
-    [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[ADPropertyManager currentFillColor]];
-    [node setPosition:point];
-    node.userData = [NSMutableDictionary dictionary]; 
-    return node;
-}
-
-- (SKNode*) polygonNode:(NSArray*)points
-{
-    SKShapeNode *node = [SKShapeNode node];
-    CGPoint centerPoint = polygonCentroid(points);
-    if (isnan(centerPoint.x) || isnan(centerPoint.y)) {
-        return node;
-    }
-    CGPathRef path = [self newPolygonPathForPoints:points atCenter:centerPoint];
-    [node setPath:path];
-    CGPathRelease(path);
-    [node setStrokeColor:[UIColor blackColor]];
-    [node setFillColor:[ADPropertyManager currentFillColor]];
-
-    [node setPosition:centerPoint];
-    node.userData = [NSMutableDictionary dictionary];
-    return node;
-}
-
 + (void)setPhysicsBodyToNode:(SKShapeNode*)node{
     SKPhysicsBody *body = [ADPropertyManager selectedNodeType]==ADNodeTypeCircle?
         [SKPhysicsBody bodyWithCircleOfRadius:node.frame.size.width/2]:
@@ -151,56 +56,5 @@
     [node setPhysicsBody:body];
 }
 
-- (CGPathRef) newRectanglePathOfSize:(CGSize)size
-{
-    CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity; 
-    CGPathAddRect(pathRef, &matrix, CGRectMake(-size.width/2, -size.height/2, size.width, size.height));
-    CGPathCloseSubpath(pathRef);
-    
-    return pathRef;
-}
-
-- (CGPathRef) newCircularPathOfSize:(CGSize)size
-{
-    CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity;
-    CGPathAddArc(pathRef, &matrix, 0,0, size.width/2, 0, M_PI * 2, YES);
-    CGPathCloseSubpath(pathRef);
-    
-    return pathRef;
-}
-
-- (CGPathRef) newTriangularPathOfSize:(CGSize)size
-{
-    CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity; 
-    CGPathMoveToPoint(pathRef, &matrix, -size.width/2, -size.height/2);
-    CGPathAddLineToPoint(pathRef, &matrix, 0, size.height/2);
-    CGPathAddLineToPoint(pathRef, &matrix, size.width/2, -size.height/2);
-    CGPathCloseSubpath(pathRef);
-    
-    return pathRef;
-}
-
-- (CGPathRef) newPolygonPathForPoints:(NSArray*)points atCenter:(CGPoint)centerPoint
-{
-    CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGAffineTransform matrix = CGAffineTransformIdentity;
-    
-    [points enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        NSValue *pointValue = (NSValue*)obj;
-        CGPoint point = [pointValue CGPointValue];
-        if (idx==0) {
-            CGPathMoveToPoint(pathRef, &matrix, point.x - centerPoint.x, point.y - centerPoint.y);
-        }
-        else{
-            CGPathAddLineToPoint(pathRef, &matrix, point.x - centerPoint.x, point.y - centerPoint.y);
-        }
-    }];
-    CGPathCloseSubpath(pathRef);
-    
-    return pathRef;
-}
 
 @end

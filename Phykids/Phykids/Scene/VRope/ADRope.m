@@ -62,7 +62,7 @@
             node.fillColor = [UIColor brownColor];
             node.position = subtractPoints(midpointOfPoints(CGPointMake(point1.x,point1.y),CGPointMake(point2.x,point2.y)), spriteSheet.position);
             //node.zRotation = -1 * RADIANS_TO_DEGREES(stickAngle);
-            
+
             [spriteSheet addChild:node];
             [self.ropeNodes addObject:node];
 		}

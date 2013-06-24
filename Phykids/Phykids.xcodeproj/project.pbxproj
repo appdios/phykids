@@ -41,6 +41,8 @@
 		5CA38C6F17764E66009D4EAE /* ADRope.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA38C6717764E66009D4EAE /* ADRope.m */; };
 		5CA38C7017764E66009D4EAE /* ADStick.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA38C6917764E66009D4EAE /* ADStick.m */; };
 		5CA38C7117764E66009D4EAE /* ADStick.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA38C6917764E66009D4EAE /* ADStick.m */; };
+		5CBB4220177805CC00BC6C59 /* ADNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB421F177805CC00BC6C59 /* ADNode.m */; };
+		5CBB4221177805CC00BC6C59 /* ADNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB421F177805CC00BC6C59 /* ADNode.m */; };
 		5CD370CE176AE39700B689AC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370CD176AE39700B689AC /* Foundation.framework */; };
 		5CD370D0176AE39700B689AC /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370CF176AE39700B689AC /* CoreGraphics.framework */; };
 		5CD370D2176AE39700B689AC /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CD370D1176AE39700B689AC /* UIKit.framework */; };
@@ -95,6 +97,8 @@
 		5CA38C6717764E66009D4EAE /* ADRope.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADRope.m; sourceTree = "<group>"; };
 		5CA38C6817764E66009D4EAE /* ADStick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADStick.h; sourceTree = "<group>"; };
 		5CA38C6917764E66009D4EAE /* ADStick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADStick.m; sourceTree = "<group>"; };
+		5CBB421E177805CC00BC6C59 /* ADNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNode.h; sourceTree = "<group>"; };
+		5CBB421F177805CC00BC6C59 /* ADNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADNode.m; sourceTree = "<group>"; };
 		5CD370CA176AE39700B689AC /* Phykids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Phykids.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CD370CD176AE39700B689AC /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		5CD370CF176AE39700B689AC /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -268,6 +272,8 @@
 				27EF5F4417711D1400DCA345 /* ADHelper.m */,
 				270908D5177394D4001F25A3 /* ADJointNode.h */,
 				270908D6177394D4001F25A3 /* ADJointNode.m */,
+				5CBB421E177805CC00BC6C59 /* ADNode.h */,
+				5CBB421F177805CC00BC6C59 /* ADNode.m */,
 				5CA38C6117764E5A009D4EAE /* VRope */,
 			);
 			path = Scene;
@@ -388,6 +394,7 @@
 				27EF5F4517711D1400DCA345 /* ADHelper.m in Sources */,
 				5CD37106176AE43100B689AC /* ADSceneViewController.m in Sources */,
 				5CD370DA176AE39700B689AC /* main.m in Sources */,
+				5CBB4220177805CC00BC6C59 /* ADNode.m in Sources */,
 				5CA38C7017764E66009D4EAE /* ADStick.m in Sources */,
 				5CA38C6C17764E66009D4EAE /* ADRopePoint.m in Sources */,
 				5CD370DE176AE39700B689AC /* ADAppDelegate.m in Sources */,
@@ -412,6 +419,7 @@
 				270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */,
 				27EF5F4617711D1400DCA345 /* ADHelper.m in Sources */,
 				270908D8177394D4001F25A3 /* ADJointNode.m in Sources */,
+				5CBB4221177805CC00BC6C59 /* ADNode.m in Sources */,
 				5CA38C6D17764E66009D4EAE /* ADRopePoint.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
