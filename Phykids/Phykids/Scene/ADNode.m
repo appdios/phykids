@@ -8,11 +8,17 @@
 
 #import "ADNode.h"
 
+@interface ADNode()
+@property (nonatomic) ADNodeType nodeType;
+
+@end
+
 @implementation ADNode
 
 + (ADNode*)rectangleNodeInRect:(CGRect)rect
 {
     ADNode *node = [[ADNode alloc] init];
+    node.nodeType = ADNodeTypeRectangle;
     CGPathRef path = [node newRectanglePathOfSize:rect.size];
     [node setPath:path];
     CGPathRelease(path);
@@ -20,12 +26,19 @@
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect))];
     node.userData = [NSMutableDictionary dictionary];
+    
+    [node addChild:[node createNodeAtPoint:CGPointMake(-rect.size.width/2, -rect.size.height/2)]];
+    [node addChild:[node createNodeAtPoint:CGPointMake(-rect.size.width/2, rect.size.height/2)]];
+    [node addChild:[node createNodeAtPoint:CGPointMake(rect.size.width/2, -rect.size.height/2)]];
+    [node addChild:[node createNodeAtPoint:CGPointMake(rect.size.width/2, rect.size.height/2)]];
+    
     return node;
 }
 
 + (ADNode*)circularNodeInRect:(CGRect)rect
 {
     ADNode *node = [[ADNode alloc] init];
+    node.nodeType = ADNodeTypeCircle;
     CGPathRef path = [node newCircularPathOfSize:rect.size];
     [node setPath:path];
     CGPathRelease(path);
@@ -33,6 +46,8 @@
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:rect.origin];
     node.userData = [NSMutableDictionary dictionary];
+    
+    
     return node;
 }
 
@@ -42,6 +57,7 @@
         return nil;
     }
     ADNode *node = [[ADNode alloc] init];
+    node.nodeType = ADNodeTypePolygon;
     CGPoint centerPoint = polygonCentroid(points);
     if (isnan(centerPoint.x) || isnan(centerPoint.y)) {
         return node;
@@ -54,6 +70,12 @@
     
     [node setPosition:centerPoint];
     node.userData = [NSMutableDictionary dictionary];
+    
+    [points enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        NSValue *valueObj = (NSValue*)obj;
+        CGPoint pointValue = valueObj.CGPointValue;
+        [node addChild:[node createNodeAtPoint:subtractPoints(pointValue, centerPoint)]];
+    }];
     return node;
 }
 
@@ -72,6 +94,10 @@
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity;
     CGPathAddArc(pathRef, &matrix, 0,0, size.width/2, 0, M_PI * 2, YES);
+    CGPathMoveToPoint(pathRef, &matrix, -8, 0);
+    CGPathAddLineToPoint(pathRef, &matrix, 8, 0);
+    CGPathMoveToPoint(pathRef, &matrix, 0, -8);
+    CGPathAddLineToPoint(pathRef, &matrix, 0, 8);
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
@@ -107,6 +133,30 @@
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
+}
+
+- (SKNode*)createNodeAtPoint:(CGPoint)p
+{
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    
+    CGPathAddArc(pathRef, nil, 0, 0, 1, 0, M_PI * 2, YES);
+    SKShapeNode *node = [SKShapeNode node];
+    node.strokeColor = [UIColor blackColor];
+    node.path = pathRef;
+    CGPathRelease(pathRef);
+    
+    node.position = p;
+    return node;
+}
+
+- (void)update:(NSTimeInterval)currentTime
+{
+
+}
+
+- (void)didSimulatePhysics
+{
+
 }
 
 @end

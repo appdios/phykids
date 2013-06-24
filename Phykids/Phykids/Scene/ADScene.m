@@ -23,6 +23,9 @@
 
 @implementation ADScene
 
+static CGPoint lastFramePositionOfSelectedNode;
+static CGFloat lastFrameZRotationOfSelectedNode;
+
 - (id)initWithSize:(CGSize)size
 {
     self = [super initWithSize:size];
@@ -63,7 +66,7 @@
                 self.currentNode = [ADNode circularNodeInRect:CGRectMake(point.x, point.y, 20, 20)];
                 break;
             case ADNodeTypePolygon:
-                self.currentNode = [ADNode polygonNodeWithPoints:@[[NSValue valueWithCGPoint:point],[NSValue valueWithCGPoint:point],[NSValue valueWithCGPoint:point]]];
+                self.currentNode = [ADNode polygonNodeWithPoints:@[[NSValue valueWithCGPoint:point],[NSValue valueWithCGPoint:addPoints(point, CGPointMake(0, 10))],[NSValue valueWithCGPoint:addPoints(point, CGPointMake(10, 0))]]];
                 break;
             default:
                 break;
@@ -131,10 +134,17 @@
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
     if (self.mouseNode) {
-        UITouch *touch = [touches anyObject];
-        CGPoint point = [touch locationInNode:self];
-        CGPoint previousPoint = [touch previousLocationInNode:self];
-        [self.mouseJoint.bodyA setVelocity:CGPointMake((point.x - previousPoint.x)*20, (point.y - previousPoint.y)*20)];
+
+        const CGFloat deceleration = 30;
+        const CGFloat angularDeceleration = 20;
+        
+        CGPoint currentPosition = self.mouseJoint.bodyA.node.position;
+        CGPoint delta = CGPointMake(currentPosition.x - lastFramePositionOfSelectedNode.x, currentPosition.y - lastFramePositionOfSelectedNode.y);
+        self.mouseJoint.bodyA.velocity = CGPointMake(delta.x * deceleration, delta.y * deceleration);
+        
+        CGFloat currentZRotation = self.mouseJoint.bodyA.node.zRotation;
+        self.mouseJoint.bodyA.angularVelocity = (currentZRotation - lastFrameZRotationOfSelectedNode) * angularDeceleration;
+        
         [self destroyMouseNode];
     }
     if (self.currentNode) {
@@ -151,7 +161,7 @@
             tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
             [tempNode.physicsBody setDynamic:NO];
             
-           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeRope betweenNodeA:self.currentNode nodeB:tempNode anchorA:CGPointMake(self.currentNode.position.x, self.currentNode.position.y+self.currentNode.frame.size.height/2) anchorB:tempNode.position inSecene:self];
+           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeSpring betweenNodeA:self.currentNode nodeB:tempNode anchorA:self.currentNode.position anchorB:tempNode.position inSecene:self];
             [self.physicsWorld addJoint:jointNode.joint];
 
             [self addChild:jointNode];
@@ -202,6 +212,11 @@
 
 - (void)update:(NSTimeInterval)currentTime
 {
+    if (self.mouseJoint && self.mouseNode) {
+        lastFramePositionOfSelectedNode = self.mouseJoint.bodyA.node.position;
+        lastFrameZRotationOfSelectedNode = self.mouseJoint.bodyA.node.zRotation;
+    }
+    
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([obj isKindOfClass:[ADJointNode class]]) {
             [(ADJointNode*)obj update:currentTime];
