@@ -53,7 +53,7 @@ static const int kOffset = 20;
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+   // [ADNodeManager setPhysicsBodyToNode:self.currentNode inWorld:self.];
 }
 
 

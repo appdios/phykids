@@ -35,6 +35,8 @@
 		5C5AC672176AEAF70019F2C8 /* ADNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */; };
 		5C7F9EC51770277F006E7368 /* ADSceneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */; };
 		5C7F9EC61770277F006E7368 /* ADSceneViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */; };
+		5C9D2A5A177A950600FC0AEE /* Triangulate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9D2A59177A950600FC0AEE /* Triangulate.mm */; };
+		5C9D2A5B177A950600FC0AEE /* Triangulate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5C9D2A59177A950600FC0AEE /* Triangulate.mm */; };
 		5CA38C6C17764E66009D4EAE /* ADRopePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA38C6517764E66009D4EAE /* ADRopePoint.m */; };
 		5CA38C6D17764E66009D4EAE /* ADRopePoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA38C6517764E66009D4EAE /* ADRopePoint.m */; };
 		5CA38C6E17764E66009D4EAE /* ADRope.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CA38C6717764E66009D4EAE /* ADRope.m */; };
@@ -91,6 +93,8 @@
 		5C5AC66F176AEAF70019F2C8 /* ADNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNodeManager.h; sourceTree = "<group>"; };
 		5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADNodeManager.m; sourceTree = "<group>"; };
 		5C7F9EC41770277F006E7368 /* ADSceneViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ADSceneViewController.xib; sourceTree = "<group>"; };
+		5C9D2A58177A950600FC0AEE /* Triangulate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Triangulate.h; sourceTree = "<group>"; };
+		5C9D2A59177A950600FC0AEE /* Triangulate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Triangulate.mm; sourceTree = "<group>"; };
 		5CA38C6417764E66009D4EAE /* ADRopePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADRopePoint.h; sourceTree = "<group>"; };
 		5CA38C6517764E66009D4EAE /* ADRopePoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADRopePoint.m; sourceTree = "<group>"; };
 		5CA38C6617764E66009D4EAE /* ADRope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADRope.h; sourceTree = "<group>"; };
@@ -274,6 +278,8 @@
 				270908D6177394D4001F25A3 /* ADJointNode.m */,
 				5CBB421E177805CC00BC6C59 /* ADNode.h */,
 				5CBB421F177805CC00BC6C59 /* ADNode.m */,
+				5C9D2A58177A950600FC0AEE /* Triangulate.h */,
+				5C9D2A59177A950600FC0AEE /* Triangulate.mm */,
 				5CA38C6117764E5A009D4EAE /* VRope */,
 			);
 			path = Scene;
@@ -401,6 +407,7 @@
 				270FC325176D0862006FBD11 /* ADPropertyManager.m in Sources */,
 				5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */,
 				5C2D1127176C33DA00E31475 /* ADSelectionView.m in Sources */,
+				5C9D2A5A177A950600FC0AEE /* Triangulate.mm in Sources */,
 				5C5AC671176AEAF70019F2C8 /* ADNodeManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,6 +425,7 @@
 				5CD370F3176AE39700B689AC /* PhykidsTests.m in Sources */,
 				270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */,
 				27EF5F4617711D1400DCA345 /* ADHelper.m in Sources */,
+				5C9D2A5B177A950600FC0AEE /* Triangulate.mm in Sources */,
 				270908D8177394D4001F25A3 /* ADJointNode.m in Sources */,
 				5CBB4221177805CC00BC6C59 /* ADNode.m in Sources */,
 				5CA38C6D17764E66009D4EAE /* ADRopePoint.m in Sources */,

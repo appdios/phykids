@@ -54,7 +54,7 @@ BOOL arePointsEqual(CGPoint point1, CGPoint point2)
     return FALSE;
 }
 
-NSArray* reducePoints(NSArray *Points,double Tolerance)
+NSMutableArray* reducePoints(NSMutableArray *Points,double Tolerance)
 {
     if (Points==NULL) {
         return Points;
@@ -96,6 +96,211 @@ NSArray* reducePoints(NSArray *Points,double Tolerance)
     }
     return returnPoints;
 }
+
+struct point
+{
+    int x; //X POSITION
+    int y; //Y POSITION
+    struct point *next; //POINTER TO NEXT NODE IN THE LIST
+    struct point *prev; //POINTER TO PREVIOUS NODE IN THE LIST
+    float angle; //INTERMEDIATE ANGLE VALUE STORAGE
+};
+struct point* firstPoint;
+
+void addPoint(struct point Point)
+{
+    struct point *tempPoint,*tempPointA,*tempPointB, *curPoint;
+    
+    //ALLOCATE A NEW POINT STRUCTURE AND INITIALIZE INTERNAL VARIABLES
+    tempPoint = (struct point*)malloc(sizeof(struct point));
+    tempPoint->x=Point.x;
+    tempPoint->y=Point.y;
+    tempPoint->angle=Point.angle;
+    tempPoint->next=NULL;
+    tempPoint->prev=NULL;
+    
+    
+    if (firstPoint==NULL) //TEST IF LIST IS EMPTY
+    {
+        firstPoint=tempPoint;
+        return;
+    }
+	
+    if (firstPoint->next==NULL && tempPoint->angle >= firstPoint->angle)
+		//TEST IF ONLY ONE NODE IN LIST AND CURRENT NODE HAS GREATER ANGLE
+    {
+        firstPoint->next=tempPoint;
+        tempPoint->prev=firstPoint;
+        return;
+    }
+    
+    curPoint=firstPoint;
+    
+    while (tempPoint->angle >= curPoint->angle && curPoint->next!=NULL)
+		//CONTINUE THROUGH LIST UNTIL A NODE IS FOUND WITH A GREATER ANGLE THAN CURRENT NODE
+        curPoint=curPoint->next;
+        
+        if (curPoint==firstPoint) //TEST IF NODE IS FIRSTPOINT.  IF SO, ADD AT FRONT OF LIST.
+        {
+            firstPoint->prev=tempPoint;
+            tempPoint->next=firstPoint;
+            firstPoint=tempPoint;
+            return;
+        }
+        else if (curPoint->next==NULL && tempPoint->angle >= curPoint->angle)
+            //TEST IF WHILE LOOP REACHED FINAL NODE IN LIST.  IF SO, ADD AT END OF THE LIST.
+        {
+            curPoint->next=tempPoint;
+            tempPoint->prev=curPoint;
+            return;
+        }
+        else //OTHERWISE, INTERMEDIATE NODE HAS BEEN FOUND.  INSERT INTO LIST.
+        {
+            tempPointA=curPoint->prev;
+            tempPointB=curPoint->prev->next;
+            tempPoint->next=tempPointB;
+            tempPoint->prev=tempPointA;
+            tempPoint->prev->next=tempPoint;
+            tempPoint->next->prev=tempPoint;
+        }
+    
+    return;   
+}
+
+float findAngle(int x1, int y1, int x2, int y2)
+{
+    float deltaX=(float)(x2-x1);
+    float deltaY=(float)(y2-y1);
+    
+    if (deltaX==0 && deltaY==0)
+        return 0;
+    
+    float angle=atan(deltaY/deltaX)*(180.0/3.141592);
+    
+    //TAKE INTO ACCOUNT QUADRANTS, VALUE: 0 - 360
+    if (deltaX>=0 && deltaY>=0)
+        angle=90+angle;
+        else if (deltaX>=0 && deltaY<0)
+            angle=90+angle;
+            else if (deltaX<0 && deltaY>0)
+                angle=270+angle;
+                else if (deltaX<0 && deltaY<=0)
+                    angle=270+angle;
+                    
+                    return angle;
+}
+
+
+void grahamInit(NSMutableArray *points)
+{
+	int NumPoints = [points count];
+    int minPoint=0;
+    struct point tempPoints[NumPoints]; //CREATE STATIC ARRAY FOR RANDOM POINT GENERATION
+    struct point *tempPtr;
+    int i,k;
+	
+    firstPoint=NULL; //INIT FIRSTPOINT POINTER
+    
+    for (i=0;i<NumPoints;i++) //GENERATE RANDOM POINTS
+    {
+		NSValue *sPoint = [points objectAtIndex:i];
+        tempPoints[i].x=[sPoint CGPointValue].x;
+        tempPoints[i].y=[sPoint CGPointValue].y;
+    }
+    
+    for (k=1;k<NumPoints;k++)  //FIND MIN POINT
+        if (tempPoints[k].y<tempPoints[minPoint].y)
+            minPoint=k;
+            
+            for (i=0;i<NumPoints;i++) //SORT RANDOM POINTS
+            {
+                tempPoints[i].angle = findAngle(tempPoints[minPoint].x, tempPoints[minPoint].y, tempPoints[i].x, tempPoints[i].y);
+                addPoint(tempPoints[i]);
+            }
+    
+    tempPtr=firstPoint;
+    do  //FIND LAST NODE IN LINKED LIST
+    {
+        tempPtr=tempPtr->next;
+    } while (tempPtr->next!=NULL);
+	
+    tempPtr->next=firstPoint; //COMPLETE CIRCULAR LINKED LIST
+    firstPoint->prev=tempPtr; //COMPLETE CIRCULAR LINKED LIST
+}
+
+BOOL isConvexPoint(struct point *P)
+{
+	float CWAngle= findAngle(P->x,P->y,P->prev->x, P->prev->y);
+    float CCWAngle=findAngle(P->x,P->y,P->next->x, P->next->y);
+    float difAngle;
+    
+    
+    if (CWAngle>CCWAngle)
+    {
+        difAngle=CWAngle-CCWAngle;  //COMPUTE DIFFERENCE BETWEEN THE TWO ANGLES
+        
+        if (difAngle>180)
+            return FALSE; //POINT IS CONCAVE
+        else
+            return TRUE; //POINT IS CONVEX
+    }
+    else if (CWAngle<CCWAngle)
+    {
+        difAngle=CCWAngle-CWAngle;  //COMPUTE DIFFERENCE BETWEEN THE TWO ANGLES
+        
+        if (difAngle>180)
+            return TRUE; //POINT IS CONVEX
+        else
+            return FALSE; //POINT IS CONCAVE
+    }
+	return FALSE;
+}
+
+void grahamScan(struct point *P)
+{
+    struct point *tempPrev, *tempNext;
+    
+    if (P==firstPoint) //IF RETURNED TO FIRST POINT, DONE
+        return;
+    
+    if (!isConvexPoint(P)) //IF POINT IS CONCAVE, ELIMINATE FROM PERIMETER
+    {
+        tempPrev=P->prev;
+        tempNext=P->next;
+        tempPrev->next=tempNext;
+        tempNext->prev=tempPrev;
+        free(P); //FREE MEMORY
+        grahamScan(tempPrev); //RUN GRAHAM'S SCAN ON PREVIOUS POINT TO CHECK IF CONVEXITY HAS CHANGED IT
+		
+    }
+    else //POINT IS CONVEX
+        grahamScan(P->next); //PROCEED TO NEXT POINT
+}
+
+
+void grahamMain(NSMutableArray *points)
+{
+    grahamInit(points); //INITIALIZE DATA FOR GRAHAM'S SCAN
+    grahamScan(firstPoint->next); //RUN GRAHAM'S SCAN STARTING AT SECOND NODE CLOCKWISE
+    
+	
+	NSMutableArray *pointsNew = [[NSMutableArray alloc] init];
+	
+	struct point *curPoint=firstPoint;
+    
+    do
+	{
+        CGPoint po = CGPointMake(curPoint->x, curPoint->y);
+		[pointsNew addObject:[NSValue valueWithCGPoint:po]];
+
+		curPoint=curPoint->next;
+    } while (curPoint!=firstPoint); //CONTINUE UNTIL HAVING LOOPED BACK AROUND TO FIRSTPOINT
+	
+	[points removeAllObjects];
+	[points addObjectsFromArray:pointsNew];
+}
+
+
 
 BOOL isConvexPolygon(NSArray *points)
 {

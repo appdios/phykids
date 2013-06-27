@@ -7,11 +7,8 @@
 //
 
 #import "ADNode.h"
+#import "ADNodeManager.h"
 
-@interface ADNode()
-@property (nonatomic) ADNodeType nodeType;
-
-@end
 
 @implementation ADNode
 
@@ -39,7 +36,7 @@
 {
     ADNode *node = [[ADNode alloc] init];
     node.nodeType = ADNodeTypeCircle;
-    CGPathRef path = [node newCircularPathOfSize:rect.size];
+    CGPathRef path = [node newCircularPathOfRadius:rect.size.width/2];
     [node setPath:path];
     CGPathRelease(path);
     [node setStrokeColor:[UIColor blackColor]];
@@ -79,6 +76,71 @@
     return node;
 }
 
++ (ADNode*)gearNodeInRect:(CGRect)rect forScene:(SKScene*)scene
+{
+    ADNode *node = [[ADNode alloc] init];
+    node.nodeType = ADNodeTypeGear;
+    
+    [node setStrokeColor:[UIColor blackColor]];
+    [node setFillColor:[ADPropertyManager currentFillColor]];
+    [node setPosition:rect.origin];
+    node.userData = [NSMutableDictionary dictionary];
+    
+    NSMutableArray *teethNodes = [NSMutableArray array];
+    [node.userData setObject:teethNodes forKey:@"teethNodes"];
+    
+    NSInteger teeth = 12;
+    CGFloat radius = CGRectGetWidth(rect)/2.0;
+    NSInteger teethSharpness = 4;
+    CGFloat offset = 0.3;
+    NSInteger teethWidth = 24;
+    
+    CGFloat offsetRadius = radius * (1-offset);
+
+    CGPathRef path = [node newCircularPathOfRadius:offsetRadius];
+    [node setPath:path];
+    CGPathRelease(path);
+    
+    CGFloat teethCorner = teethSharpness*2+2;
+    for(NSInteger i = 0; i<teeth; i++){
+        
+        double teethAngle = (360/teeth)*i;
+        
+        SKNode *newNode1 = [node createNodeAtPoint:CGPointMake(offsetRadius*cos((teethAngle+teethWidth/2)*M_PI/180), offsetRadius*sin((teethAngle+teethWidth/2)*M_PI/180))];
+        SKNode *newNode2 = [node createNodeAtPoint:CGPointMake(radius*cos((teethAngle+teethWidth/teethCorner)*M_PI/180), radius*sin((teethAngle+teethWidth/teethCorner)*M_PI/180))];
+        SKNode *newNode3 = [node createNodeAtPoint:CGPointMake(radius*cos((teethAngle-teethWidth/teethCorner)*M_PI/180), radius*sin((teethAngle-teethWidth/teethCorner)*M_PI/180))];
+        SKNode *newNode4 = [node createNodeAtPoint:CGPointMake(offsetRadius*cos((teethAngle-teethWidth/2)*M_PI/180), offsetRadius*sin((teethAngle-teethWidth/2)*M_PI/180))];
+        
+        
+        ADNode *teethNode = [ADNode node];
+        NSArray *pointValues = @[[NSValue valueWithCGPoint:newNode1.position],
+                                 [NSValue valueWithCGPoint:newNode2.position],
+                                 [NSValue valueWithCGPoint:newNode3.position],
+                                 [NSValue valueWithCGPoint:newNode4.position]];
+        CGPoint centerPoint = polygonCentroid(pointValues);
+        if (isnan(centerPoint.x) || isnan(centerPoint.y)) {
+            continue;
+        }
+        teethNode.fillColor = [ADPropertyManager currentFillColor];
+        teethNode.strokeColor = [SKColor blackColor];
+        teethNode.position = addPoints(node.position, centerPoint);
+        CGPathRef teethPathRef = [node newPolygonPathForPoints:pointValues atCenter:centerPoint];
+        [teethNode setPath:teethPathRef];
+        CGPathRelease(teethPathRef);
+        
+        node.nodeType = ADNodeTypePolygon;
+        [scene addChild:teethNode];
+        [teethNodes addObject:teethNode];
+//        
+//        [node addChild:newNode1];
+//        [node addChild:newNode2];
+//        [node addChild:newNode3];
+//        [node addChild:newNode4];
+ 
+    }
+    return node;
+}
+
 - (CGPathRef) newRectanglePathOfSize:(CGSize)size
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
@@ -89,11 +151,11 @@
     return pathRef;
 }
 
-- (CGPathRef) newCircularPathOfSize:(CGSize)size
+- (CGPathRef) newCircularPathOfRadius:(CGFloat)radius
 {
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity;
-    CGPathAddArc(pathRef, &matrix, 0,0, size.width/2, 0, M_PI * 2, YES);
+    CGPathAddArc(pathRef, &matrix, 0,0, radius, 0, M_PI * 2, YES);
     CGPathMoveToPoint(pathRef, &matrix, -8, 0);
     CGPathAddLineToPoint(pathRef, &matrix, 8, 0);
     CGPathMoveToPoint(pathRef, &matrix, 0, -8);

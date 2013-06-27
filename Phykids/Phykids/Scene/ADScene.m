@@ -10,12 +10,13 @@
 #import "ADNodeManager.h"
 #import "ADJointNode.h"
 #import "ADNode.h"
+#import "Triangulate.h"
 
 @interface ADScene()
 @property (nonatomic) BOOL isPaused;
 @property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
 @property (nonatomic, strong) SKNode *mouseNode;
-@property (nonatomic, strong) SKNode *currentNode;
+@property (nonatomic, strong) ADNode *currentNode;
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic, strong) NSMutableArray *touchPoints;
 
@@ -68,6 +69,9 @@ static CGFloat lastFrameZRotationOfSelectedNode;
             case ADNodeTypePolygon:
                 self.currentNode = [ADNode polygonNodeWithPoints:@[[NSValue valueWithCGPoint:point],[NSValue valueWithCGPoint:addPoints(point, CGPointMake(0, 10))],[NSValue valueWithCGPoint:addPoints(point, CGPointMake(10, 0))]]];
                 break;
+            case ADNodeTypeGear:
+                self.currentNode = [ADNode gearNodeInRect:CGRectMake(point.x, point.y, 20, 20) forScene:self];
+                break;
             default:
                 break;
         }
@@ -112,11 +116,26 @@ static CGFloat lastFrameZRotationOfSelectedNode;
             {
                 [self.touchPoints addObject:[NSValue valueWithCGPoint:point]];
                 if ([self.touchPoints count]>=3) {
-                    NSArray *reducedPoints = reducePoints(self.touchPoints,10);
-                    [self.currentNode removeFromParent];
-                    self.currentNode = nil;
-                    self.currentNode = [ADNode polygonNodeWithPoints:reducedPoints];
+                    NSMutableArray *reducedPoints = reducePoints(self.touchPoints,10);
+                    grahamMain(reducedPoints);
+                    if ([reducedPoints count]>3) {
+                        [self.currentNode removeFromParent];
+                        self.currentNode = nil;
+                        self.currentNode = [ADNode polygonNodeWithPoints:reducedPoints];
+                    }
                 }
+            }
+                break;
+            case ADNodeTypeGear:
+            {
+                NSArray *teethNodes = [[self.currentNode userData] objectForKey:@"teethNodes"];
+                [self removeChildrenInArray:teethNodes];
+                
+                [self.currentNode removeFromParent];
+                self.currentNode = nil;
+                
+                CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
+                self.currentNode = [ADNode gearNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0) forScene:self];
             }
                 break;
             default:
@@ -148,30 +167,54 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         [self destroyMouseNode];
     }
     if (self.currentNode) {
-        NSArray *reducedPoints = reducePoints(self.touchPoints,10);
-        BOOL isConvex = isConvexPolygon(reducedPoints);
-        if (isConvex) {
-            [ADNodeManager setPhysicsBodyToNode:self.currentNode];
-
-            
-            SKNode *tempNode = [SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(20, 20)];
-            tempNode.hidden = YES;
-            tempNode.position = CGPointMake(self.frame.size.width/2, 450);
-            [self addChild:tempNode];
-            tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
-            [tempNode.physicsBody setDynamic:NO];
-            
-           ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypeSpring betweenNodeA:self.currentNode nodeB:tempNode anchorA:self.currentNode.position anchorB:tempNode.position inSecene:self];
-            [self.physicsWorld addJoint:jointNode.joint];
-
-            [self addChild:jointNode];
-            
+        [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+        return;
+        if (self.currentNode.nodeType == ADNodeTypePolygon) {
+            NSArray *reducedPoints = reducePoints(self.touchPoints,10);
+            BOOL isConvex = isConvexPolygon(reducedPoints);
+            if (isConvex) {
+                [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+            }
+            else{
+                [self.currentNode removeFromParent];
+                NSArray *triangles = [Triangulate Process:reducedPoints];
+                if ([triangles count]) {
+                    __block ADNode *lastNode = nil;
+                    [triangles enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                        NSArray *triangle = (NSArray*)obj;
+                        ADNode *triangleNode = [ADNode polygonNodeWithPoints:triangle];
+                        [self addChild:triangleNode];
+                        [ADNodeManager setPhysicsBodyToNode:triangleNode];
+                        if (lastNode!=nil) {
+                            SKPhysicsJointFixed *joint =[SKPhysicsJointFixed jointWithBodyA:lastNode.physicsBody bodyB:triangleNode.physicsBody anchor:CGPointZero];
+                            [self.physicsWorld addJoint:joint];
+                        }
+                        lastNode = triangleNode;
+                    }];
+                    self.currentNode = lastNode;
+                }
+            }
         }
-        else{
-            [self.currentNode removeFromParent];
-        }
+       // [self addDummyJoint];
         [ADPropertyManager setCurrentFillColor:nil];
     }
+}
+
+- (void)addDummyJoint
+{
+    SKNode *tempNode = [SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(20, 20)];
+    tempNode.hidden = YES;
+    tempNode.position = self.currentNode.position;//CGPointMake(self.frame.size.width/2, 450);
+    [self addChild:tempNode];
+    tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
+    [tempNode.physicsBody setDynamic:NO];
+    
+    ADJointNode *jointNode = [ADJointNode jointOfType:ADPhysicsJointTypePivot betweenNodeA:self.currentNode nodeB:tempNode anchorA:self.currentNode.position anchorB:tempNode.position inSecene:self];
+    [self.physicsWorld addJoint:jointNode.joint];
+    
+    [self addChild:jointNode];
+    
+    self.currentNode.physicsBody.angularVelocity = 10.0;
 }
 
 - (void)playPauseScene

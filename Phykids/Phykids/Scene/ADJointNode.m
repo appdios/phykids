@@ -67,7 +67,7 @@
         case ADPhysicsJointTypeSpring:
         {
             SKPhysicsJointSpring *springJoint = [SKPhysicsJointSpring jointWithBodyA:nodeA.physicsBody bodyB:nodeB.physicsBody anchorA:pointA anchorB:pointB];
-            springJoint.damping = 0.5;
+            springJoint.damping = 0.4;
             springJoint.frequency = 4.0;
             joint.joint = springJoint;
             joint.position = pointA;
