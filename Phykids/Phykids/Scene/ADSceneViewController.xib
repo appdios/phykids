@@ -85,7 +85,7 @@
                         <action selector="shapeChanged:" destination="-1" eventType="touchUpInside" id="FNQ-js-tkL"/>
                     </connections>
                 </button>
-                <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OBY-rP-26p">
+                <button hidden="YES" opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OBY-rP-26p">
                     <rect key="frame" x="14" y="246" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.77647058820000003" green="0.83529411760000005" blue="0.87843137250000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -193,4 +193,19 @@
     <resources>
         <image name="btnPlay.png" width="60" height="61"/>
     </resources>
+    <classes>
+        <class className="ADSceneViewController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ADSceneViewController.h"/>
+            <relationships>
+                <relationship kind="action" name="shapeChanged:" candidateClass="UIButton"/>
+                <relationship kind="outlet" name="playButton" candidateClass="UIButton"/>
+            </relationships>
+        </class>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="SKView" superclassName="UIView">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/SKView.h"/>
+        </class>
+    </classes>
 </document>

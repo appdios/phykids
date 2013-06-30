@@ -219,10 +219,10 @@ void grahamInit(NSMutableArray *points)
             }
     
     tempPtr=firstPoint;
-    do  //FIND LAST NODE IN LINKED LIST
+    while (tempPtr->next!=NULL)  //FIND LAST NODE IN LINKED LIST
     {
         tempPtr=tempPtr->next;
-    } while (tempPtr->next!=NULL);
+    };
 	
     tempPtr->next=firstPoint; //COMPLETE CIRCULAR LINKED LIST
     firstPoint->prev=tempPtr; //COMPLETE CIRCULAR LINKED LIST

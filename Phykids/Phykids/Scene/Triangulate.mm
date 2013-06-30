@@ -152,7 +152,7 @@ static bool Snip(NSArray *points,int u,int v,int w,int n,int *V)
 	
 	
 	
-	delete V;
+	delete[] V;
 
 	return [triangles count]?triangles:nil;
 }
