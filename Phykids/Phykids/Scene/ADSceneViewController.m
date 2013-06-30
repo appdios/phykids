@@ -73,6 +73,20 @@
     [self.selectionView setNode:node];
 }
 
+- (IBAction)shapeChanged:(UIButton*)sender
+{
+    [ADPropertyManager setSelectedNodeType:sender.tag - 1];
+    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIButton class]]) {
+            UIButton *btn = (UIButton*)obj;
+            if (btn.tag > 0) {
+                btn.backgroundColor = [UIColor colorWithRed:198.0/255.0 green:213.0/255.0 blue:224.0/255.0 alpha:1.0];
+            }
+        }
+    }];
+    sender.backgroundColor = [UIColor brownColor];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

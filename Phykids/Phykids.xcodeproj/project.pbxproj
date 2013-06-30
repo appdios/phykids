@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		270908D7177394D4001F25A3 /* ADJointNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 270908D6177394D4001F25A3 /* ADJointNode.m */; };
-		270908D8177394D4001F25A3 /* ADJointNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 270908D6177394D4001F25A3 /* ADJointNode.m */; };
 		270FC31C176C38E0006FBD11 /* SpriteKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 270FC31B176C38E0006FBD11 /* SpriteKit.framework */; };
 		270FC31F176C4467006FBD11 /* touchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 270FC31D176C4467006FBD11 /* touchImage.png */; };
 		270FC320176C4467006FBD11 /* touchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 270FC31D176C4467006FBD11 /* touchImage.png */; };
@@ -72,8 +70,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		270908D5177394D4001F25A3 /* ADJointNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADJointNode.h; sourceTree = "<group>"; };
-		270908D6177394D4001F25A3 /* ADJointNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADJointNode.m; sourceTree = "<group>"; };
 		270FC31B176C38E0006FBD11 /* SpriteKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SpriteKit.framework; path = System/Library/Frameworks/SpriteKit.framework; sourceTree = SDKROOT; };
 		270FC31D176C4467006FBD11 /* touchImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = touchImage.png; sourceTree = "<group>"; };
 		270FC31E176C4467006FBD11 /* touchImage@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "touchImage@2x.png"; sourceTree = "<group>"; };
@@ -274,8 +270,6 @@
 				270FC324176D0862006FBD11 /* ADPropertyManager.m */,
 				27EF5F431771190800DCA345 /* ADHelper.h */,
 				27EF5F4417711D1400DCA345 /* ADHelper.m */,
-				270908D5177394D4001F25A3 /* ADJointNode.h */,
-				270908D6177394D4001F25A3 /* ADJointNode.m */,
 				5CBB421E177805CC00BC6C59 /* ADNode.h */,
 				5CBB421F177805CC00BC6C59 /* ADNode.m */,
 				5C9D2A58177A950600FC0AEE /* Triangulate.h */,
@@ -396,7 +390,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CA38C6E17764E66009D4EAE /* ADRope.m in Sources */,
-				270908D7177394D4001F25A3 /* ADJointNode.m in Sources */,
 				27EF5F4517711D1400DCA345 /* ADHelper.m in Sources */,
 				5CD37106176AE43100B689AC /* ADSceneViewController.m in Sources */,
 				5CD370DA176AE39700B689AC /* main.m in Sources */,
@@ -426,7 +419,6 @@
 				270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */,
 				27EF5F4617711D1400DCA345 /* ADHelper.m in Sources */,
 				5C9D2A5B177A950600FC0AEE /* Triangulate.mm in Sources */,
-				270908D8177394D4001F25A3 /* ADJointNode.m in Sources */,
 				5CBB4221177805CC00BC6C59 /* ADNode.m in Sources */,
 				5CA38C6D17764E66009D4EAE /* ADRopePoint.m in Sources */,
 			);

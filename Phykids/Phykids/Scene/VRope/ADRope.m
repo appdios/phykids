@@ -148,5 +148,8 @@
 	
 }
 
-
+- (void)removeAllNodes
+{
+    [spriteSheet removeChildrenInArray:self.ropeNodes];
+}
 @end

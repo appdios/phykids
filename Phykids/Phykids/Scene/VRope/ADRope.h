@@ -13,5 +13,6 @@
 - (void)resetWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB;
 - (void)updateWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB dt:(float)dt;
 - (void)updateSprites;
-- (void)updateSpritesWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB ;
+- (void)updateSpritesWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB;
+- (void)removeAllNodes;
 @end
