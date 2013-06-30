@@ -15,5 +15,6 @@
 @interface ADScene : SKScene
 
 @property (nonatomic, weak) id<ADSceneDelegate> delegate;
+@property (nonatomic) BOOL isPaused;
 - (void)playPauseScene;
 @end

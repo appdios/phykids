@@ -54,9 +54,22 @@
 
 - (void)playPauseScene
 {
+    [self showHideMenu];
     [self hideSelectionView];
     [self.sceneView playPauseScene];
     [self.playButton setSelected:![self.playButton isSelected]];
+}
+
+- (void)showHideMenu
+{
+    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIButton class]]) {
+            UIButton *btn = (UIButton*)obj;
+            if (btn.tag > 0) {
+                btn.hidden = self.sceneView.isPaused;
+            }
+        }
+    }];
 }
 
 - (void)showSelectionViewForNode:(SKShapeNode *)node

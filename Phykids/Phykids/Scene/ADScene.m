@@ -12,7 +12,6 @@
 #import "Triangulate.h"
 
 @interface ADScene()
-@property (nonatomic) BOOL isPaused;
 @property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
 @property (nonatomic, strong) SKNode *mouseNode;
 @property (nonatomic, strong) ADNode *currentNode;
