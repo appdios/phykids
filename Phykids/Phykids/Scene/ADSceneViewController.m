@@ -38,6 +38,12 @@
     [self.playButton setImage:[UIImage imageNamed:@"btnPlay"] forState:UIControlStateNormal];
     [self.playButton setImage:[UIImage imageNamed:@"btnStop"] forState:UIControlStateSelected];
     [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];
+    
+    self.selectionView = [[ADSelectionView alloc] initWithFrame:CGRectZero];
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
+    [tapGesture setCancelsTouchesInView:YES];
+    [self.view addGestureRecognizer:tapGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -45,10 +51,31 @@
     [super viewWillAppear:animated];
 }
 
+- (void)tapGesture:(UITapGestureRecognizer*)recognizer{
+    if (self.sceneView.isPaused) {
+        CGPoint point = [recognizer locationInView:self.view];
+        SKNode *node = [self.sceneView nodeAtPoint:[self.sceneView convertPointFromView:point]];
+        if ([node isKindOfClass:[ADScene class]]) {
+            [self hideSelectionView];
+        }
+        if (node) {
+            [self showSelectionViewForNode:(ADNode*)node];
+        }
+    }
+}
+
+- (void)showSelectionViewForNode:(SKShapeNode *)node
+{
+    [self.view addSubview:self.selectionView];
+    [self.selectionView setNode:node];
+}
+
 - (void)hideSelectionView{
     if (self.selectionView) {
+        if (self.selectionView.currentNode) {
+            [self.selectionView.currentNode unHighlight];
+        }
         [self.selectionView removeFromSuperview];
-        self.selectionView = nil;
     }
 }
 
@@ -70,20 +97,6 @@
             }
         }
     }];
-}
-
-- (void)showSelectionViewForNode:(SKShapeNode *)node
-{
-    if (self.selectionView) {
-        [self.selectionView removeFromSuperview];
-        self.selectionView = nil;
-    }
-    CGRect boundingBox = [node calculateAccumulatedFrame];
-    
-    self.selectionView = [[ADSelectionView alloc] initWithFrame:CGRectMake(boundingBox.origin.x, fabs(boundingBox.origin.y - self.view.bounds.size.height+boundingBox.size.height), boundingBox.size.width, boundingBox.size.height)];
-    
-    [self.view addSubview:self.selectionView];
-    [self.selectionView setNode:node];
 }
 
 - (IBAction)shapeChanged:(UIButton*)sender

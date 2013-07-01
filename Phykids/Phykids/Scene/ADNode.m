@@ -170,7 +170,7 @@
         for (ADNode *shapeNode in shapeNodes2) {
             if ([shapeNode isKindOfClass:[ADNode class]]) {
                 if (shapeNode.nodeType < ADNodeTypePivot) {
-                    if (node2 == nil) {
+                    if (node2 == nil && ![shapeNode isEqual:node1]) {
                         node2 = shapeNode;
                         break;
                     }
@@ -181,30 +181,6 @@
         if (node1 || node2) {
             ADNode *newNode = [ADNode jointOfType:node.nodeType betweenNodeA:node1?node1:scene nodeB:node2?node2:scene anchorA:node.startPositionA anchorB:node.startPositionB inSecene:scene];
             [node remove];
-            return newNode;
-        }
-        else{
-            [node remove];
-        }
-    }
-    else if (node.nodeType == ADNodeTypePivot) {
-        NSArray *shapeNodes = [scene nodesAtPoint:node.position];
-        ADNode *node1 = nil;
-        ADNode *node2 = nil;
-        for (ADNode *shapeNode in shapeNodes) {
-            if (shapeNode.nodeType < ADNodeTypePivot) {
-                if (node1 == nil) {
-                    node1 = shapeNode;
-                }
-                else if(node2 == nil)
-                {
-                    node2 = shapeNode;
-                    break;
-                }
-            }
-        }
-        if (node1 || node2) {
-            ADNode *newNode = [ADNode jointOfType:ADNodeTypePivot betweenNodeA:node1?node1:scene nodeB:node2?node2:scene anchorA:node.position anchorB:node.position inSecene:scene];
             return newNode;
         }
         else{
@@ -272,14 +248,7 @@
 
 - (SKNode*)createNodeAtPoint:(CGPoint)p
 {
-    CGMutablePathRef pathRef = CGPathCreateMutable();
-    
-    CGPathAddArc(pathRef, nil, 0, 0, 1, 0, M_PI * 2, YES);
-    SKShapeNode *node = [SKShapeNode node];
-    node.strokeColor = [UIColor blackColor];
-    node.path = pathRef;
-    CGPathRelease(pathRef);
-    
+    SKSpriteNode *node  = [SKSpriteNode spriteNodeWithImageNamed:@"blackdot"];
     node.position = p;
     return node;
 }
@@ -299,7 +268,7 @@
     joint.startPositionB = pointB;
     joint.anchorPointOffsetA = CGPointMake(pointA.x - nodeA.position.x,pointA.y - nodeA.position.y);
     joint.anchorPointOffsetB = CGPointMake(pointB.x - nodeB.position.x,pointB.y - nodeB.position.y);
-    joint.strokeColor = [ADPropertyManager currentFillColor];
+    joint.strokeColor = [UIColor brownColor];
 
     switch (type) {
         case ADNodeTypePivot:
@@ -350,7 +319,7 @@
     joint.nodeType = type;
     joint.startPositionA = pointA;
     joint.startPositionB = pointB;
-    joint.strokeColor = [ADPropertyManager currentFillColor];
+    joint.strokeColor = [UIColor brownColor];
     switch (type) {
         case ADNodeTypePivot:
         {
@@ -364,7 +333,6 @@
         case ADNodeTypeRope:
         {
             joint.position = pointA;
-            
             joint.vRope = [[ADRope alloc] initWithPoints:pointA pointB:pointB spriteSheet:scene];
             
         }
@@ -577,6 +545,18 @@
     }
     
     [self removeFromParent];
+}
+
+- (void)highlight
+{
+    self.strokeColor = [UIColor redColor];
+    self.lineWidth = 4.0;
+}
+
+- (void)unHighlight
+{
+    self.strokeColor = [UIColor blackColor];
+    self.lineWidth = 1.0;
 }
 
 @end

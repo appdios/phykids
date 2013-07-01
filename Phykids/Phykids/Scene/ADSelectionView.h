@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <SpriteKit/SpriteKit.h>
+#import "ADNodeManager.h"
 
 @interface ADSelectionView : UIView
+@property(nonatomic, strong) ADNode *currentNode;
 
 - (void)setNode:(SKNode*)node;
 @end

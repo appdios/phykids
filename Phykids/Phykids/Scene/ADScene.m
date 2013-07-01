@@ -10,11 +10,12 @@
 #import "ADNodeManager.h"
 #import "ADNode.h"
 #import "Triangulate.h"
+#import "ADSpriteNode.h"
 
 @interface ADScene()
 @property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
 @property (nonatomic, strong) SKNode *mouseNode;
-@property (nonatomic, strong) ADNode *currentNode;
+@property (nonatomic, strong) id currentNode;
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic, strong) NSMutableArray *touchPoints;
 
@@ -55,12 +56,6 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     else
     {
         //Run Mode
-        SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
-        if (body) {
-            SKNode *node = body.node;
-            [self destroyMouseNode];
-            [self createMouseNodeWithNode:node atPoint:point];
-        }
     }
 }
 
@@ -94,9 +89,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                 if ([self.touchPoints count]>=3) {
                     NSMutableArray *reducedPoints = reducePoints(self.touchPoints,10);
                     grahamMain(reducedPoints);
-                    if ([reducedPoints count]>3) {
-                        [self.currentNode remove];
-                        self.currentNode = nil;
+                    if ([reducedPoints count]>=3) {
                         self.currentNode = [ADNode polygonNodeWithPoints:reducedPoints];
                     }
                 }
@@ -121,7 +114,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                 break;
             case ADNodeTypePivot:
             {
-                self.currentNode = [ADNode jointOfType:[ADPropertyManager selectedNodeType] betweenPointA:point pointB:point inSecene:self];
+                self.currentNode = [ADSpriteNode pivotJointAtPoint:point inSecene:self];
             }
                 break;
             default:
@@ -129,9 +122,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         }
         
         if (self.currentNode) {
-            if (![self.currentNode.parent isEqual:self]) {
-                [self addChild:self.currentNode];
-            }
+            [self addChild:self.currentNode];
         }
     }
     else
@@ -139,6 +130,14 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         //Run Mode
         if (self.mouseNode) {
             self.mouseNode.position = point;
+        }
+        else{
+            SKPhysicsBody *body = [self.physicsWorld bodyAtPoint:point];
+            if (body) {
+                SKNode *node = body.node;
+                [self destroyMouseNode];
+                [self createMouseNodeWithNode:node atPoint:point];
+            }
         }
     }
 }
@@ -148,10 +147,10 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     if (self.isPaused) {
         //Design Mode
         if (self.currentNode) {
-            if (self.currentNode.nodeType == ADNodeTypeCircle ||
-                self.currentNode.nodeType == ADNodeTypeRectangle ||
-                self.currentNode.nodeType == ADNodeTypeGear ||
-                self.currentNode.nodeType == ADNodeTypePolygon 
+            if (((ADNode*)self.currentNode).nodeType == ADNodeTypeCircle ||
+                ((ADNode*)self.currentNode).nodeType == ADNodeTypeRectangle ||
+                ((ADNode*)self.currentNode).nodeType == ADNodeTypeGear ||
+                ((ADNode*)self.currentNode).nodeType == ADNodeTypePolygon 
                 ) {
                 [ADNodeManager setPhysicsBodyToNode:self.currentNode];
             }
@@ -174,59 +173,24 @@ static CGFloat lastFrameZRotationOfSelectedNode;
             [self destroyMouseNode];
         }
     }
-    
-    
-//        if (self.currentNode.nodeType == ADNodeTypePolygon) {
-//            NSArray *reducedPoints = reducePoints(self.touchPoints,10);
-//            BOOL isConvex = isConvexPolygon(reducedPoints);
-//            if (isConvex) {
-//                [ADNodeManager setPhysicsBodyToNode:self.currentNode];
-//            }
-//            else{
-//                [self.currentNode removeFromParent];
-//                NSArray *triangles = [Triangulate Process:reducedPoints];
-//                if ([triangles count]) {
-//                    __block ADNode *lastNode = nil;
-//                    [triangles enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-//                        NSArray *triangle = (NSArray*)obj;
-//                        ADNode *triangleNode = [ADNode polygonNodeWithPoints:triangle];
-//                        [self addChild:triangleNode];
-//                        [ADNodeManager setPhysicsBodyToNode:triangleNode];
-//                        if (lastNode!=nil) {
-//                            SKPhysicsJointFixed *joint =[SKPhysicsJointFixed jointWithBodyA:lastNode.physicsBody bodyB:triangleNode.physicsBody anchor:CGPointZero];
-//                            [self.physicsWorld addJoint:joint];
-//                        }
-//                        lastNode = triangleNode;
-//                    }];
-//                    self.currentNode = lastNode;
-//                }
-//            }
-//        }
-       // [self addDummyJoint];
 }
 
-- (void)addDummyJoint
-{
-    SKNode *tempNode = [SKSpriteNode spriteNodeWithColor:[UIColor darkGrayColor] size:CGSizeMake(20, 20)];
-    tempNode.hidden = YES;
-    tempNode.position = CGPointMake(self.frame.size.width/2, 450);
-    [self addChild:tempNode];
-    tempNode.physicsBody = [SKPhysicsBody bodyWithRectangleOfSize:CGSizeMake(20, 20)];
-    [tempNode.physicsBody setDynamic:NO];
-    
-    ADNode *jointNode = [ADNode jointOfType:ADNodeTypeRope betweenNodeA:self.currentNode nodeB:tempNode anchorA:self.currentNode.position anchorB:tempNode.position inSecene:self];
-    [self.physicsWorld addJoint:jointNode.joint];
-    
-    [self addChild:jointNode];
-}
 
 - (void)adjustShapesForRun
 {
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]] ||
+            [obj isKindOfClass:[ADSpriteNode class]]) {
             ADNode *node = (ADNode*)obj;
             if (node.nodeType < ADNodeTypePivot) {
                 [node setPaused:NO];
+            }
+            else if (node.nodeType == ADNodeTypePivot){
+                ADSpriteNode *newNode = [ADSpriteNode physicsJointForJoint:(ADSpriteNode*)node inScene:self];
+                if (newNode) {
+                    [self addChild:newNode];
+                    [self.physicsWorld addJoint:newNode.joint];
+                }
             }
             else{
                 ADNode *newNode = [ADNode physicsJointForJoint:node inScene:self];
@@ -244,7 +208,8 @@ static CGFloat lastFrameZRotationOfSelectedNode;
 {
     [self.physicsWorld removeAllJoints];
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]] ||
+            [obj isKindOfClass:[ADSpriteNode class]]) {
             ADNode *node = (ADNode*)obj;
             if (node.nodeType < ADNodeTypePivot) {
                 [node setPaused:YES];
@@ -255,9 +220,13 @@ static CGFloat lastFrameZRotationOfSelectedNode;
             }
             else{
                 if (node.nodeType == ADNodeTypeRope ||
-                    node.nodeType == ADNodeTypeSpring ||
-                    node.nodeType == ADNodeTypePivot) {
+                    node.nodeType == ADNodeTypeSpring) {
                     ADNode *newNode = [ADNode jointOfType:node.nodeType betweenPointA:node.startPositionA pointB:node.startPositionB inSecene:self];
+                    [self addChild:newNode];
+                    [node remove];
+                }
+                else if (node.nodeType == ADNodeTypePivot) {
+                    ADSpriteNode *newNode = [ADSpriteNode pivotJointAtPoint:node.originalPosition inSecene:self];
                     [self addChild:newNode];
                     [node remove];
                 }
@@ -281,7 +250,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
 
 - (void)createMouseNodeWithNode:(SKNode*)node atPoint:(CGPoint)point
 {
-    self.mouseNode = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImageNamed:@"touchImage"] size:CGSizeMake(20, 20)];
+    self.mouseNode = [SKSpriteNode spriteNodeWithImageNamed:@"pivot"];
     self.mouseNode.position = point;
     [self addChild:self.mouseNode];
     
@@ -317,7 +286,8 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     }
     
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]] ||
+            [obj isKindOfClass:[ADSpriteNode class]]) {
             [(ADNode*)obj update:currentTime];
         }
         
@@ -330,7 +300,8 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         return;
     }
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]] ||
+            [obj isKindOfClass:[ADSpriteNode class]]) {
             [(ADNode*)obj didSimulatePhysics];
         }
         

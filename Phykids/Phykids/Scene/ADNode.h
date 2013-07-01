@@ -32,4 +32,6 @@
 - (void)didSimulatePhysics;
 
 - (void)remove;
+- (void)highlight;
+- (void)unHighlight;
 @end

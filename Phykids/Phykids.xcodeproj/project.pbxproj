@@ -27,6 +27,16 @@
 		5C2D1127176C33DA00E31475 /* ADSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1126176C33DA00E31475 /* ADSelectionView.m */; };
 		5C2D1128176C33F000E31475 /* ADSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1126176C33DA00E31475 /* ADSelectionView.m */; };
 		5C2D112C176D619700E31475 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5C2D112B176D619700E31475 /* QuartzCore.framework */; };
+		5C365B2717800EDE00064802 /* blackdot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2517800EDE00064802 /* blackdot.png */; };
+		5C365B2817800EDE00064802 /* blackdot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2517800EDE00064802 /* blackdot.png */; };
+		5C365B2917800EDE00064802 /* blackdot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2617800EDE00064802 /* blackdot@2x.png */; };
+		5C365B2A17800EDE00064802 /* blackdot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2617800EDE00064802 /* blackdot@2x.png */; };
+		5C365B2D1780125F00064802 /* pivot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2B1780125F00064802 /* pivot.png */; };
+		5C365B2E1780125F00064802 /* pivot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2B1780125F00064802 /* pivot.png */; };
+		5C365B2F1780125F00064802 /* pivot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2C1780125F00064802 /* pivot@2x.png */; };
+		5C365B301780125F00064802 /* pivot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2C1780125F00064802 /* pivot@2x.png */; };
+		5C365B331780148200064802 /* ADSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C365B321780148200064802 /* ADSpriteNode.m */; };
+		5C365B341780148200064802 /* ADSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C365B321780148200064802 /* ADSpriteNode.m */; };
 		5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC671176AEAF70019F2C8 /* ADNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */; };
@@ -84,6 +94,12 @@
 		5C2D1125176C33DA00E31475 /* ADSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSelectionView.h; sourceTree = "<group>"; };
 		5C2D1126176C33DA00E31475 /* ADSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADSelectionView.m; sourceTree = "<group>"; };
 		5C2D112B176D619700E31475 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		5C365B2517800EDE00064802 /* blackdot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blackdot.png; sourceTree = "<group>"; };
+		5C365B2617800EDE00064802 /* blackdot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackdot@2x.png"; sourceTree = "<group>"; };
+		5C365B2B1780125F00064802 /* pivot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pivot.png; sourceTree = "<group>"; };
+		5C365B2C1780125F00064802 /* pivot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pivot@2x.png"; sourceTree = "<group>"; };
+		5C365B311780148200064802 /* ADSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSpriteNode.h; sourceTree = "<group>"; };
+		5C365B321780148200064802 /* ADSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADSpriteNode.m; sourceTree = "<group>"; };
 		5C5AC66A176AE7630019F2C8 /* ADScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADScene.h; sourceTree = "<group>"; };
 		5C5AC66B176AE7630019F2C8 /* ADScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADScene.m; sourceTree = "<group>"; };
 		5C5AC66F176AEAF70019F2C8 /* ADNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNodeManager.h; sourceTree = "<group>"; };
@@ -157,6 +173,10 @@
 		2781D59E176C268C00C80532 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5C365B2B1780125F00064802 /* pivot.png */,
+				5C365B2C1780125F00064802 /* pivot@2x.png */,
+				5C365B2517800EDE00064802 /* blackdot.png */,
+				5C365B2617800EDE00064802 /* blackdot@2x.png */,
 				2781D59F176C26A000C80532 /* btnStop.png */,
 				2781D5A0176C26A000C80532 /* btnPlay.png */,
 				277FE7A71774F207002B9F5C /* rope.png */,
@@ -272,6 +292,8 @@
 				27EF5F4417711D1400DCA345 /* ADHelper.m */,
 				5CBB421E177805CC00BC6C59 /* ADNode.h */,
 				5CBB421F177805CC00BC6C59 /* ADNode.m */,
+				5C365B311780148200064802 /* ADSpriteNode.h */,
+				5C365B321780148200064802 /* ADSpriteNode.m */,
 				5C9D2A58177A950600FC0AEE /* Triangulate.h */,
 				5C9D2A59177A950600FC0AEE /* Triangulate.mm */,
 				5CA38C6117764E5A009D4EAE /* VRope */,
@@ -357,11 +379,15 @@
 			files = (
 				2781D5A3176C26A000C80532 /* btnPlay.png in Resources */,
 				5CD370D8176AE39700B689AC /* InfoPlist.strings in Resources */,
+				5C365B2D1780125F00064802 /* pivot.png in Resources */,
 				277FE7A81774F207002B9F5C /* rope.png in Resources */,
+				5C365B2717800EDE00064802 /* blackdot.png in Resources */,
+				5C365B2917800EDE00064802 /* blackdot@2x.png in Resources */,
 				270FC31F176C4467006FBD11 /* touchImage.png in Resources */,
 				5C7F9EC51770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A1176C26A000C80532 /* btnStop.png in Resources */,
 				270FC321176C4467006FBD11 /* touchImage@2x.png in Resources */,
+				5C365B2F1780125F00064802 /* pivot@2x.png in Resources */,
 				2771A2121770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */,
 				5CD370E0176AE39700B689AC /* Images.xcassets in Resources */,
 			);
@@ -373,11 +399,15 @@
 			files = (
 				2771A2131770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */,
 				277FE7A91774F207002B9F5C /* rope.png in Resources */,
+				5C365B2E1780125F00064802 /* pivot.png in Resources */,
+				5C365B301780125F00064802 /* pivot@2x.png in Resources */,
 				5C7F9EC61770277F006E7368 /* ADSceneViewController.xib in Resources */,
 				2781D5A2176C26A000C80532 /* btnStop.png in Resources */,
 				5CD370F1176AE39700B689AC /* InfoPlist.strings in Resources */,
 				2781D5A4176C26A000C80532 /* btnPlay.png in Resources */,
 				270FC320176C4467006FBD11 /* touchImage.png in Resources */,
+				5C365B2817800EDE00064802 /* blackdot.png in Resources */,
+				5C365B2A17800EDE00064802 /* blackdot@2x.png in Resources */,
 				270FC322176C4467006FBD11 /* touchImage@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -396,6 +426,7 @@
 				5CBB4220177805CC00BC6C59 /* ADNode.m in Sources */,
 				5CA38C7017764E66009D4EAE /* ADStick.m in Sources */,
 				5CA38C6C17764E66009D4EAE /* ADRopePoint.m in Sources */,
+				5C365B331780148200064802 /* ADSpriteNode.m in Sources */,
 				5CD370DE176AE39700B689AC /* ADAppDelegate.m in Sources */,
 				270FC325176D0862006FBD11 /* ADPropertyManager.m in Sources */,
 				5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */,
@@ -417,6 +448,7 @@
 				5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */,
 				5CD370F3176AE39700B689AC /* PhykidsTests.m in Sources */,
 				270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */,
+				5C365B341780148200064802 /* ADSpriteNode.m in Sources */,
 				27EF5F4617711D1400DCA345 /* ADHelper.m in Sources */,
 				5C9D2A5B177A950600FC0AEE /* Triangulate.mm in Sources */,
 				5CBB4221177805CC00BC6C59 /* ADNode.m in Sources */,
