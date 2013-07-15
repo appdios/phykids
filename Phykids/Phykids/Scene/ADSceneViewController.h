@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong) IBOutlet UIButton *playButton;
 
+- (IBAction)shapeChanged:(UIButton*)sender;
+- (IBAction)toolSelected:(UIButton*)sender;
 @end

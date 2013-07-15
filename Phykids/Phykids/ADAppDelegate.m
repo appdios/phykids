@@ -16,7 +16,12 @@
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
-    self.sceneController = [[ADSceneViewController alloc] initWithNibName:isPad?@"ADSceneViewController":@"ADSceneViewController-iPhone" bundle:nil];
+    if (isPad()) {
+        self.sceneController = [[ADSceneViewController alloc] initWithNibName:@"ADSceneViewController" bundle:nil];
+    }
+    else{
+        self.sceneController = [[ADSceneViewController alloc] initWithNibName:@"ADSceneViewController-iPhone" bundle:nil];
+    }
     [self.window setRootViewController:self.sceneController];
     
     self.window.backgroundColor = [UIColor whiteColor];

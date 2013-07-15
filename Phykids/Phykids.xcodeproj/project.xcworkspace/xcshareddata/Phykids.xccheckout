@@ -3,34 +3,34 @@
 <plist version="1.0">
 <dict>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>4457A1F9-A40B-4194-BF7E-0C72648FFA27</string>
+	<string>613342A6-5CEF-47F0-917A-BDA5E14E0550</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Phykids</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>7AB89758-7374-4A22-8D09-DDE82C7D02C8</key>
-		<string>https://github.com/appdios/phykids.git</string>
+		<key>94D85340-3759-48A1-B84D-4DF9633F9277</key>
+		<string>ssh://github.com/appdios/phykids.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Phykids/Phykids.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>7AB89758-7374-4A22-8D09-DDE82C7D02C8</key>
+		<key>94D85340-3759-48A1-B84D-4DF9633F9277</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/appdios/phykids.git</string>
+	<string>ssh://github.com/appdios/phykids.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>7AB89758-7374-4A22-8D09-DDE82C7D02C8</string>
+	<string>94D85340-3759-48A1-B84D-4DF9633F9277</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7AB89758-7374-4A22-8D09-DDE82C7D02C8</string>
+			<string>94D85340-3759-48A1-B84D-4DF9633F9277</string>
 			<key>IDESourceControlWCCName</key>
 			<string>phykids</string>
 		</dict>
