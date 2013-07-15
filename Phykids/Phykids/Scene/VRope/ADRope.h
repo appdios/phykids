@@ -8,10 +8,13 @@
 
 @interface ADRope : NSObject
 
-- (id)initWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB spriteSheet:(SKNode*)spriteSheetArg;
+- (id)initWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB spriteSheet:(SKNode*)spriteSheetArg antiSagHack:(CGFloat)antiSagHack;
 - (void)createRope:(CGPoint)pointA pointB:(CGPoint)pointB;
 - (void)resetWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB;
 - (void)updateWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB dt:(float)dt;
 - (void)updateSprites;
-- (void)updateSpritesWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB ;
+- (void)updateSpritesWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB;
+- (void)removeAllNodes;
+- (void)updateParentOfAllNodes:(id)parent;
+- (void)updatePositionOfAllNodesBy:(CGPoint)distancePoint;
 @end

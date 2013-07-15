@@ -7,13 +7,11 @@
 //
 
 #import "ADSelectionView.h"
-#import "ADNodeManager.h"
 
 static const int kOffset = 20;
 
 @interface ADSelectionView ()
 @property(nonatomic, strong) UIView *scaleView;
-@property(nonatomic, strong) SKNode *currentNode;
 @end
 
 @implementation ADSelectionView
@@ -23,7 +21,6 @@ static const int kOffset = 20;
     self = [super initWithFrame:frame];
     if (self) {
 
-        self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.4];
         self.scaleView = [[UIView alloc] initWithFrame:CGRectMake(self.bounds.origin.x + self.bounds.size.width - kOffset, self.bounds.origin.y + self.bounds.size.height - kOffset, 20, 20)];
         CALayer *slayer = self.scaleView.layer;
         slayer.cornerRadius = 10;
@@ -48,57 +45,31 @@ static const int kOffset = 20;
 
 
     self.center = CGPointMake(self.center.x + (point.x - previousPoint.x), self.center.y + (point.y - previousPoint.y));
-    self.currentNode.position = CGPointMake(self.currentNode.position.x + (point.x - previousPoint.x), self.currentNode.position.y - (point.y - previousPoint.y));
+    if (self.currentNode.nodeType == ADNodeTypeSpring) {
+        self.currentNode.startPositionA = CGPointMake(self.currentNode.startPositionA.x + (point.x - previousPoint.x), self.currentNode.startPositionA.y - (point.y - previousPoint.y));
+        self.currentNode.startPositionB = CGPointMake(self.currentNode.startPositionB.x + (point.x - previousPoint.x), self.currentNode.startPositionB.y - (point.y - previousPoint.y));
+    }
+    self.currentNode.originalPosition = self.currentNode.position = CGPointMake(self.currentNode.position.x + (point.x - previousPoint.x), self.currentNode.position.y - (point.y - previousPoint.y));
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+   // [ADNodeManager setPhysicsBodyToNode:self.currentNode inWorld:self.];
 }
 
 
-- (void)setNode:(SKShapeNode*)node
+- (void)setNode:(ADNode*)node
 {
-    if (![node isKindOfClass:[SKShapeNode class]]) {
+    if ([node isKindOfClass:[SKScene class]]) {
         return;
     }
     
-    CGPoint pathPoint = CGPathGetCurrentPoint(node.path);
+    if (self.currentNode) {
+        [self.currentNode unHighlight];
+    }
+    [node highlight];
+    
     self.currentNode = node;
-    CGRect  pathBox = CGPathGetBoundingBox(node.path);
-    
-//    CGPoint centerDiffPoint =  CGPointMake(self.center.x - CGRectGetMidX(pathBox), self.center.y - CGRectGetMidY(pathBox));
-//    // Create the shape layer
-    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
-//    CATransform3D tmatrix = CATransform3DIdentity;
-//    NSLog(@"%.0f",node.zRotation*57.2957795);
-//    tmatrix = CATransform3DRotate(tmatrix, node.zRotation, 0, 0, 1);
-//    tmatrix = CATransform3DScale(tmatrix, 1.0, -1.0, 1.0);
-//    tmatrix = CATransform3DTranslate(tmatrix, CGRectGetWidth(pathBox)/2,CGRectGetHeight(pathBox)/2 - CGRectGetHeight(pathBox), 0);
-////
-//    [shapeLayer setTransform:tmatrix];
-    [shapeLayer setFillColor:[[UIColor colorWithWhite:0.0 alpha:0.3] CGColor]];
-    [shapeLayer setStrokeColor:[[UIColor whiteColor] CGColor]];
-    [shapeLayer setLineWidth:2.0f];
-    [shapeLayer setLineJoin:kCALineJoinRound];
-    [shapeLayer setLineDashPattern:
-     [NSArray arrayWithObjects:[NSNumber numberWithInt:10],
-      [NSNumber numberWithInt:5],
-      nil]];
-    
-    [shapeLayer setPath:CGPathCreateWithRect(self.bounds, nil)];
-    
-    [self.layer addSublayer:shapeLayer];
-    CABasicAnimation *dashAnimation;
-    dashAnimation = [CABasicAnimation
-                     animationWithKeyPath:@"lineDashPhase"];
-    
-    [dashAnimation setFromValue:[NSNumber numberWithFloat:0.0f]];
-    [dashAnimation setToValue:[NSNumber numberWithFloat:15.0f]];
-    [dashAnimation setDuration:0.75f];
-    [dashAnimation setRepeatCount:10000];
-    
-    [shapeLayer addAnimation:dashAnimation forKey:@"linePhase"];
 }
 
 @end 

@@ -7,15 +7,15 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
-
+#import "ADNode.h"
+#import "ADSpriteNode.h"
 
 @interface ADNodeManager : NSObject
 
 
 + (ADNodeManager*)sharedInstance;
-+ (void)tranformNode:(SKNode*)node withMatrix:(CGAffineTransform)matrix;
-+ (void)setPhysicsBodyToNode:(SKNode*)node;
-+ (SKNode*)currentSelectedNode;
-+ (void)setCurrentSelectedNode:(SKNode*)node;
-
++ (void)tranformNode:(ADNode*)node withMatrix:(CGAffineTransform)matrix;
++ (void)setPhysicsBodyToNode:(ADNode*)node;
++ (ADNode*)currentSelectedNode;
++ (void)setCurrentSelectedNode:(ADNode*)node;
 @end

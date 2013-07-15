@@ -12,7 +12,7 @@
 #define RADIANS_TO_DEGREES(__ANGLE__) ((__ANGLE__) * 57.29577951f) // PI * 180
 
 
-NSArray* reducePoints(NSArray *Points,double Tolerance);
+NSMutableArray* reducePoints(NSMutableArray *Points,double Tolerance);
 BOOL isConvexPolygon(NSArray *points);
 BOOL isPad();
 UIColor* randomColor();
@@ -26,4 +26,5 @@ CGPoint addPoints(const CGPoint v1, const CGPoint v2);
 CGPoint angleToPoint(const CGFloat a);
 CGFloat pointToAngle(const CGPoint v);
 CGPoint midpointOfPoints(const CGPoint v1, const CGPoint v2);
+void grahamMain(NSMutableArray *points);
 #endif

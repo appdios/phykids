@@ -13,7 +13,11 @@ typedef enum
     ADNodeTypeRectangle,
     ADNodeTypeCircle,
     ADNodeTypePolygon,
-    
+    ADNodeTypeGear,
+    ADNodeTypePivot,
+    ADNodeTypeRope,
+    ADNodeTypeSpring,
+    ADNodeTypeGlue
 }ADNodeType;
 
 @interface ADPropertyManager : NSObject
