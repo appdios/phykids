@@ -1,26 +1,28 @@
 
 
 #import "ADRope.h"
+#import "ADNode.h"
 
 @interface ADRope()
 {
     NSInteger numPoints;
-	CGFloat antiSagHack;
     SKNode* spriteSheet;
 }
 @property (nonatomic, strong) NSMutableArray *ropePoints;
 @property (nonatomic, strong) NSMutableArray *ropeSticks;
 @property (nonatomic, strong) NSMutableArray *ropeNodes;
+@property (nonatomic) CGFloat antiSagHack;
 @end
 
 @implementation ADRope
 
-- (id)initWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB spriteSheet:(SKNode*)spriteSheetArg{
+- (id)initWithPoints:(CGPoint)pointA pointB:(CGPoint)pointB spriteSheet:(SKNode*)spriteSheetArg antiSagHack:(CGFloat)antiSagHack{
 	if((self = [super init])) {
 		spriteSheet = spriteSheetArg;
         self.ropePoints = [NSMutableArray array];
         self.ropeSticks = [NSMutableArray array];
         self.ropeNodes = [NSMutableArray array];
+        self.antiSagHack = antiSagHack;
 		[self createRope:pointA pointB:pointB];
 	}
 	return self;
@@ -30,13 +32,13 @@
 - (void)createRope:(CGPoint)pointA pointB:(CGPoint)pointB {
 	
 	float distance = distanceBetween(pointA,pointB);
-	int segmentFactor = 12; //increase value to have less segments per rope, decrease to have more segments
+	int segmentFactor = 15; //increase value to have less segments per rope, decrease to have more segments
 	numPoints = distance/segmentFactor;
 	CGPoint diffVector = CGPointMake(pointB.x - pointA.x, pointB.y - pointA.y);
 	float multiplier = distance / (numPoints-1);
-	antiSagHack = 0.1f; //HACK: scale down rope points to cheat sag. set to 0 to disable, max suggested value 0.1
+	
 	for(int i=0;i<numPoints;i++) {
-		CGPoint tmpVector = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*i*(1-antiSagHack)));
+		CGPoint tmpVector = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*i*(1-self.antiSagHack)));
 		ADRopePoint *tmpPoint = [[ADRopePoint alloc] init];
 		[tmpPoint setPos:tmpVector.x y:tmpVector.y];
 		[self.ropePoints addObject:tmpPoint];
@@ -49,20 +51,10 @@
 		for(int i=0;i<numPoints-1;i++) {
 			ADRopePoint *point1 = [[self.ropeSticks objectAtIndex:i] getPointA];
 			ADRopePoint *point2 = [[self.ropeSticks objectAtIndex:i] getPointB];
-		//	CGPoint stickVector = subtractPoints(CGPointMake(point1.x,point1.y),CGPointMake(point2.x,point2.y));
-		//	float stickAngle = pointToAngle(stickVector);
-            
-            SKShapeNode *node = [SKShapeNode node];
-            CGMutablePathRef pathRef = CGPathCreateMutable();
-            CGPathAddArc(pathRef, nil, 0,0, 4, 0, M_PI * 2, YES);
-            node.path = pathRef;
-            CGPathRelease(pathRef);
-            
-            node.strokeColor = [UIColor brownColor];
-            node.fillColor = [UIColor brownColor];
+		
+            ADJointConnectingNode *node = [ADJointConnectingNode spriteNodeWithImageNamed:@"browndot"];
             node.position = subtractPoints(midpointOfPoints(CGPointMake(point1.x,point1.y),CGPointMake(point2.x,point2.y)), spriteSheet.position);
-            //node.zRotation = -1 * RADIANS_TO_DEGREES(stickAngle);
-
+            node.userInteractionEnabled = NO;
             [spriteSheet addChild:node];
             [self.ropeNodes addObject:node];
 		}
@@ -74,7 +66,7 @@
 	CGPoint diffVector = subtractPoints(pointB,pointA);
 	float multiplier = distance / (numPoints - 1);
 	for(int i=0;i<numPoints;i++) {
-		CGPoint tmpVector = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*i*(1-antiSagHack)));
+		CGPoint tmpVector = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*i*(1-self.antiSagHack)));
 		ADRopePoint *tmpPoint = [self.ropePoints objectAtIndex:i];
 		[tmpPoint setPos:tmpVector.x y:tmpVector.y];
 		
@@ -128,12 +120,12 @@
 	float distance = distanceBetween(pointA,pointB);
 	CGPoint diffVector = subtractPoints(pointB,pointA);
 	float multiplier = distance / (numPoints-1);
-	antiSagHack = 0.0f; //HACK: scale down rope points to cheat sag. set to 0 to disable, max suggested value 0.1
+	self.antiSagHack = 0.0f; //HACK: scale down rope points to cheat sag. set to 0 to disable, max suggested value 0.1
 	for(int i=0;i<numPoints-1;i++) {
-		CGPoint tmpVector = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*i*(1-antiSagHack)));
+		CGPoint tmpVector = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*i*(1-self.antiSagHack)));
 		CGPoint point1 = CGPointMake(tmpVector.x, tmpVector.y);
 		
-		CGPoint tmpVector2 = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*(i+1)*(1-antiSagHack)));
+		CGPoint tmpVector2 = addPoints(pointA, multiplyPoint(normalizePoint(diffVector),multiplier*(i+1)*(1-self.antiSagHack)));
 		CGPoint point2 = CGPointMake(tmpVector2.x, tmpVector2.y);
 		
 		CGPoint stickVector = subtractPoints(CGPointMake(point1.x,point1.y),CGPointMake(point2.x,point2.y));
@@ -151,5 +143,17 @@
 - (void)removeAllNodes
 {
     [spriteSheet removeChildrenInArray:self.ropeNodes];
+}
+
+- (void)updateParentOfAllNodes:(ADNode*)parent{
+    [self.ropeNodes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        ((ADJointConnectingNode*)obj).parentNode = parent;
+    }];
+}
+
+- (void)updatePositionOfAllNodesBy:(CGPoint)distancePoint{
+    [self.ropeNodes enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        ((ADJointConnectingNode*)obj).position = addPoints(((ADJointConnectingNode*)obj).position, distancePoint);
+    }];
 }
 @end

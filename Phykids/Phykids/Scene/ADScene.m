@@ -15,7 +15,7 @@
 @interface ADScene()
 @property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
 @property (nonatomic, strong) SKNode *mouseNode;
-@property (nonatomic, strong) id currentNode;
+@property (nonatomic, strong) ADNode *currentNode;
 @property (nonatomic) CGPoint startPoint;
 @property (nonatomic, strong) NSMutableArray *touchPoints;
 
@@ -52,6 +52,17 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         
         [self.touchPoints removeAllObjects];
         [self.touchPoints addObject:[NSValue valueWithCGPoint:self.startPoint]];
+        
+        if (self.toolSelected) {
+            NSArray *nodes = [self nodesAtPoint:self.startPoint];
+            if (nodes.count) {
+                self.currentNode = [nodes lastObject];
+                if ([self.currentNode isKindOfClass:[ADJointConnectingNode class]]) {
+                    self.currentNode = ((ADJointConnectingNode*)self.currentNode).parentNode;
+                }
+                [self.currentNode highlight];
+            }
+        }
     }
     else
     {
@@ -63,66 +74,75 @@ static CGFloat lastFrameZRotationOfSelectedNode;
 {
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInNode:self];
+    CGPoint ppoint = [touch previousLocationInNode:self];
     
     if (self.isPaused) {
         //Design Mode
-        if (self.currentNode) {
-            [self.currentNode remove];
-            self.currentNode = nil;
-        }
         
-        switch ([ADPropertyManager selectedNodeType]) {
-            case ADNodeTypeRectangle:
-            {
-                self.currentNode = [ADNode rectangleNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, point.x - self.startPoint.x, point.y - self.startPoint.y)];
+        if (self.toolSelected) {
+            if (self.currentNode) {
+                [self.currentNode updatePositionByDistance:subtractPoints(point, ppoint)];
             }
-                break;
-            case ADNodeTypeCircle:
-            {
-                CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
-                self.currentNode = [ADNode circularNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0)];
+        }
+        else{
+            if (self.currentNode) {
+                [self.currentNode remove];
+                self.currentNode = nil;
             }
-                break;
-            case ADNodeTypePolygon:
-            {
-                [self.touchPoints addObject:[NSValue valueWithCGPoint:point]];
-                if ([self.touchPoints count]>=3) {
-                    NSMutableArray *reducedPoints = reducePoints(self.touchPoints,10);
-                    grahamMain(reducedPoints);
-                    if ([reducedPoints count]>=3) {
-                        self.currentNode = [ADNode polygonNodeWithPoints:reducedPoints];
+            
+            switch ([ADPropertyManager selectedNodeType]) {
+                case ADNodeTypeRectangle:
+                {
+                    self.currentNode = [ADNode rectangleNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, point.x - self.startPoint.x, point.y - self.startPoint.y)];
+                }
+                    break;
+                case ADNodeTypeCircle:
+                {
+                    CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
+                    self.currentNode = [ADNode circularNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0)];
+                }
+                    break;
+                case ADNodeTypePolygon:
+                {
+                    [self.touchPoints addObject:[NSValue valueWithCGPoint:point]];
+                    if ([self.touchPoints count]>=3) {
+                        NSMutableArray *reducedPoints = reducePoints(self.touchPoints,10);
+                        grahamMain(reducedPoints);
+                        if ([reducedPoints count]>=3) {
+                            self.currentNode = [ADNode polygonNodeWithPoints:reducedPoints];
+                        }
                     }
                 }
-            }
-                break;
-            case ADNodeTypeGear:
-            {
-                NSArray *teethNodes = [[self.currentNode userData] objectForKey:@"teethNodes"];
-                if (teethNodes) {
-                    [self removeChildrenInArray:teethNodes];
+                    break;
+                case ADNodeTypeGear:
+                {
+                    NSArray *teethNodes = [[self.currentNode userData] objectForKey:@"teethNodes"];
+                    if (teethNodes) {
+                        [self removeChildrenInArray:teethNodes];
+                    }
+                    
+                    CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
+                    self.currentNode = [ADNode gearNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0) forScene:self];
                 }
-                
-                CGFloat radius = MAX(abs((point.x - self.startPoint.x)), abs((point.y - self.startPoint.y)));
-                self.currentNode = [ADNode gearNodeInRect:CGRectMake(self.startPoint.x, self.startPoint.y, radius*2.0, radius*2.0) forScene:self];
+                    break;
+                case ADNodeTypeSpring:
+                case ADNodeTypeRope:
+                {
+                    self.currentNode = [ADNode jointOfType:[ADPropertyManager selectedNodeType] betweenPointA:self.startPoint pointB:point inSecene:self];
+                }
+                    break;
+                case ADNodeTypePivot:
+                {
+                    self.currentNode = (ADNode*)[ADSpriteNode pivotJointAtPoint:point inSecene:self];
+                }
+                    break;
+                default:
+                    break;
             }
-                break;
-            case ADNodeTypeSpring:
-            case ADNodeTypeRope:
-            {
-                self.currentNode = [ADNode jointOfType:[ADPropertyManager selectedNodeType] betweenPointA:self.startPoint pointB:point inSecene:self];
+            
+            if (self.currentNode) {
+                [self addChild:self.currentNode];
             }
-                break;
-            case ADNodeTypePivot:
-            {
-                self.currentNode = [ADSpriteNode pivotJointAtPoint:point inSecene:self];
-            }
-                break;
-            default:
-                break;
-        }
-        
-        if (self.currentNode) {
-            [self addChild:self.currentNode];
         }
     }
     else
@@ -146,16 +166,24 @@ static CGFloat lastFrameZRotationOfSelectedNode;
 {
     if (self.isPaused) {
         //Design Mode
-        if (self.currentNode) {
-            if (((ADNode*)self.currentNode).nodeType == ADNodeTypeCircle ||
-                ((ADNode*)self.currentNode).nodeType == ADNodeTypeRectangle ||
-                ((ADNode*)self.currentNode).nodeType == ADNodeTypeGear ||
-                ((ADNode*)self.currentNode).nodeType == ADNodeTypePolygon 
-                ) {
-                [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+        if (self.toolSelected) {
+            if (self.currentNode) {
+                [self.currentNode unHighlight];
             }
-            [ADPropertyManager setCurrentFillColor:nil];
         }
+        else{
+            if (self.currentNode) {
+                if (((ADNode*)self.currentNode).nodeType == ADNodeTypeCircle ||
+                    ((ADNode*)self.currentNode).nodeType == ADNodeTypeRectangle ||
+                    ((ADNode*)self.currentNode).nodeType == ADNodeTypeGear ||
+                    ((ADNode*)self.currentNode).nodeType == ADNodeTypePolygon
+                    ) {
+                    [ADNodeManager setPhysicsBodyToNode:self.currentNode];
+                }
+                [ADPropertyManager setCurrentFillColor:nil];
+            }
+        }
+        
     }
     else{
         //Run Mode
@@ -184,6 +212,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
             ADNode *node = (ADNode*)obj;
             if (node.nodeType < ADNodeTypePivot) {
                 [node setPaused:NO];
+                node.physicsBody.dynamic = !node.gluedToScene;
             }
             else if (node.nodeType == ADNodeTypePivot){
                 ADSpriteNode *newNode = [ADSpriteNode physicsJointForJoint:(ADSpriteNode*)node inScene:self];

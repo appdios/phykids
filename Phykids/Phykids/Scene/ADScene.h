@@ -16,5 +16,6 @@
 
 @property (nonatomic, weak) id<ADSceneDelegate> delegate;
 @property (nonatomic) BOOL isPaused;
+@property (nonatomic) BOOL toolSelected;
 - (void)playPauseScene;
 @end

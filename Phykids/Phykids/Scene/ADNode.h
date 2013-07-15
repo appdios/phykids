@@ -9,12 +9,20 @@
 #import <SpriteKit/SpriteKit.h>
 #import "ADRope.h"
 
+@class ADNode;
+
+@interface ADJointConnectingNode : SKSpriteNode
+
+@property (nonatomic, strong) ADNode *parentNode;
+@end
+
 @interface ADNode : SKShapeNode
 @property (nonatomic) ADNodeType nodeType;
 @property (nonatomic, strong) SKPhysicsJoint *joint;
 @property (nonatomic) CGPoint originalPosition;
 @property (nonatomic) CGPoint startPositionA;
 @property (nonatomic) CGPoint startPositionB;
+@property (nonatomic) BOOL gluedToScene;
 
 + (ADNode*)rectangleNodeInRect:(CGRect)rect;
 + (ADNode*)circularNodeInRect:(CGRect)rect;
@@ -34,4 +42,6 @@
 - (void)remove;
 - (void)highlight;
 - (void)unHighlight;
+
+- (void)updatePositionByDistance:(CGPoint)distancePoint;
 @end

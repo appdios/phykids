@@ -67,6 +67,10 @@
 		5CD370F3176AE39700B689AC /* PhykidsTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD370F2176AE39700B689AC /* PhykidsTests.m */; };
 		5CD37106176AE43100B689AC /* ADSceneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD37105176AE43100B689AC /* ADSceneViewController.m */; };
 		5CD37107176AE43100B689AC /* ADSceneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5CD37105176AE43100B689AC /* ADSceneViewController.m */; };
+		5CE7CA971781FF8500F12A01 /* browndot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7CA951781FF8500F12A01 /* browndot.png */; };
+		5CE7CA981781FF8500F12A01 /* browndot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7CA951781FF8500F12A01 /* browndot.png */; };
+		5CE7CA991781FF8500F12A01 /* browndot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7CA961781FF8500F12A01 /* browndot@2x.png */; };
+		5CE7CA9A1781FF8500F12A01 /* browndot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5CE7CA961781FF8500F12A01 /* browndot@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,6 +137,8 @@
 		5CD370F2176AE39700B689AC /* PhykidsTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PhykidsTests.m; sourceTree = "<group>"; };
 		5CD37104176AE43100B689AC /* ADSceneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSceneViewController.h; sourceTree = "<group>"; };
 		5CD37105176AE43100B689AC /* ADSceneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADSceneViewController.m; sourceTree = "<group>"; };
+		5CE7CA951781FF8500F12A01 /* browndot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = browndot.png; sourceTree = "<group>"; };
+		5CE7CA961781FF8500F12A01 /* browndot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "browndot@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +179,8 @@
 		2781D59E176C268C00C80532 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5CE7CA951781FF8500F12A01 /* browndot.png */,
+				5CE7CA961781FF8500F12A01 /* browndot@2x.png */,
 				5C365B2B1780125F00064802 /* pivot.png */,
 				5C365B2C1780125F00064802 /* pivot@2x.png */,
 				5C365B2517800EDE00064802 /* blackdot.png */,
@@ -379,6 +387,7 @@
 			files = (
 				2781D5A3176C26A000C80532 /* btnPlay.png in Resources */,
 				5CD370D8176AE39700B689AC /* InfoPlist.strings in Resources */,
+				5CE7CA971781FF8500F12A01 /* browndot.png in Resources */,
 				5C365B2D1780125F00064802 /* pivot.png in Resources */,
 				277FE7A81774F207002B9F5C /* rope.png in Resources */,
 				5C365B2717800EDE00064802 /* blackdot.png in Resources */,
@@ -390,6 +399,7 @@
 				5C365B2F1780125F00064802 /* pivot@2x.png in Resources */,
 				2771A2121770FCDD00B3B7A7 /* ADSceneViewController-iPhone.xib in Resources */,
 				5CD370E0176AE39700B689AC /* Images.xcassets in Resources */,
+				5CE7CA991781FF8500F12A01 /* browndot@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,7 +412,9 @@
 				5C365B2E1780125F00064802 /* pivot.png in Resources */,
 				5C365B301780125F00064802 /* pivot@2x.png in Resources */,
 				5C7F9EC61770277F006E7368 /* ADSceneViewController.xib in Resources */,
+				5CE7CA981781FF8500F12A01 /* browndot.png in Resources */,
 				2781D5A2176C26A000C80532 /* btnStop.png in Resources */,
+				5CE7CA9A1781FF8500F12A01 /* browndot@2x.png in Resources */,
 				5CD370F1176AE39700B689AC /* InfoPlist.strings in Resources */,
 				2781D5A4176C26A000C80532 /* btnPlay.png in Resources */,
 				270FC320176C4467006FBD11 /* touchImage.png in Resources */,

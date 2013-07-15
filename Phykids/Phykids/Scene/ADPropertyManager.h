@@ -16,7 +16,8 @@ typedef enum
     ADNodeTypeGear,
     ADNodeTypePivot,
     ADNodeTypeRope,
-    ADNodeTypeSpring
+    ADNodeTypeSpring,
+    ADNodeTypeGlue
 }ADNodeType;
 
 @interface ADPropertyManager : NSObject

@@ -9,6 +9,20 @@
 #import "ADNode.h"
 #import "ADNodeManager.h"
 
+@implementation ADJointConnectingNode
+
+- (void)highlight
+{
+    
+}
+
+- (void)unHighlight
+{
+    
+}
+
+@end
+
 @interface ADNode()
 
 @property (nonatomic, strong) SKNode *nodeA;
@@ -28,7 +42,7 @@
     CGPathRef path = [node newRectanglePathOfSize:rect.size];
     [node setPath:path];
     CGPathRelease(path);
-    [node setStrokeColor:[UIColor blackColor]];
+    [node unHighlight];
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect))];
     node.userData = [NSMutableDictionary dictionary];
@@ -49,7 +63,7 @@
     CGPathRef path = [node newCircularPathOfRadius:rect.size.width/2];
     [node setPath:path];
     CGPathRelease(path);
-    [node setStrokeColor:[UIColor blackColor]];
+    [node unHighlight];
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:rect.origin];
     node.userData = [NSMutableDictionary dictionary];
@@ -72,7 +86,7 @@
     CGPathRef path = [node newPolygonPathForPoints:points atCenter:centerPoint];
     [node setPath:path];
     CGPathRelease(path);
-    [node setStrokeColor:[UIColor blackColor]];
+    [node unHighlight];
     [node setFillColor:[ADPropertyManager currentFillColor]];
     
     [node setPosition:centerPoint];
@@ -93,7 +107,7 @@
     ADNode *node = [[ADNode alloc] init];
     node.nodeType = ADNodeTypeGear;
     
-    [node setStrokeColor:[UIColor blackColor]];
+    [node unHighlight];
     [node setFillColor:[ADPropertyManager currentFillColor]];
     [node setPosition:rect.origin];
     node.userData = [NSMutableDictionary dictionary];
@@ -134,7 +148,7 @@
             continue;
         }
         teethNode.fillColor = [ADPropertyManager currentFillColor];
-        teethNode.strokeColor = [SKColor blackColor];
+        [teethNode unHighlight];
         teethNode.position = addPoints(node.position, centerPoint);
         CGPathRef teethPathRef = [node newPolygonPathForPoints:pointValues atCenter:centerPoint];
         [teethNode setPath:teethPathRef];
@@ -248,7 +262,9 @@
 
 - (SKNode*)createNodeAtPoint:(CGPoint)p
 {
-    SKSpriteNode *node  = [SKSpriteNode spriteNodeWithImageNamed:@"blackdot"];
+    ADJointConnectingNode *node  = [ADJointConnectingNode spriteNodeWithImageNamed:@"blackdot"];
+    node.parentNode = self;
+    node.userInteractionEnabled = NO;
     node.position = p;
     return node;
 }
@@ -289,7 +305,8 @@
             joint.joint = limitJoint;
             joint.position = pointA;
             
-            joint.vRope = [[ADRope alloc] initWithPoints:pointA pointB:pointB spriteSheet:scene];
+            joint.vRope = [[ADRope alloc] initWithPoints:pointA pointB:pointB spriteSheet:scene antiSagHack:0.1];
+            [joint.vRope updateParentOfAllNodes:joint];
             
         }
             break;
@@ -333,8 +350,8 @@
         case ADNodeTypeRope:
         {
             joint.position = pointA;
-            joint.vRope = [[ADRope alloc] initWithPoints:pointA pointB:pointB spriteSheet:scene];
-            
+            joint.vRope = [[ADRope alloc] initWithPoints:pointA pointB:pointB spriteSheet:scene antiSagHack:0.0];
+            [joint.vRope updateParentOfAllNodes:joint];
         }
             break;
         case ADNodeTypeSpring:
@@ -549,14 +566,27 @@
 
 - (void)highlight
 {
-    self.strokeColor = [UIColor redColor];
+    self.strokeColor = [UIColor blueColor];
     self.lineWidth = 4.0;
 }
 
 - (void)unHighlight
 {
-    self.strokeColor = [UIColor blackColor];
+    self.strokeColor = self.gluedToScene?[UIColor redColor]:[UIColor blackColor];
     self.lineWidth = 1.0;
 }
 
+- (void)updatePositionByDistance:(CGPoint)distancePoint{
+    self.position = addPoints(self.position, distancePoint);
+    self.originalPosition = self.position;
+    if (self.nodeType  == ADNodeTypeSpring) {
+        self.startPositionA = addPoints(self.startPositionA, distancePoint);
+        self.startPositionB = addPoints(self.startPositionB, distancePoint);
+    }
+    else if(self.nodeType  == ADNodeTypeRope){
+        self.startPositionA = addPoints(self.startPositionA, distancePoint);
+        self.startPositionB = addPoints(self.startPositionB, distancePoint);
+        [self.vRope updatePositionOfAllNodesBy:distancePoint];
+    }
+}
 @end

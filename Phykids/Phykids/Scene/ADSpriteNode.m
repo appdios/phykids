@@ -98,4 +98,14 @@
     [self removeFromParent];
 }
 
+- (void)highlight
+{
+
+}
+
+- (void)unHighlight
+{
+
+}
+
 @end

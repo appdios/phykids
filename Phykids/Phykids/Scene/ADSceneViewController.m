@@ -42,7 +42,6 @@
     self.selectionView = [[ADSelectionView alloc] initWithFrame:CGRectZero];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
-    [tapGesture setCancelsTouchesInView:YES];
     [self.view addGestureRecognizer:tapGesture];
 }
 
@@ -54,18 +53,37 @@
 - (void)tapGesture:(UITapGestureRecognizer*)recognizer{
     if (self.sceneView.isPaused) {
         CGPoint point = [recognizer locationInView:self.view];
-        SKNode *node = [self.sceneView nodeAtPoint:[self.sceneView convertPointFromView:point]];
-        if ([node isKindOfClass:[ADScene class]]) {
-            [self hideSelectionView];
+        NSArray *nodes = [self.sceneView nodesAtPoint:[self.sceneView convertPointFromView:point]];
+        __block ADNode *shapeNode = nil;
+        [nodes enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([obj isKindOfClass:[ADNode class]] && ((ADNode*)obj).nodeType<ADNodeTypePivot) {
+                shapeNode = (ADNode*)obj;
+                *stop = YES;
+            }
+        }];
+//        [nodes enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+//            if ([obj isKindOfClass:[ADNode class]] ||
+//                [obj isKindOfClass:[ADSpriteNode class]]) {
+//                shapeNode = (ADNode*)obj;
+//                *stop = YES;
+//            }
+//        }];
+        if (shapeNode) {
+            [shapeNode setGluedToScene:!shapeNode.gluedToScene];
+            [shapeNode unHighlight];
+//            [self showSelectionViewForNode:shapeNode];
         }
-        if (node) {
-            [self showSelectionViewForNode:(ADNode*)node];
+        else {
+//            [self hideSelectionView];
         }
     }
 }
 
 - (void)showSelectionViewForNode:(SKShapeNode *)node
 {
+    CGRect nodeFrame =[node calculateAccumulatedFrame];
+    CGPoint originPoint = [self.sceneView convertPointToView:nodeFrame.origin];
+    self.selectionView.frame = CGRectMake(originPoint.x, originPoint.y - nodeFrame.size.height, nodeFrame.size.width, nodeFrame.size.height);
     [self.view addSubview:self.selectionView];
     [self.selectionView setNode:node];
 }
@@ -101,7 +119,22 @@
 
 - (IBAction)shapeChanged:(UIButton*)sender
 {
+    self.sceneView.toolSelected = NO;
     [ADPropertyManager setSelectedNodeType:sender.tag - 1];
+    [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isKindOfClass:[UIButton class]]) {
+            UIButton *btn = (UIButton*)obj;
+            if (btn.tag > 0) {
+                btn.backgroundColor = [UIColor colorWithRed:198.0/255.0 green:213.0/255.0 blue:224.0/255.0 alpha:1.0];
+            }
+        }
+    }];
+    sender.backgroundColor = [UIColor brownColor];
+}
+
+- (IBAction)toolSelected:(UIButton*)sender
+{
+    self.sceneView.toolSelected = YES;
     [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([obj isKindOfClass:[UIButton class]]) {
             UIButton *btn = (UIButton*)obj;
