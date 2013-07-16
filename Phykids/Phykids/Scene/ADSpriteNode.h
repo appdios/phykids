@@ -24,4 +24,5 @@
 - (void)didSimulatePhysics;
 
 - (void)remove;
+- (void)updatePositionByDistance:(CGPoint)distancePoint;
 @end

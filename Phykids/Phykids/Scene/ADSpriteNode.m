@@ -108,4 +108,9 @@
 
 }
 
+- (void)updatePositionByDistance:(CGPoint)distancePoint{
+    self.position = addPoints(self.position, distancePoint);
+    self.originalPosition = self.position;
+}
+
 @end
