@@ -61,14 +61,14 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     
     if (self.isPaused) {
         //Design Mode
-        self.currentNode = nil;
         self.startPoint = point;
-        [ADPropertyManager setCurrentFillColor:((SKShapeNode*)self.currentNode).fillColor];
         
-        [self.touchPoints removeAllObjects];
-        [self.touchPoints addObject:[NSValue valueWithCGPoint:self.startPoint]];
         
         if (self.toolSelected) {
+            if (self.currentNode) {
+                [self.currentNode unHighlight];
+                self.currentNode = nil;
+            }
             NSArray *nodes = [self nodesAtPoint:self.startPoint];
             if (nodes.count) {
                 self.currentNode = [nodes lastObject];
@@ -77,6 +77,13 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                 }
                 [self.currentNode highlight];
             }
+        }
+        else{
+            self.currentNode = nil;
+            [ADPropertyManager setCurrentFillColor:((SKShapeNode*)self.currentNode).fillColor];
+            
+            [self.touchPoints removeAllObjects];
+            [self.touchPoints addObject:[NSValue valueWithCGPoint:self.startPoint]];
         }
     }
     else
@@ -182,9 +189,9 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     if (self.isPaused) {
         //Design Mode
         if (self.toolSelected) {
-            if (self.currentNode) {
-                [self.currentNode unHighlight];
-            }
+//            if (self.currentNode) {
+//                [self.currentNode unHighlight];
+//            }
         }
         else{
             if (self.currentNode) {
@@ -225,6 +232,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         if ([obj isKindOfClass:[ADNode class]] ||
             [obj isKindOfClass:[ADSpriteNode class]]) {
             ADNode *node = (ADNode*)obj;
+            [node unHighlight];
             if (node.nodeType < ADNodeTypePivot) {
                 [node setPaused:NO];
                 node.physicsBody.dynamic = !node.gluedToScene;

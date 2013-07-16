@@ -219,10 +219,8 @@
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGAffineTransform matrix = CGAffineTransformIdentity;
     CGPathAddArc(pathRef, &matrix, 0,0, radius, 0, M_PI * 2, YES);
-    CGPathMoveToPoint(pathRef, &matrix, -10, 0);
-    CGPathAddLineToPoint(pathRef, &matrix, 10, 0);
-    CGPathMoveToPoint(pathRef, &matrix, 0, -10);
-    CGPathAddLineToPoint(pathRef, &matrix, 0, 10);
+    CGPathMoveToPoint(pathRef, &matrix, 0, 0);
+    CGPathAddLineToPoint(pathRef, &matrix, radius, 0);
     CGPathCloseSubpath(pathRef);
     
     return pathRef;
