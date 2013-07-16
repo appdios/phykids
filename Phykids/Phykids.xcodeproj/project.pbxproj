@@ -22,6 +22,7 @@
 		2781D5A2176C26A000C80532 /* btnStop.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D59F176C26A000C80532 /* btnStop.png */; };
 		2781D5A3176C26A000C80532 /* btnPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D5A0176C26A000C80532 /* btnPlay.png */; };
 		2781D5A4176C26A000C80532 /* btnPlay.png in Resources */ = {isa = PBXBuildFile; fileRef = 2781D5A0176C26A000C80532 /* btnPlay.png */; };
+		27EC0786179606E500120E5D /* ADRotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EC0785179606E500120E5D /* ADRotationView.m */; };
 		27EF5F4517711D1400DCA345 /* ADHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EF5F4417711D1400DCA345 /* ADHelper.m */; };
 		27EF5F4617711D1400DCA345 /* ADHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 27EF5F4417711D1400DCA345 /* ADHelper.m */; };
 		5C2D1127176C33DA00E31475 /* ADSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C2D1126176C33DA00E31475 /* ADSelectionView.m */; };
@@ -93,6 +94,8 @@
 		277FE7A71774F207002B9F5C /* rope.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rope.png; sourceTree = "<group>"; };
 		2781D59F176C26A000C80532 /* btnStop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnStop.png; sourceTree = "<group>"; };
 		2781D5A0176C26A000C80532 /* btnPlay.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = btnPlay.png; sourceTree = "<group>"; };
+		27EC0784179606E500120E5D /* ADRotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADRotationView.h; sourceTree = "<group>"; };
+		27EC0785179606E500120E5D /* ADRotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADRotationView.m; sourceTree = "<group>"; };
 		27EF5F431771190800DCA345 /* ADHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ADHelper.h; sourceTree = "<group>"; };
 		27EF5F4417711D1400DCA345 /* ADHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADHelper.m; sourceTree = "<group>"; };
 		5C2D1125176C33DA00E31475 /* ADSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSelectionView.h; sourceTree = "<group>"; };
@@ -304,6 +307,8 @@
 				5C365B321780148200064802 /* ADSpriteNode.m */,
 				5C9D2A58177A950600FC0AEE /* Triangulate.h */,
 				5C9D2A59177A950600FC0AEE /* Triangulate.mm */,
+				27EC0784179606E500120E5D /* ADRotationView.h */,
+				27EC0785179606E500120E5D /* ADRotationView.m */,
 				5CA38C6117764E5A009D4EAE /* VRope */,
 			);
 			path = Scene;
@@ -431,6 +436,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27EC0786179606E500120E5D /* ADRotationView.m in Sources */,
 				5CA38C6E17764E66009D4EAE /* ADRope.m in Sources */,
 				27EF5F4517711D1400DCA345 /* ADHelper.m in Sources */,
 				5CD37106176AE43100B689AC /* ADSceneViewController.m in Sources */,

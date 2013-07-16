@@ -7,9 +7,10 @@
 //
 
 #import <SpriteKit/SpriteKit.h>
+#import "ADNode.h"
 
 @protocol ADSceneDelegate <NSObject>
-- (void)showSelectionViewForNode:(SKShapeNode*)node;
+- (void)showSelectionViewForNode:(ADNode*)node;
 @end
 
 @interface ADScene : SKScene

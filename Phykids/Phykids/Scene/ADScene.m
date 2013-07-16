@@ -8,7 +8,6 @@
 
 #import "ADScene.h"
 #import "ADNodeManager.h"
-#import "ADNode.h"
 #import "Triangulate.h"
 
 @interface ADScene()
@@ -75,6 +74,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                     self.currentNode = ((ADJointConnectingNode*)self.currentNode).parentNode;
                 }
                 [self.currentNode highlight];
+                [self.delegate showSelectionViewForNode:self.currentNode];
             }
         }
         else{

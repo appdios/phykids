@@ -9,14 +9,14 @@
 
 #import "ADSceneViewController.h"
 #import "ADScene.h"
-#import "ADSelectionView.h"
+#import "ADRotationView.h"
 #import "ADNodeManager.h"
 
 @import SpriteKit;
 
 @interface ADSceneViewController ()
 @property (nonatomic, strong) ADScene *sceneView;
-@property (nonatomic, strong) ADSelectionView *selectionView;
+@property (nonatomic, strong) ADRotationView *rotationView;
 @end
 
 @implementation ADSceneViewController
@@ -39,7 +39,7 @@
     [self.playButton setImage:[UIImage imageNamed:@"btnStop"] forState:UIControlStateSelected];
     [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];
     
-    self.selectionView = [[ADSelectionView alloc] initWithFrame:CGRectZero];
+    self.rotationView = [[ADRotationView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
     
 //    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
 //    [self.view addGestureRecognizer:tapGesture];
@@ -79,28 +79,9 @@
     }
 }
 
-- (void)showSelectionViewForNode:(SKShapeNode *)node
-{
-    CGRect nodeFrame =[node calculateAccumulatedFrame];
-    CGPoint originPoint = [self.sceneView convertPointToView:nodeFrame.origin];
-    self.selectionView.frame = CGRectMake(originPoint.x, originPoint.y - nodeFrame.size.height, nodeFrame.size.width, nodeFrame.size.height);
-    [self.view addSubview:self.selectionView];
-    [self.selectionView setNode:node];
-}
-
-- (void)hideSelectionView{
-    if (self.selectionView) {
-        if (self.selectionView.currentNode) {
-            [self.selectionView.currentNode unHighlight];
-        }
-        [self.selectionView removeFromSuperview];
-    }
-}
-
 - (void)playPauseScene
 {
     [self showHideMenu];
-    [self hideSelectionView];
     [self.sceneView playPauseScene];
     [self.playButton setSelected:![self.playButton isSelected]];
 }
@@ -150,8 +131,10 @@
     [self.sceneView testAction];
 }
 
-- (void)nodeSelected:(ADNode*)node{
-    
+- (void)showSelectionViewForNode:(ADNode*)node;{
+    CGRect rect = CGPathGetBoundingBox(node.path);
+    self.rotationView.center = CGPointMake(CGRectGetMaxX(rect), CGRectGetMaxY(rect));
+    [self.view addSubview:self.rotationView];
 }
 
 - (void)didReceiveMemoryWarning
