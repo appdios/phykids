@@ -150,6 +150,10 @@
     [self.sceneView testAction];
 }
 
+- (void)nodeSelected:(ADNode*)node{
+    
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];

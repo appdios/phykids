@@ -201,6 +201,31 @@
             [node remove];
         }
     }
+    else if (node.nodeType == ADNodeTypePivot) {
+        NSArray *shapeNodes = [scene nodesAtPoint:node.position];
+        ADNode *node1 = nil;
+        ADNode *node2 = nil;
+        for (ADNode *shapeNode in shapeNodes) {
+            if (shapeNode.nodeType < ADNodeTypePivot) {
+                if (node1 == nil) {
+                    node1 = shapeNode;
+                }
+                else if(node2 == nil)
+                {
+                    node2 = shapeNode;
+                    break;
+                }
+            }
+        }
+        if (node1 || node2) {
+            ADNode *newNode = [ADNode jointOfType:node.nodeType betweenNodeA:node1?node1:scene nodeB:node2?node2:scene anchorA:node.startPositionA anchorB:node.startPositionB inSecene:scene];
+            [node remove];
+            return newNode;
+        }
+        else{
+            [node remove];
+        }
+    }
     return nil;
 }
 
@@ -289,7 +314,7 @@
         {
             SKPhysicsJointPin *pinJoint = [SKPhysicsJointPin jointWithBodyA:nodeA.physicsBody bodyB:nodeB.physicsBody anchor:pointA];
             joint.joint = pinJoint;
-            CGPathRef pathRef = CGPathCreateWithEllipseInRect(CGRectMake(-5, -5, 10, 10), nil);
+            CGPathRef pathRef = CGPathCreateWithEllipseInRect(CGRectMake(-10, -10, 20, 20), nil);
             joint.path = pathRef;
             CGPathRelease(pathRef);
             joint.fillColor = [SKColor blackColor];
@@ -338,7 +363,7 @@
     switch (type) {
         case ADNodeTypePivot:
         {
-            CGPathRef pathRef = CGPathCreateWithEllipseInRect(CGRectMake(-5, -5, 10, 10), nil);
+            CGPathRef pathRef = CGPathCreateWithEllipseInRect(CGRectMake(-10, -10, 20, 20), nil);
             joint.path = pathRef;
             CGPathRelease(pathRef);
             joint.fillColor = [SKColor blackColor];

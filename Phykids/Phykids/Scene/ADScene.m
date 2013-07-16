@@ -10,7 +10,6 @@
 #import "ADNodeManager.h"
 #import "ADNode.h"
 #import "Triangulate.h"
-#import "ADSpriteNode.h"
 
 @interface ADScene()
 @property (nonatomic, strong) SKPhysicsJointLimit *mouseJoint;
@@ -155,7 +154,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                     break;
                 case ADNodeTypePivot:
                 {
-                    self.currentNode = (ADNode*)[ADSpriteNode pivotJointAtPoint:point inSecene:self];
+                    self.currentNode = [ADNode jointOfType:[ADPropertyManager selectedNodeType] betweenPointA:point pointB:point inSecene:self];
                 }
                     break;
                 default:
@@ -229,20 +228,12 @@ static CGFloat lastFrameZRotationOfSelectedNode;
 - (void)adjustShapesForRun
 {
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]] ||
-            [obj isKindOfClass:[ADSpriteNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]]) {
             ADNode *node = (ADNode*)obj;
             [node unHighlight];
             if (node.nodeType < ADNodeTypePivot) {
                 [node setPaused:NO];
                 node.physicsBody.dynamic = !node.gluedToScene;
-            }
-            else if (node.nodeType == ADNodeTypePivot){
-                ADSpriteNode *newNode = [ADSpriteNode physicsJointForJoint:(ADSpriteNode*)node inScene:self];
-                if (newNode) {
-                    [self addChild:newNode];
-                    [self.physicsWorld addJoint:newNode.joint];
-                }
             }
             else{
                 ADNode *newNode = [ADNode physicsJointForJoint:node inScene:self];
@@ -260,8 +251,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
 {
     [self.physicsWorld removeAllJoints];
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]] ||
-            [obj isKindOfClass:[ADSpriteNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]]) {
             ADNode *node = (ADNode*)obj;
             if (node.nodeType < ADNodeTypePivot) {
                 [node setPaused:YES];
@@ -278,7 +268,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                     [node remove];
                 }
                 else if (node.nodeType == ADNodeTypePivot) {
-                    ADSpriteNode *newNode = [ADSpriteNode pivotJointAtPoint:node.originalPosition inSecene:self];
+                    ADNode *newNode = [ADNode jointOfType:node.nodeType betweenPointA:node.originalPosition pointB:node.originalPosition inSecene:self];
                     [self addChild:newNode];
                     [node remove];
                 }
@@ -338,8 +328,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     }
     
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]] ||
-            [obj isKindOfClass:[ADSpriteNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]]) {
             [(ADNode*)obj update:currentTime];
         }
         
@@ -352,8 +341,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         return;
     }
     [self.children enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[ADNode class]] ||
-            [obj isKindOfClass:[ADSpriteNode class]]) {
+        if ([obj isKindOfClass:[ADNode class]]) {
             [(ADNode*)obj didSimulatePhysics];
         }
         
