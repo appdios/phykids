@@ -38,6 +38,21 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     return self;
 }
 
+- (void)testAction{
+    SKNode *cNode = [[self children] lastObject];
+    if (cNode) {
+        SKAction *action1 = [SKAction customActionWithDuration:0.1 actionBlock:^(SKNode *node, CGFloat elapsedTime) {
+            node.physicsBody.velocity =  CGPointMake(0, 400);
+//            node.physicsBody.angularVelocity = M_PI;
+        }];
+        SKAction *action2 = [SKAction fadeAlphaTo:0.0 duration:0.1];
+        SKAction *action3 = [SKAction removeFromParent];
+        SKAction *sequenceAction = [SKAction sequence:@[action1,action2,action3]];
+        [cNode runAction:sequenceAction];
+        
+    }
+}
+
 #pragma mark - Touch Events
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {

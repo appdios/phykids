@@ -18,4 +18,6 @@
 @property (nonatomic) BOOL isPaused;
 @property (nonatomic) BOOL toolSelected;
 - (void)playPauseScene;
+
+- (void)testAction;
 @end

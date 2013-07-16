@@ -110,7 +110,7 @@
     [self.view.subviews enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
         if ([obj isKindOfClass:[UIButton class]]) {
             UIButton *btn = (UIButton*)obj;
-            if (btn.tag > 0) {
+            if (btn.tag > 0 && btn.tag < 999) {
                 btn.hidden = self.sceneView.isPaused;
             }
         }
@@ -144,6 +144,10 @@
         }
     }];
     sender.backgroundColor = [UIColor brownColor];
+}
+
+- (IBAction)jump:(id)sender{
+    [self.sceneView testAction];
 }
 
 - (void)didReceiveMemoryWarning
