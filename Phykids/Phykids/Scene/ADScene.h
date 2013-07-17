@@ -11,6 +11,8 @@
 
 @protocol ADSceneDelegate <NSObject>
 - (void)showSelectionViewForNode:(ADNode*)node;
+- (void)moveSelectionViewForNode:(ADNode*)node;
+- (void)removeSelectionViewForNode:(ADNode*)node;
 @end
 
 @interface ADScene : SKScene

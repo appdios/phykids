@@ -65,6 +65,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         if (self.toolSelected) {
             if (self.currentNode) {
                 [self.currentNode unHighlight];
+                [self.delegate removeSelectionViewForNode:self.currentNode];
                 self.currentNode = nil;
             }
             NSArray *nodes = [self nodesAtPoint:self.startPoint];
@@ -103,6 +104,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         if (self.toolSelected) {
             if (self.currentNode) {
                 [self.currentNode updatePositionByDistance:subtractPoints(point, ppoint)];
+                [self.delegate moveSelectionViewForNode:self.currentNode];
             }
         }
         else{
@@ -188,6 +190,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     if (self.isPaused) {
         //Design Mode
         if (self.toolSelected) {
+
 //            if (self.currentNode) {
 //                [self.currentNode unHighlight];
 //            }
