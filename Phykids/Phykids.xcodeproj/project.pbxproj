@@ -36,8 +36,6 @@
 		5C365B2E1780125F00064802 /* pivot.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2B1780125F00064802 /* pivot.png */; };
 		5C365B2F1780125F00064802 /* pivot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2C1780125F00064802 /* pivot@2x.png */; };
 		5C365B301780125F00064802 /* pivot@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5C365B2C1780125F00064802 /* pivot@2x.png */; };
-		5C365B331780148200064802 /* ADSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C365B321780148200064802 /* ADSpriteNode.m */; };
-		5C365B341780148200064802 /* ADSpriteNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C365B321780148200064802 /* ADSpriteNode.m */; };
 		5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC66B176AE7630019F2C8 /* ADScene.m */; };
 		5C5AC671176AEAF70019F2C8 /* ADNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C5AC670176AEAF70019F2C8 /* ADNodeManager.m */; };
@@ -105,8 +103,6 @@
 		5C365B2617800EDE00064802 /* blackdot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "blackdot@2x.png"; sourceTree = "<group>"; };
 		5C365B2B1780125F00064802 /* pivot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pivot.png; sourceTree = "<group>"; };
 		5C365B2C1780125F00064802 /* pivot@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "pivot@2x.png"; sourceTree = "<group>"; };
-		5C365B311780148200064802 /* ADSpriteNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADSpriteNode.h; sourceTree = "<group>"; };
-		5C365B321780148200064802 /* ADSpriteNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADSpriteNode.m; sourceTree = "<group>"; };
 		5C5AC66A176AE7630019F2C8 /* ADScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADScene.h; sourceTree = "<group>"; };
 		5C5AC66B176AE7630019F2C8 /* ADScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ADScene.m; sourceTree = "<group>"; };
 		5C5AC66F176AEAF70019F2C8 /* ADNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ADNodeManager.h; sourceTree = "<group>"; };
@@ -303,8 +299,6 @@
 				27EF5F4417711D1400DCA345 /* ADHelper.m */,
 				5CBB421E177805CC00BC6C59 /* ADNode.h */,
 				5CBB421F177805CC00BC6C59 /* ADNode.m */,
-				5C365B311780148200064802 /* ADSpriteNode.h */,
-				5C365B321780148200064802 /* ADSpriteNode.m */,
 				5C9D2A58177A950600FC0AEE /* Triangulate.h */,
 				5C9D2A59177A950600FC0AEE /* Triangulate.mm */,
 				27EC0784179606E500120E5D /* ADRotationView.h */,
@@ -444,7 +438,6 @@
 				5CBB4220177805CC00BC6C59 /* ADNode.m in Sources */,
 				5CA38C7017764E66009D4EAE /* ADStick.m in Sources */,
 				5CA38C6C17764E66009D4EAE /* ADRopePoint.m in Sources */,
-				5C365B331780148200064802 /* ADSpriteNode.m in Sources */,
 				5CD370DE176AE39700B689AC /* ADAppDelegate.m in Sources */,
 				270FC325176D0862006FBD11 /* ADPropertyManager.m in Sources */,
 				5C5AC66C176AE7630019F2C8 /* ADScene.m in Sources */,
@@ -466,7 +459,6 @@
 				5C5AC66D176AE7630019F2C8 /* ADScene.m in Sources */,
 				5CD370F3176AE39700B689AC /* PhykidsTests.m in Sources */,
 				270FC326176D0862006FBD11 /* ADPropertyManager.m in Sources */,
-				5C365B341780148200064802 /* ADSpriteNode.m in Sources */,
 				27EF5F4617711D1400DCA345 /* ADHelper.m in Sources */,
 				5C9D2A5B177A950600FC0AEE /* Triangulate.mm in Sources */,
 				5CBB4221177805CC00BC6C59 /* ADNode.m in Sources */,

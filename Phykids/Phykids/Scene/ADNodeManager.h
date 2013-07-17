@@ -8,7 +8,6 @@
 
 #import <SpriteKit/SpriteKit.h>
 #import "ADNode.h"
-#import "ADSpriteNode.h"
 
 @interface ADNodeManager : NSObject
 

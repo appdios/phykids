@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ADNode.h"
 
 @interface ADRotationView : UIView
 
+@property (nonatomic, strong) ADNode *node;
 @end

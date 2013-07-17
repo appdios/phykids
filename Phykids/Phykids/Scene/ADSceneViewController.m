@@ -40,7 +40,8 @@
     [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];
     
     self.rotationView = [[ADRotationView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-    
+    self.rotationView.layer.borderWidth = 2.0;
+    self.rotationView.layer.cornerRadius = 25.0;
 //    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
 //    [self.view addGestureRecognizer:tapGesture];
 }
@@ -133,8 +134,19 @@
 
 - (void)showSelectionViewForNode:(ADNode*)node;{
     CGRect rect = CGPathGetBoundingBox(node.path);
-    self.rotationView.center = CGPointMake(CGRectGetMaxX(rect), CGRectGetMaxY(rect));
+    
+    self.rotationView.node = node;
+    self.rotationView.center = addPoints([self.sceneView convertPointToView:node.originalPosition], CGPointMake(CGRectGetWidth(rect)/2, CGRectGetHeight(rect)/2));
     [self.view addSubview:self.rotationView];
+}
+
+- (void)moveSelectionViewForNode:(ADNode *)node{
+    CGRect rect = CGPathGetBoundingBox(node.path);
+    self.rotationView.center = addPoints([self.sceneView convertPointToView:node.originalPosition], CGPointMake(CGRectGetWidth(rect)/2, CGRectGetHeight(rect)/2));
+}
+
+- (void)removeSelectionViewForNode:(ADNode *)node{
+    [self.rotationView removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning
