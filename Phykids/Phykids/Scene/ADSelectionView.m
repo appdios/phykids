@@ -11,7 +11,7 @@
 static const int kOffset = 20;
 
 @interface ADSelectionView ()
-@property(nonatomic, strong) UIView *scaleView;
+@property(nonatomic, strong) UIView *rotationView;
 @end
 
 @implementation ADSelectionView
@@ -21,16 +21,21 @@ static const int kOffset = 20;
     self = [super initWithFrame:frame];
     if (self) {
 
-        self.scaleView = [[UIView alloc] initWithFrame:CGRectMake(self.bounds.origin.x + self.bounds.size.width - kOffset, self.bounds.origin.y + self.bounds.size.height - kOffset, 20, 20)];
-        CALayer *slayer = self.scaleView.layer;
-        slayer.cornerRadius = 10;
+        self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.1];
+        self.rotationView = [[UIView alloc] initWithFrame:CGRectMake(0,0,50,50)];
+        CALayer *slayer = self.rotationView.layer;
+        slayer.cornerRadius = 25;
         slayer.borderColor = [UIColor blackColor].CGColor;
         slayer.borderWidth = 2.0;
         slayer.masksToBounds = YES;
-    //    [self addSubview:self.scaleView];
+        [self addSubview:self.rotationView];
         
     }
     return self;
+}
+    
+- (void)adjustSubviews{
+    self.rotationView.center = CGPointMake(CGRectGetMaxX(self.bounds) - 25, CGRectGetMaxY(self.bounds) - 25);
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -43,7 +48,17 @@ static const int kOffset = 20;
     CGPoint point = [touch locationInView:self];
     CGPoint previousPoint = [touch previousLocationInView:self];
 
+    
+//    [self translateFrom:previousPoint toPoint:point];
+    [self rotateFrom:previousPoint toPoint:point];
+    
+}
 
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+}
+
+- (void)translateFrom:(CGPoint)previousPoint toPoint:(CGPoint)point{
     self.center = CGPointMake(self.center.x + (point.x - previousPoint.x), self.center.y + (point.y - previousPoint.y));
     if (self.currentNode.nodeType == ADNodeTypeSpring) {
         self.currentNode.startPositionA = CGPointMake(self.currentNode.startPositionA.x + (point.x - previousPoint.x), self.currentNode.startPositionA.y - (point.y - previousPoint.y));
@@ -51,25 +66,10 @@ static const int kOffset = 20;
     }
     self.currentNode.originalPosition = self.currentNode.position = CGPointMake(self.currentNode.position.x + (point.x - previousPoint.x), self.currentNode.position.y - (point.y - previousPoint.y));
 }
-
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
-{
-   // [ADNodeManager setPhysicsBodyToNode:self.currentNode inWorld:self.];
+    
+- (void)rotateFrom:(CGPoint)previousPoint toPoint:(CGPoint)point{
+	double angleInRadian = angleBetweenPoints(point, CGPointMake(self.frame.size.width/2.0, self.frame.size.height/2.0));
+    self.transform = CGAffineTransformMakeRotation(angleInRadian);
 }
 
-
-- (void)setNode:(ADNode*)node
-{
-    if ([node isKindOfClass:[SKScene class]]) {
-        return;
-    }
-    
-    if (self.currentNode) {
-        [self.currentNode unHighlight];
-    }
-    [node highlight];
-    
-    self.currentNode = node;
-}
-
-@end 
+@end

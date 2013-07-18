@@ -75,7 +75,6 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                     self.currentNode = ((ADJointConnectingNode*)self.currentNode).parentNode;
                 }
                 [self.currentNode highlight];
-                [self.delegate showSelectionViewForNode:self.currentNode];
             }
         }
         else{
@@ -104,7 +103,6 @@ static CGFloat lastFrameZRotationOfSelectedNode;
         if (self.toolSelected) {
             if (self.currentNode) {
                 [self.currentNode updatePositionByDistance:subtractPoints(point, ppoint)];
-                [self.delegate moveSelectionViewForNode:self.currentNode];
             }
         }
         else{
@@ -190,6 +188,9 @@ static CGFloat lastFrameZRotationOfSelectedNode;
     if (self.isPaused) {
         //Design Mode
         if (self.toolSelected) {
+            if (self.currentNode) {
+                [self.delegate showSelectionViewForNode:self.currentNode];
+            }
 
 //            if (self.currentNode) {
 //                [self.currentNode unHighlight];

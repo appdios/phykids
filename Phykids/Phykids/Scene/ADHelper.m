@@ -484,3 +484,9 @@ CGPoint midpointOfPoints(const CGPoint v1, const CGPoint v2)
 	return multiplyPoint(addPoints(v1, v2), 0.5f);
 }
 
+double angleBetweenPoints(CGPoint first , CGPoint second){
+	CGFloat height = second.y - first.y;
+	CGFloat width = first.x - second.x;
+	CGFloat rads = atan2(height,width);
+	return rads;
+}

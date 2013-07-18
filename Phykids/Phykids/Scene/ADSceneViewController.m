@@ -9,14 +9,14 @@
 
 #import "ADSceneViewController.h"
 #import "ADScene.h"
-#import "ADRotationView.h"
+#import "ADSelectionView.h"
 #import "ADNodeManager.h"
 
 @import SpriteKit;
 
 @interface ADSceneViewController ()
 @property (nonatomic, strong) ADScene *sceneView;
-@property (nonatomic, strong) ADRotationView *rotationView;
+@property (nonatomic, strong) ADSelectionView *selectionView;
 @end
 
 @implementation ADSceneViewController
@@ -39,9 +39,8 @@
     [self.playButton setImage:[UIImage imageNamed:@"btnStop"] forState:UIControlStateSelected];
     [self.playButton addTarget:self action:@selector(playPauseScene) forControlEvents:UIControlEventTouchUpInside];
     
-    self.rotationView = [[ADRotationView alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
-    self.rotationView.layer.borderWidth = 2.0;
-    self.rotationView.layer.cornerRadius = 25.0;
+    self.selectionView = [[ADSelectionView alloc] init];
+    
 //    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGesture:)];
 //    [self.view addGestureRecognizer:tapGesture];
 }
@@ -133,20 +132,19 @@
 }
 
 - (void)showSelectionViewForNode:(ADNode*)node;{
-    CGRect rect = CGPathGetBoundingBox(node.path);
-    
-    self.rotationView.node = node;
-    self.rotationView.center = addPoints([self.sceneView convertPointToView:node.originalPosition], CGPointMake(CGRectGetWidth(rect)/2, CGRectGetHeight(rect)/2));
-    [self.view addSubview:self.rotationView];
+    CGRect boundingBox = [node calculateAccumulatedFrame];
+    self.selectionView.currentNode = node;
+    self.selectionView.frame = CGRectMake(boundingBox.origin.x - 25, fabs(boundingBox.origin.y - self.view.bounds.size.height+boundingBox.size.height) - 25, boundingBox.size.width + 50, boundingBox.size.height + 50);
+    [self.selectionView adjustSubviews];
+    [self.view addSubview:self.selectionView];
 }
 
 - (void)moveSelectionViewForNode:(ADNode *)node{
-    CGRect rect = CGPathGetBoundingBox(node.path);
-    self.rotationView.center = addPoints([self.sceneView convertPointToView:node.originalPosition], CGPointMake(CGRectGetWidth(rect)/2, CGRectGetHeight(rect)/2));
+    
 }
 
 - (void)removeSelectionViewForNode:(ADNode *)node{
-    [self.rotationView removeFromSuperview];
+    [self.selectionView removeFromSuperview];
 }
 
 - (void)didReceiveMemoryWarning

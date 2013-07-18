@@ -13,5 +13,5 @@
 @interface ADSelectionView : UIView
 @property(nonatomic, strong) ADNode *currentNode;
 
-- (void)setNode:(SKNode*)node;
+- (void)adjustSubviews;
 @end

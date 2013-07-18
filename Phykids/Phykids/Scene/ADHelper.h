@@ -27,4 +27,5 @@ CGPoint angleToPoint(const CGFloat a);
 CGFloat pointToAngle(const CGPoint v);
 CGPoint midpointOfPoints(const CGPoint v1, const CGPoint v2);
 void grahamMain(NSMutableArray *points);
+double angleBetweenPoints(CGPoint first , CGPoint second);
 #endif
