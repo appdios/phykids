@@ -15,6 +15,7 @@ static const int kOffset = 20;
 @property(nonatomic, strong) ADNode *currentNode;
 @property(nonatomic) CGFloat currentAngle;
 @property(nonatomic) CGPoint startposition;
+@property(nonatomic) BOOL touchToRotate;
 @end
 
 @implementation ADSelectionView
@@ -24,11 +25,12 @@ static const int kOffset = 20;
     self = [super initWithFrame:frame];
     if (self) {
 
-        self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.1];
+        self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.0];
         self.rotationView = [[UIView alloc] initWithFrame:CGRectMake(0,0,50,50)];
+        self.rotationView.backgroundColor = [UIColor colorWithRed:1.0 green:0 blue:0 alpha:0.4];
         CALayer *slayer = self.rotationView.layer;
         slayer.cornerRadius = 25;
-        slayer.borderColor = [UIColor blackColor].CGColor;
+        slayer.borderColor = [UIColor colorWithWhite:1.0 alpha:1.0].CGColor;
         slayer.borderWidth = 2.0;
         slayer.masksToBounds = YES;
         [self addSubview:self.rotationView];
@@ -39,7 +41,7 @@ static const int kOffset = 20;
 
 - (void)setNode:(ADNode*)node{
     self.currentNode = node;
-    self.rotationView.center = CGPointMake(CGRectGetMaxX(self.bounds) - 25, CGRectGetMaxY(self.bounds) - 25);
+    self.rotationView.center = CGPointMake(CGRectGetMaxX(self.bounds) - 25, CGRectGetMidY(self.bounds));
 
     CGAffineTransform transform = CGAffineTransformIdentity;
     transform = CGAffineTransformTranslate(transform, -self.rotationView.center.x + self.frame.size.width/2.0, -self.rotationView.center.y + self.frame.size.height/2.0);
@@ -54,8 +56,24 @@ static const int kOffset = 20;
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGPoint centerPoint = CGPointMake(self.frame.size.width/2.0, self.frame.size.height/2.0);
 
+    CGContextSetFillColorWithColor(context, [UIColor colorWithRed:1.0 green:0 blue:0 alpha:0.4].CGColor);
     CGContextFillEllipseInRect(context, CGRectMake(centerPoint.x-5, centerPoint.y-5, 10, 10));
     
+    CGContextAddPath(context, [self createArcPath].CGPath);
+    CGContextDrawPath(context, kCGPathFill);
+    
+}
+
+- (UIBezierPath *)createArcPath
+{
+    CGPoint centerPoint = CGPointMake(self.frame.size.width/2.0, self.frame.size.height/2.0);
+
+    UIBezierPath *aPath = [UIBezierPath bezierPath];
+    [aPath moveToPoint:centerPoint];
+    [aPath addLineToPoint:CGPointMake(centerPoint.x+self.frame.size.width/2.0, centerPoint.y)];
+    [aPath addArcWithCenter:centerPoint radius:self.bounds.size.width/2 startAngle:0 endAngle:-self.currentNode.zRotation clockwise:YES];
+    [aPath addLineToPoint:centerPoint];
+    return aPath;
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
@@ -63,21 +81,31 @@ static const int kOffset = 20;
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
     self.startposition = point;
+    self.touchToRotate = NO;
+    if (CGRectContainsPoint(self.rotationView.frame, point)) {
+        self.touchToRotate = YES;
+    }
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
 
-    CGFloat angle = [self rotationAngle:point];
-    self.currentNode.zRotation = -angle;
-    
-    CGAffineTransform transform = CGAffineTransformIdentity;
-    transform = CGAffineTransformTranslate(transform, -self.rotationView.center.x + self.frame.size.width/2.0, -self.rotationView.center.y + self.frame.size.height/2.0);
-    transform = CGAffineTransformRotate(transform, angle);
-    transform = CGAffineTransformTranslate(transform, self.rotationView.center.x - self.frame.size.width/2.0, self.rotationView.center.y - self.frame.size.height/2.0);
-    self.rotationView.transform = transform;
-//    [self translateFrom:previousPoint toPoint:point];
+    if (self.touchToRotate) {
+        CGFloat angle = [self rotationAngle:point];
+        self.currentNode.zRotation = -angle;
+        
+        CGAffineTransform transform = CGAffineTransformIdentity;
+        transform = CGAffineTransformTranslate(transform, -self.rotationView.center.x + self.frame.size.width/2.0, -self.rotationView.center.y + self.frame.size.height/2.0);
+        transform = CGAffineTransformRotate(transform, angle);
+        transform = CGAffineTransformTranslate(transform, self.rotationView.center.x - self.frame.size.width/2.0, self.rotationView.center.y - self.frame.size.height/2.0);
+        self.rotationView.transform = transform;
+        [self setNeedsDisplay];
+    }
+    else{
+        CGPoint previousPoint = [touch previousLocationInView:self];
+        [self translateFrom:previousPoint toPoint:point];
+    }
     
 }
 
@@ -107,7 +135,6 @@ static const int kOffset = 20;
     float toAngle = atan2(point.y-centerPoint.y, point.x-centerPoint.x);
     float newAngle = wrapd(self.currentAngle + (toAngle - fromAngle), 0, 2*3.14);
     
-    NSLog(@"%.0f",newAngle*57.2957795);
     return newAngle;
 }
 
