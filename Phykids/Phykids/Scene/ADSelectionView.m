@@ -12,6 +12,9 @@ static const int kOffset = 20;
 
 @interface ADSelectionView ()
 @property(nonatomic, strong) UIView *rotationView;
+@property(nonatomic, strong) ADNode *currentNode;
+@property(nonatomic) CGFloat currentAngle;
+@property(nonatomic) CGPoint startposition;
 @end
 
 @implementation ADSelectionView
@@ -33,29 +36,59 @@ static const int kOffset = 20;
     }
     return self;
 }
-    
-- (void)adjustSubviews{
+
+- (void)setNode:(ADNode*)node{
+    self.currentNode = node;
     self.rotationView.center = CGPointMake(CGRectGetMaxX(self.bounds) - 25, CGRectGetMaxY(self.bounds) - 25);
+
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    transform = CGAffineTransformTranslate(transform, -self.rotationView.center.x + self.frame.size.width/2.0, -self.rotationView.center.y + self.frame.size.height/2.0);
+    transform = CGAffineTransformRotate(transform, -node.zRotation);
+    transform = CGAffineTransformTranslate(transform, self.rotationView.center.x - self.frame.size.width/2.0, self.rotationView.center.y - self.frame.size.height/2.0);
+    self.rotationView.transform = transform;
+    
+    [self setNeedsDisplay];
+}
+
+- (void)drawRect:(CGRect)rect{
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGPoint centerPoint = CGPointMake(self.frame.size.width/2.0, self.frame.size.height/2.0);
+
+    CGContextFillEllipseInRect(context, CGRectMake(centerPoint.x-5, centerPoint.y-5, 10, 10));
+    
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:self];
+    self.startposition = point;
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
-    CGPoint previousPoint = [touch previousLocationInView:self];
 
+    CGFloat angle = [self rotationAngle:point];
+    self.currentNode.zRotation = -angle;
     
+    CGAffineTransform transform = CGAffineTransformIdentity;
+    transform = CGAffineTransformTranslate(transform, -self.rotationView.center.x + self.frame.size.width/2.0, -self.rotationView.center.y + self.frame.size.height/2.0);
+    transform = CGAffineTransformRotate(transform, angle);
+    transform = CGAffineTransformTranslate(transform, self.rotationView.center.x - self.frame.size.width/2.0, self.rotationView.center.y - self.frame.size.height/2.0);
+    self.rotationView.transform = transform;
 //    [self translateFrom:previousPoint toPoint:point];
-    [self rotateFrom:previousPoint toPoint:point];
     
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
+    UITouch *touch = [touches anyObject];
+    CGPoint point = [touch locationInView:self];
+    CGFloat angle = [self rotationAngle:point];
+//    self.transform = CGAffineTransformMakeRotation(angle);
+
+    self.currentAngle = angle;
 }
 
 - (void)translateFrom:(CGPoint)previousPoint toPoint:(CGPoint)point{
@@ -66,10 +99,23 @@ static const int kOffset = 20;
     }
     self.currentNode.originalPosition = self.currentNode.position = CGPointMake(self.currentNode.position.x + (point.x - previousPoint.x), self.currentNode.position.y - (point.y - previousPoint.y));
 }
+
+- (float) rotationAngle:(CGPoint)point
+{
+    CGPoint centerPoint = CGPointMake(self.bounds.size.width/2.0, self.bounds.size.height/2.0);
+    float fromAngle = atan2(self.startposition.y-centerPoint.y, self.startposition.x-centerPoint.x);
+    float toAngle = atan2(point.y-centerPoint.y, point.x-centerPoint.x);
+    float newAngle = wrapd(self.currentAngle + (toAngle - fromAngle), 0, 2*3.14);
     
-- (void)rotateFrom:(CGPoint)previousPoint toPoint:(CGPoint)point{
-	double angleInRadian = angleBetweenPoints(point, CGPointMake(self.frame.size.width/2.0, self.frame.size.height/2.0));
-    self.transform = CGAffineTransformMakeRotation(angleInRadian);
+    NSLog(@"%.0f",newAngle*57.2957795);
+    return newAngle;
+}
+
+double wrapd(double _val, double _min, double _max)
+{
+    if(_val < _min) return _max - (_min - _val);
+    if(_val > _max) return _min - (_max - _val);
+    return _val;
 }
 
 @end

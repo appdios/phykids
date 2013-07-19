@@ -133,14 +133,15 @@
 
 - (void)showSelectionViewForNode:(ADNode*)node;{
     CGRect boundingBox = [node calculateAccumulatedFrame];
-    self.selectionView.currentNode = node;
-    self.selectionView.frame = CGRectMake(boundingBox.origin.x - 25, fabs(boundingBox.origin.y - self.view.bounds.size.height+boundingBox.size.height) - 25, boundingBox.size.width + 50, boundingBox.size.height + 50);
-    [self.selectionView adjustSubviews];
+    CGPoint centerPoint = CGPointMake(CGRectGetMidX(boundingBox), CGRectGetMidY(boundingBox));
+    centerPoint = [self.sceneView convertPointToView:centerPoint];
+    CGFloat maxHeightOrWidth = MAX(boundingBox.size.width, boundingBox.size.height) + 50;
+    self.selectionView.frame = CGRectMake(centerPoint.x - maxHeightOrWidth/2, (centerPoint.y - maxHeightOrWidth/2), maxHeightOrWidth, maxHeightOrWidth);
+    [self.selectionView setNode:node];
     [self.view addSubview:self.selectionView];
 }
 
 - (void)moveSelectionViewForNode:(ADNode *)node{
-    
 }
 
 - (void)removeSelectionViewForNode:(ADNode *)node{

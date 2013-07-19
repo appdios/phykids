@@ -11,7 +11,6 @@
 #import "ADNodeManager.h"
 
 @interface ADSelectionView : UIView
-@property(nonatomic, strong) ADNode *currentNode;
 
-- (void)adjustSubviews;
+- (void)setNode:(ADNode*)node;
 @end
