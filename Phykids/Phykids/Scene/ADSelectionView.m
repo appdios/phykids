@@ -41,6 +41,7 @@ static const int kOffset = 20;
 
 - (void)setNode:(ADNode*)node{
     self.currentNode = node;
+    self.currentAngle = -node.zRotation;
     self.rotationView.center = CGPointMake(CGRectGetMaxX(self.bounds) - 25, CGRectGetMidY(self.bounds));
 
     CGAffineTransform transform = CGAffineTransformIdentity;
@@ -93,7 +94,7 @@ static const int kOffset = 20;
 
     if (self.touchToRotate) {
         CGFloat angle = [self rotationAngle:point];
-        self.currentNode.zRotation = -angle;
+        self.currentNode.zRotation = self.currentNode.originalRotation = -angle;
         
         CGAffineTransform transform = CGAffineTransformIdentity;
         transform = CGAffineTransformTranslate(transform, -self.rotationView.center.x + self.frame.size.width/2.0, -self.rotationView.center.y + self.frame.size.height/2.0);
@@ -114,7 +115,6 @@ static const int kOffset = 20;
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:self];
     CGFloat angle = [self rotationAngle:point];
-//    self.transform = CGAffineTransformMakeRotation(angle);
 
     self.currentAngle = angle;
 }

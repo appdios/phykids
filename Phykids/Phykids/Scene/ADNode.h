@@ -20,6 +20,7 @@
 @property (nonatomic) ADNodeType nodeType;
 @property (nonatomic, strong) SKPhysicsJoint *joint;
 @property (nonatomic) CGPoint originalPosition;
+@property (nonatomic) CGFloat originalRotation;
 @property (nonatomic) CGPoint startPositionA;
 @property (nonatomic) CGPoint startPositionB;
 @property (nonatomic) BOOL gluedToScene;

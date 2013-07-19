@@ -261,6 +261,7 @@ static CGFloat lastFrameZRotationOfSelectedNode;
                 [node setPaused:YES];
                 node.zRotation = 0;
                 node.position = node.originalPosition;
+                node.zRotation = node.originalRotation;
                 node.physicsBody.velocity = CGPointZero;
                 node.physicsBody.angularVelocity = 0.0;
             }
